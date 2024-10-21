@@ -75,43 +75,6 @@
             </li>
         </ul>
     </li>
-
-    <!-- role -->
-
-    <li>
-        <a href="javascript:;.html" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='role_list'||$active_menu=='role_add'||$active_menu=='kiot'|| $active_menu=='setting_list'|| $active_menu=='log_list'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">
-              <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
-              <div class="side-menu__title">
-                  Cài đặt
-                  <div class="side-menu__sub-icon transform"> <i data-lucide="chevron-down"></i> </div>
-              </div>
-        </a>
-        <ul class="{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='role_list'||$active_menu=='role_add'||$active_menu=='kiot'|| $active_menu=='setting_list'|| $active_menu=='banner_add'|| $active_menu=='banner_list')?'side-menu__sub-open':''}}">
-             
-              <li>
-                  <a href="{{route('admin.roleuser.index')}}" class="side-menu {{$active_menu=='role_list'||$active_menu=='roles'?'side-menu--active':''}}">
-                      <div class="side-menu__icon"> <i data-lucide="octagon"></i> </div>
-                      <div class="side-menu__title"> Roles</div>
-                  </a>
-              </li>
-              <li>
-                  <a href="{{route('admin.roleuser.create')}}" class="side-menu {{$active_menu=='role_list'?'side-menu--active':''}}">
-                      <div class="side-menu__icon"> <i data-lucide="moon"></i> </div>
-                      <div class="side-menu__title"> Add Roles</div>
-                  </a>
-              </li>
-              <li>
-                  <a href="{{route('admin.setting.edit',1)}}" class="side-menu {{$active_menu=='role_list'?'side-menu--active':''}}">
-                      <div class="side-menu__icon"> <i data-lucide="key"></i> </div>
-                      <div class="side-menu__title"> Edit role</div>
-                  </a>
-              </li>
-              
-              
-          </ul>
-    </li>
-    <!-- role -->
-    
      <!-- setting menu -->
      <li>
         <a href="javascript:;.html" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='role_list'||$active_menu=='role_add'||$active_menu=='kiot'|| $active_menu=='setting_list'|| $active_menu=='log_list'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">
@@ -121,10 +84,10 @@
                   <div class="side-menu__sub-icon transform"> <i data-lucide="chevron-down"></i> </div>
               </div>
         </a>
-        <ul class="{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='role_list1'||$active_menu=='role_add'||$active_menu=='kiot'|| $active_menu=='setting_list'|| $active_menu=='banner_add'|| $active_menu=='banner_list')?'side-menu__sub-open':''}}">
+        <ul class="{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='role_list'||$active_menu=='role_add'||$active_menu=='kiot'|| $active_menu=='setting_list'|| $active_menu=='banner_add'|| $active_menu=='banner_list')?'side-menu__sub-open':''}}">
              
               <li>
-                  <a href="{{route('admin.role.index',1)}}" class="side-menu {{$active_menu=='role_list2'||$active_menu=='role_add'?'side-menu--active':''}}">
+                  <a href="{{route('admin.role.index',1)}}" class="side-menu {{$active_menu=='role_list'||$active_menu=='role_add'?'side-menu--active':''}}">
                       <div class="side-menu__icon"> <i data-lucide="octagon"></i> </div>
                       <div class="side-menu__title"> Roles</div>
                   </a>
