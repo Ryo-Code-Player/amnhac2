@@ -82,7 +82,7 @@
         <a href="javascript:;.html" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='role_list'||$active_menu=='role_add'||$active_menu=='kiot'|| $active_menu=='setting_list'|| $active_menu=='log_list'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">
               <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
               <div class="side-menu__title">
-                  Cài đặt
+                  Quyền người dùng
                   <div class="side-menu__sub-icon transform"> <i data-lucide="chevron-down"></i> </div>
               </div>
         </a>
@@ -91,21 +91,16 @@
               <li>
                   <a href="{{route('admin.roleuser.index')}}" class="side-menu {{$active_menu=='role_list'||$active_menu=='roles'?'side-menu--active':''}}">
                       <div class="side-menu__icon"> <i data-lucide="octagon"></i> </div>
-                      <div class="side-menu__title"> Roles</div>
+                      <div class="side-menu__title"> Danh sách quyền</div>
                   </a>
               </li>
               <li>
                   <a href="{{route('admin.roleuser.create')}}" class="side-menu {{$active_menu=='role_list'?'side-menu--active':''}}">
-                      <div class="side-menu__icon"> <i data-lucide="moon"></i> </div>
-                      <div class="side-menu__title"> Add Roles</div>
+                      <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                      <div class="side-menu__title"> Thêm quyền người dùng</div>
                   </a>
               </li>
-              <li>
-                  <a href="{{route('admin.setting.edit',1)}}" class="side-menu {{$active_menu=='role_list'?'side-menu--active':''}}">
-                      <div class="side-menu__icon"> <i data-lucide="key"></i> </div>
-                      <div class="side-menu__title"> Edit role</div>
-                  </a>
-              </li>
+              
               
               
           </ul>
