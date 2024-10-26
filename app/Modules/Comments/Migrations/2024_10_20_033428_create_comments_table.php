@@ -14,7 +14,8 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained(); // FK user_id
             $table->text('content'); // Cột content
             $table->foreignId('parent_id')->nullable()->constrained('comments'); // FK parent_id
-            $table->json('comment_resources'); // Cột comment_resources
+            $table->string('comment_resources'); // Cột comment_resources
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps(); // Timestamps created_at và updated_at
         });
     }

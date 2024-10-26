@@ -22,7 +22,8 @@ class Controller extends BaseController
     public function check_function($func)
     {
         $user= auth()->user();
-        if($user->role == 'admin')
+        // dd($user);
+        // if($user->role == 'admin')
             return true;
         $row = \DB::select("select d.value from (select * from (select id as role_id from roles where alias ='".$user->role
         ."') as a join (select id as cfunction_id from cmd_functions where alias = '".$func
