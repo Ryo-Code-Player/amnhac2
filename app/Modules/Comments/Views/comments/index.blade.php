@@ -23,62 +23,64 @@
             <thead>
                 <tr>
                     <th class="whitespace-nowrap">NỘI DUNG</th>
-                    <th class="whitespace-nowrap">NGƯỜI DÙNG</th> <!-- Đổi thành "NGƯỜI DÙNG" -->
+                    <th class="whitespace-nowrap">NGƯỜI DÙNG</th>
                     <th class="whitespace-nowrap">NGUỒN</th>
                     <th class="text-center whitespace-nowrap">TRẠNG THÁI</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-    @foreach($comments as $comment)
-    <tr class="intro-x">
-        <td>
-            <a href="" class="font-medium whitespace-nowrap">{{ $comment->content }}</a> 
-        </td>
-        <td class="text-left">
-    <a href="{{ route('admin.users.show', $comment->user_id) }}" class="font-medium">
-        {{ \App\Models\User::find($comment->user_id)->full_name }}
-    </a>
-</td>
-
-<td class="text-left">
-    <a href="{{ route('admin.items.show', $comment->item_id) }}" class="font-medium">
-        {{ \App\Modules\Comments\Models\Item::find($comment->item_id)->name }}
-    </a>
-</td>
-
-        <td class="text-center">
-            <input type="checkbox" 
-                data-toggle="switchbutton" 
-                data-onlabel="active"
-                data-offlabel="inactive"
-                {{ $comment->status == "active" ? "checked" : "" }}
-                data-size="sm"
-                name="toggle"
-                value="{{ $comment->id }}"
-                data-style="ios">
-        </td>
-        <td class="table-report__action w-56">
-            <div class="flex justify-center items-center">
-            <a href="{{ route('admin.comments.edit', $comment->id) }}" class="flex items-center mr-3"> 
-    <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit 
-</a>
-
-<form action="{{ route('admin.comments.destroy', $comment->id) }}" method="post">
-    @csrf
-    @method('delete')
-    <a class="flex items-center text-danger dltBtn" data-id="{{ $comment->id }}" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"> 
-        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete 
-    </a>
-</form>
-
-            </div>
-        </td>
-    </tr>
-    @endforeach
-</tbody>
-
-
+                @if($comments->isEmpty())
+                    <tr>
+                        <td colspan="5" class="text-center text-slate-500">
+                            Không có bình luận nào hiển thị.
+                        </td>
+                    </tr>
+                @else
+                    @foreach($comments as $comment)
+                    <tr class="intro-x">
+                        <td>
+                            <a href="" class="font-medium whitespace-nowrap">{{ $comment->content }}</a> 
+                        </td>
+                        <td class="text-left">
+                            <a href="{{ route('admin.users.show', $comment->user_id) }}" class="font-medium">
+                                {{ \App\Models\User::find($comment->user_id)->full_name }}
+                            </a>
+                        </td>
+                        <td class="text-left">
+                            <a href="{{ route('admin.items.show', $comment->item_id) }}" class="font-medium">
+                                {{ \App\Modules\Comments\Models\Item::find($comment->item_id)->name }}
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" 
+                                data-toggle="switchbutton" 
+                                data-onlabel="active"
+                                data-offlabel="inactive"
+                                {{ $comment->status == "active" ? "checked" : "" }}
+                                data-size="sm"
+                                name="toggle"
+                                value="{{ $comment->id }}"
+                                data-style="ios">
+                        </td>
+                        <td class="table-report__action w-56">
+                            <div class="flex justify-center items-center">
+                                <a href="{{ route('admin.comments.edit', $comment->id) }}" class="flex items-center mr-3"> 
+                                    <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit 
+                                </a>
+                                <form action="{{ route('admin.comments.destroy', $comment->id) }}" method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <a class="flex items-center text-danger dltBtn" data-id="{{ $comment->id }}" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"> 
+                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete 
+                                    </a>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                @endif
+            </tbody>
         </table>
     </div>
     <!-- END: HTML Table Data -->

@@ -2,103 +2,123 @@
 
 namespace App\Modules\MusicCompany\Controllers;
 
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Modules\MusicCompany\Models\MusicCompany;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\Modules\Resource\Models\Resource;
-use Illuminate\Support\Facades\Log;
+
+
 
 class MusicCompanyController extends Controller
 {
+
+
     public function index()
-    {
-        $music_companies = MusicCompany::with('resources')->paginate(10);
-        $active_menu = 'musiccompany';
-        $allResources = Resource::all();
+{
+    $active_menu = "musiccompany_list";
+    $breadcrumb = '
+        <li class="breadcrumb-item"><a href="#">/</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Danh sách Công ty Âm nhạc</li>';
+    
+    $music_companies = MusicCompany::with('resources')->paginate(10);
+    $allResources = Resource::all();
 
-        return view('MusicCompany::musiccompany.index', compact('music_companies', 'active_menu', 'allResources'));
+    return view('MusicCompany::musiccompany.index', compact('music_companies', 'active_menu', 'allResources', 'breadcrumb'));
+}
+
+
+public function create()
+{
+    $active_menu = "musiccompany_list"; // Xác định trạng thái menu hiện tại
+    $breadcrumb = '
+        <li class="breadcrumb-item"><a href="#">/</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Thêm Công Ty Âm Nhạc</li>';
+    $allResources = Resource::all(); 
+
+    // Truyền biến $breadcrumb vào view nếu bạn cần sử dụng nó
+    return view('MusicCompany::musiccompany.create', compact('active_menu', 'allResources', 'breadcrumb'));
+}
+
+
+public function store(Request $request)
+{
+    
+    $validatedData = $request->validate([
+        'title' => 'required|string|max:255',
+        'address' => 'nullable|string',
+        'photo'=>'string|nullable',
+        'summary' => 'nullable|string',
+        'content' => 'nullable|string',
+        'tags' => 'nullable|string',
+        'status' => 'required|string|in:active,inactive',
+        'phone' => 'nullable|string',
+        'email' => 'nullable|email',
+    ]);
+
+    // Remove HTML tags from title, summary, and content
+    $validatedData['title'] = strip_tags($validatedData['title']);
+    $validatedData['summary'] = strip_tags($validatedData['summary']);
+    $validatedData['content'] = strip_tags($validatedData['content']);
+
+    // Tạo một đối tượng MusicCompany
+    $musicCompany = new MusicCompany($validatedData);
+
+    // Tạo slug tự động
+    $slug = $this->createSlug($musicCompany->title);
+    $musicCompany->slug = $slug;
+
+    // Thiết lập user_id từ người dùng hiện tại
+    $musicCompany->user_id = Auth::id();
+
+  // Gán ảnh mặc định nếu không có
+  $data['photo'] = $data['photo'] ?? asset('backend/images/profile-6.jpg');
+
+    // Lưu vào cơ sở dữ liệu
+    $musicCompany->save();
+
+    // Xử lý trường resources
+    if ($request->has('resources')) {
+        $resourceIds = array_map('intval', $request->resources);
+        $musicCompany->resources()->attach($resourceIds);
     }
 
-    public function create()
-    {
-        $allResources = Resource::all(); 
-        $active_menu = 'musiccompany'; 
-        return view('MusicCompany::musiccompany.create', compact('active_menu', 'allResources'));
-    }
-
-    public function store(Request $request)
-    {
-        // Xác thực dữ liệu đầu vào
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'address' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'summary' => 'nullable|string',
-            'content' => 'nullable|string',
-            'tags' => 'nullable|string',
-            'status' => 'required|string|in:active,inactive',
-            'phone' => 'nullable|string',
-            'email' => 'nullable|email',
-        ]);
-    
-        // Remove HTML tags from title, summary, and content
-        $validatedData['title'] = strip_tags($validatedData['title']);
-        $validatedData['summary'] = strip_tags($validatedData['summary']);
-        $validatedData['content'] = strip_tags($validatedData['content']);
-    
-        // Tạo một đối tượng MusicCompany
-        $musicCompany = new MusicCompany($validatedData);
-    
-        // Tạo slug tự động
-        $slug = $this->createSlug($musicCompany->title);
-        $musicCompany->slug = $slug;
-    
-        // Thiết lập user_id từ người dùng hiện tại
-        $musicCompany->user_id = Auth::id();
-    
-        // Xử lý ảnh
-        if ($request->hasFile('photo')) {
-            $musicCompany->photo = $request->file('photo')->store('musicCompany', 'public');
-        } else {
-            $musicCompany->photo = 'backend/images/profile-6.jpg'; // Ảnh mặc định
-        }
-    
-        // Lưu vào cơ sở dữ liệu
-        $musicCompany->save();
-    
-        // Xử lý trường resources
-        if ($request->has('resources')) {
-            $resourceIds = array_map('intval', $request->resources);
-            $musicCompany->resources()->attach($resourceIds);
-        }
-    
-        // Chuyển hướng về danh sách công ty âm nhạc với thông báo thành công
-        return redirect()->route('admin.musiccompany.index')->with('success', 'Công ty âm nhạc đã được thêm thành công.');
-    }
+    // Chuyển hướng về danh sách công ty âm nhạc với thông báo thành công
+    return redirect()->route('admin.musiccompany.index')->with('success', 'Công ty âm nhạc đã được thêm thành công.');
+}
     
     
 
-    public function edit($id)
-    {
-        $active_menu = 'musiccompany';
-        $musicCompany = MusicCompany::with('resources')->findOrFail($id);
-        $allResources = Resource::all();
-        return view('MusicCompany::musiccompany.edit', compact('musicCompany', 'active_menu', 'allResources'));
-    }
+public function edit($id)
+{
+    $active_menu = "musiccompany_list"; // Xác định trạng thái menu hiện tại
+    $breadcrumb = '
+        <li class="breadcrumb-item"><a href="' . route('admin.musiccompany.index') . '">Danh sách công ty âm nhạc</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Điều chỉnh công ty âm nhạc</li>';
+    
+    // Tìm công ty âm nhạc cùng với tài nguyên
+    $musicCompany = MusicCompany::with('resources')->findOrFail($id);
+    
+    // Lấy tất cả tài nguyên
+    $allResources = Resource::all();
+    
+    // Trả về view với dữ liệu cần thiết
+    return view('MusicCompany::musiccompany.edit', compact('musicCompany', 'active_menu', 'allResources', 'breadcrumb'));
+}
+
 
     public function update(Request $request, $id)
     {
         // Tìm công ty âm nhạc theo ID
         $musicCompany = MusicCompany::findOrFail($id);
-
+    
         // Xác thực dữ liệu đầu vào
-        $request->validate([
+        $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'address' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'photo' => 'string|nullable',
             'summary' => 'nullable|string',
             'content' => 'nullable|string',
             'tags' => 'nullable|string',
@@ -106,37 +126,34 @@ class MusicCompanyController extends Controller
             'phone' => 'nullable|string',
             'email' => 'nullable|email',
         ]);
-
+    
         // Cập nhật slug nếu tiêu đề đã thay đổi
         if ($musicCompany->title !== $request->title) {
             $musicCompany->slug = $this->createSlug($request->title);
         }
-
+    
+        // Xử lý trường photo
+        $validatedData['photo'] = $validatedData['photo'] ?? asset('backend/images/profile-6.jpg');
+    
         // Cập nhật các thuộc tính khác mà không bao gồm 'resources'
-        $musicCompany->fill($request->except('slug', 'resources'));
-
-        // Xử lý ảnh
-        if ($request->hasFile('photo')) {
-            // Xóa ảnh cũ nếu có
-            if ($musicCompany->photo && $musicCompany->photo !== 'backend/images/profile-6.jpg') {
-                Storage::disk('public')->delete($musicCompany->photo);
-            }
-            // Lưu ảnh mới
-            $musicCompany->photo = $request->file('photo')->store('musicCompany', 'public');
-        }
-
+        $musicCompany->fill($validatedData);
+    
+        // Log validated data for debugging
+        Log::info('Updating music company with data:', $validatedData);
+    
         // Lưu lại bản ghi
         $musicCompany->save();
-
+    
         // Xử lý trường resources
         if ($request->has('resources')) {
             $resourceIds = array_map('intval', $request->resources);
             $musicCompany->resources()->sync($resourceIds); // Cập nhật mối quan hệ
         }
-
+    
         // Chuyển hướng với thông báo thành công
         return redirect()->route('admin.musiccompany.index')->with('success', 'Công ty âm nhạc đã được cập nhật thành công.');
     }
+    
 
     public function destroy(string $id)
     {
