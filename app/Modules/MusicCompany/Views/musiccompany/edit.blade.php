@@ -30,17 +30,18 @@
                     </div>
 
                     <div class="mt-3">
-                        <label for="mydropzone" class="form-label">Hình ảnh</label>
-                        <div class="px-4 pb-4 mt-5 flex items-center cursor-pointer relative">
-                            <div data-single="true" id="mydropzone" class="dropzone" url="{{ route('admin.upload.avatar') }}">
-                                <div class="fallback">
-                                    <input name="file" type="file" />
-                                </div>
+                        <label for="" class="form-label">Photo</label>
+                        <div class="px-4 pb-4 mt-5 flex items-center  cursor-pointer relative">
+                            <div data-single="true" id="mydropzone" class="dropzone  "    url="{{route('admin.upload.avatar')}}" >
+                                <div class="fallback"> <input name="file" type="file" /> </div>
                                 <div class="dz-message" data-dz-message>
-                                    <div class="font-medium">Kéo thả hoặc chọn hình ảnh.</div>
+                                    <div class=" font-medium">Kéo thả hoặc chọn ảnh.</div>
+                                        
                                 </div>
                             </div>
+                            <input type="hidden" id="photo" name="photo"/>
                         </div>
+                    </div>
                         <div class="grid grid-cols-10 gap-5 pl-4 pr-5 py-5">
                             @foreach (explode(',', $musicCompany->photo) as $photo)
                                 <div data-photo="{{ $photo }}" class="product_photo col-span-5 md:col-span-2 h-28 relative image-fit cursor-pointer zoom-in">
@@ -108,100 +109,101 @@
 @endsection
 
 @section('scripts')
+
 <script>
-    // Khởi tạo TomSelect cho dropdown
-    var select = new TomSelect('#resources', {
+    var resourceSelect = new TomSelect('#resources', {
+        create: true,
         maxItems: null,
-        allowEmptyOption: true,
-        plugins: ['remove_button'],
-        sortField: {
-            field: "text",
-            direction: "asc"
-        },
-        create: true
-    });
-
-    // Xử lý sự kiện khi nhấn nút xóa
-    $(".btn_remove").click(function() {
-        var photo = $(this).parent().data("photo"); // Lấy đường dẫn ảnh
-        $(this).closest('.product_photo').remove();
-        
-        // Cập nhật giá trị của photo
-        var current_photos = $('#photo').val().split(','); // Lấy danh sách hiện tại
-        current_photos = current_photos.filter(function(item) {
-            return item !== photo; // Lọc bỏ ảnh đã xóa
-        });
-        
-        $('#photo').val(current_photos.join(',')); // Cập nhật giá trị của photo
-    });
-
-    // Cấu hình Dropzone
-    Dropzone.autoDiscover = false; // Tắt autoDiscover để tự quản lý Dropzone
-    var myDropzone = new Dropzone("#mydropzone", { // Đảm bảo ID đúng
-        url: "{{ route('admin.upload.avatar') }}", // Đường dẫn tải lên
-        method: "post",
-        maxFilesize: 1, // MB
-        maxFiles: 5, // Giới hạn số tệp
-        acceptedFiles: "image/jpeg,image/png,image/gif",
-        previewTemplate: `
-            <div class="col-span-5 md:col-span-2 h-28 relative image-fit cursor-pointer zoom-in">
-                <img data-dz-thumbnail>
-                <div title="Xóa hình này?" class="tooltip w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-danger right-0 top-0 -mr-2 -mt-2">
-                    <i data-lucide="octagon" data-dz-remove> x </i>
-                </div>
-            </div>
-        `,
-        addRemoveLinks: true,
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
-    });
-
-    // Các sự kiện của Dropzone
-    myDropzone.on("addedfile", function(file) {
-        console.log('File added successfully!');
-    });
-
-    myDropzone.on("success", function(file, response) {
-        if(response.status == "true") {
-            var value_link = $('#photo').val();
-            if(value_link != "") {
-                value_link += ",";
-            }
-            value_link += response.link; // Thêm đường dẫn tệp vào ô ẩn
-            $('#photo').val(value_link);
-        }
-    });
-
-    myDropzone.on("removedfile", function(file) {
-        var current_photos = $('#photo').val().split(',');
-        current_photos = current_photos.filter(function(item) {
-            return item !== file.name; // Chỉ xóa ảnh cụ thể
-        });
-        $('#photo').val(current_photos.join(',')); // Cập nhật giá trị ô ẩn
-        console.log('File removed successfully!');
-    });
-
-    myDropzone.on("error", function(file, message) {
-        console.log(file);
-        console.log('error: ' + message);
-    });
-
-    // Khởi tạo CKEditor cho editor2
-    ClassicEditor.create(document.querySelector('#editor2'), {
-        ckfinder: {
-            uploadUrl: '{{ route("admin.upload.ckeditor") . "?_token=" . csrf_token() }}',
-        }
-    }).catch(error => {
-        console.error(error);
-    });
-
-    // Khởi tạo CKEditor cho editor1
-    ClassicEditor.create(document.querySelector('#editor1'), {
-        ckfinder: {
-            uploadUrl: '{{ route("admin.upload.ckeditor") . "?_token=" . csrf_token() }}',
-        }
-    }).catch(error => {
-        console.error(error);
+        placeholder: 'Nhập tài nguyên và nhấn Enter',
     });
 </script>
 
+<script>
+    $(".btn_remove").click(function(){
+        $(this).parent().parent().remove();   
+        var link_photo = "";
+        $('.product_photo').each(function() {
+            if (link_photo != '')
+            {
+            link_photo+= ',';
+            }   
+            link_photo += $(this).data("photo");
+        });
+        $('#photo_old').val(link_photo);
+    });
+
+ 
+                // previewsContainer: ".dropzone-previews",
+    Dropzone.instances[0].options.multiple = true;
+    Dropzone.instances[0].options.autoQueue= true;
+    Dropzone.instances[0].options.maxFilesize =  1; // MB
+    Dropzone.instances[0].options.maxFiles =5;
+    Dropzone.instances[0].options.acceptedFiles= "image/jpeg,image/png,image/gif";
+    Dropzone.instances[0].options.previewTemplate =  '<div class="col-span-5 md:col-span-2 h-28 relative image-fit cursor-pointer zoom-in">'
+                                               +' <img    data-dz-thumbnail >'
+                                               +' <div title="Xóa hình này?" class="tooltip w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-danger right-0 top-0 -mr-2 -mt-2"> <i data-lucide="octagon"   data-dz-remove> x </i> </div>'
+                                           +' </div>';
+    // Dropzone.instances[0].options.previewTemplate =  '<li><figure><img data-dz-thumbnail /><i title="Remove Image" class="icon-trash" data-dz-remove ></i></figure></li>';      
+    Dropzone.instances[0].options.addRemoveLinks =  true;
+    Dropzone.instances[0].options.headers= {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')};
+ 
+    Dropzone.instances[0].on("addedfile", function (file ) {
+        // Example: Handle success event
+        console.log('File addedfile successfully!' );
+    });
+    Dropzone.instances[0].on("success", function (file, response) {
+        // Example: Handle success event
+        // file.previewElement.innerHTML = "";
+        if(response.status == "true")
+        {
+            var value_link = $('#photo').val();
+            if(value_link != "")
+            {
+                value_link += ",";
+            }
+            value_link += response.link;
+            $('#photo').val(value_link);
+        }
+           
+        // console.log('File success successfully!' +$('#photo').val());
+    });
+    Dropzone.instances[0].on("removedfile", function (file ) {
+            $('#photo').val('');
+        console.log('File removed successfully!'  );
+    });
+    Dropzone.instances[0].on("error", function (file, message) {
+        // Example: Handle success event
+        file.previewElement.innerHTML = "";
+        console.log(file);
+       
+        console.log('error !' +message);
+    });
+     console.log(Dropzone.instances[0].options   );
+ 
+    // console.log(Dropzone.optionsForElement);
+ 
+</script>
+ 
+<script src="{{asset('js/js/ckeditor.js')}}"></script>
+<script>
+     
+        // CKSource.Editor
+        ClassicEditor.create( document.querySelector( '#editor2' ), 
+        {
+            ckfinder: {
+                uploadUrl: '{{route("admin.upload.ckeditor")."?_token=".csrf_token()}}'
+                }
+                ,
+                mediaEmbed: {previewsInData: true}
+
+        })
+
+        .then( editor => {
+            console.log( editor );
+        })
+        .catch( error => {
+            console.error( error );
+        })
+
+</script>
 @endsection

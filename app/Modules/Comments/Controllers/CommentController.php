@@ -18,19 +18,22 @@ class CommentController extends Controller
 
     // Hiển thị danh sách bình luận trong admin
     public function index()
-    {
-       
-        // Lấy tất cả bình luận từ cơ sở dữ liệu và phân trang
-        $comments = Comment::with('user', 'item', 'children') // Sửa 'replies' thành 'children'
-                           ->orderBy('created_at', 'DESC')
-                           ->paginate($this->pagesize);
+{
+    $active_menu = "comment_list";
+    $breadcrumb = '
+        <li class="breadcrumb-item"><a href="#">/</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Danh sách bình luận</li>';
+    
+    // Đảm bảo $this->pagesize đã được định nghĩa hoặc sử dụng giá trị cụ thể thay thế
+    $pagesize = 10; // Thay đổi giá trị nếu cần
+    $comments = Comment::with('user', 'item', 'children')
+                       ->orderBy('created_at', 'DESC')
+                       ->paginate($pagesize);
 
-           // Định nghĩa biến active_menu
-    $active_menu = 'comments'; // Thay đổi giá trị này tùy thuộc vào menu hiện tại
+    // Truyền thêm $breadcrumb nếu cần sử dụng trong view
+    return view('Comments::comments.index', compact('comments', 'active_menu', 'breadcrumb'));
+}
 
-    // Thay đổi đường dẫn view để phù hợp với cấu trúc thư mục
-    return view('Comments::comments.index', compact('comments', 'active_menu'));
-    }
 
     // Xóa bình luận
     public function destroy($id)

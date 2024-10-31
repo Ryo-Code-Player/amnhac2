@@ -23,58 +23,67 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach($music_companies as $company)
-            <tr class="intro-x">
-                <td class="text-left">
-                    <a href="{{ route('admin.musiccompany.show', $company->id) }}" class="font-medium whitespace-nowrap">{{ $company->id }}</a>
-                </td>
-                <td>
-                    <a href="{{ route('admin.musiccompany.show', $company->id) }}" class="font-medium whitespace-nowrap">{{ $company->title }}</a>
-                </td>
-                <td class="text-left">{{ $company->address }}</td>
-                <td class="w-40 text-center"> <!-- Căn giữa logo -->
-                    <div class="flex justify-center items-center h-full">
-                        <img class="tooltip rounded-full h-10 w-10 object-cover" src="{{ $company->photo }}" alt="Company Logo">
-                    </div>
-                </td>
-                <td class="text-left">{{ optional($company->user)->full_name ?? 'N/A' }}</td>
-                <td class="text-center"> 
-                    <input type="checkbox" 
-                    data-toggle="switchbutton" 
-                    data-onlabel="active"
-                    data-offlabel="inactive"
-                    {{ $company->status == "active" ? "checked" : "" }}
-                    data-size="sm"
-                    name="toggle"
-                    value="{{ $company->id }}"
-                    data-style="ios">
-                </td>
-                <td>
-                    @if ($company->resources->isNotEmpty())
-                        @foreach ($company->resources as $resource)
-                            {{ $resource->title }}{{ !$loop->last ? ', ' : '' }} <!-- Hiển thị tên tài nguyên -->
-                        @endforeach
-                    @else
-                        N/A
-                    @endif
-                </td>
-                <td class="table-report__action w-56">
-                    <div class="flex justify-center items-center">
-                        <a href="{{ route('admin.musiccompany.edit', $company->id) }}" class="flex items-center mr-3"> 
-                            <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit 
+    @if ($music_companies->isEmpty())
+        <tr>
+            <td colspan="8" class="text-center py-4"> <!-- Căn giữa và kéo dài ra các cột -->
+                <strong>Không có công ty âm nhạc nào hiển thị.</strong>
+            </td>
+        </tr>
+    @else
+        @foreach($music_companies as $company)
+        <tr class="intro-x">
+            <td class="text-left">
+                <a href="{{ route('admin.musiccompany.show', $company->id) }}" class="font-medium whitespace-nowrap">{{ $company->id }}</a>
+            </td>
+            <td>
+                <a href="{{ route('admin.musiccompany.show', $company->id) }}" class="font-medium whitespace-nowrap">{{ $company->title }}</a>
+            </td>
+            <td class="text-left">{{ $company->address }}</td>
+            <td class="w-40 text-center"> <!-- Căn giữa logo -->
+                <div class="flex justify-center items-center h-full">
+                    <img class="tooltip rounded-full h-10 w-10 object-cover" src="{{ asset($company->photo) }}" alt="Company Logo">
+                </div>
+            </td>
+            <td class="text-left">{{ optional($company->user)->full_name ?? 'N/A' }}</td>
+            <td class="text-center"> 
+                <input type="checkbox" 
+                data-toggle="switchbutton" 
+                data-onlabel="active"
+                data-offlabel="inactive"
+                {{ $company->status == "active" ? "checked" : "" }}
+                data-size="sm"
+                name="toggle"
+                value="{{ $company->id }}"
+                data-style="ios">
+            </td>
+            <td>
+                @if ($company->resources->isNotEmpty())
+                    @foreach ($company->resources as $resource)
+                        {{ $resource->title }}{{ !$loop->last ? ', ' : '' }} <!-- Hiển thị tên tài nguyên -->
+                    @endforeach
+                @else
+                    N/A
+                @endif
+            </td>
+            <td class="table-report__action w-56">
+                <div class="flex justify-center items-center">
+                    <a href="{{ route('admin.musiccompany.edit', $company->id) }}" class="flex items-center mr-3"> 
+                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit 
+                    </a>
+                    <form action="{{ route('admin.musiccompany.destroy', $company->id) }}" method="post" style="display: inline;">
+                        @csrf
+                        @method('delete')
+                        <a class="flex items-center text-danger dltBtn" data-id="{{ $company->id }}" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"> 
+                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete 
                         </a>
-                        <form action="{{ route('admin.musiccompany.destroy', $company->id) }}" method="post" style="display: inline;">
-                            @csrf
-                            @method('delete')
-                            <a class="flex items-center text-danger dltBtn" data-id="{{ $company->id }}" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"> 
-                                <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete 
-                            </a>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-            @endforeach
-            </tbody>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        @endforeach
+    @endif
+</tbody>
+
         </table>
     </div>
 </div>

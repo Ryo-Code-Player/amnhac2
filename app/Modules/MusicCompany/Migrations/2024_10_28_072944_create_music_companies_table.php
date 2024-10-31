@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique()->nullable();
             $table->string('address')->nullable();
-            $table->string('photo')->nullable();
+            $table->mediumText('photo')->nullable();
             $table->text('summary')->nullable();
             $table->text('content')->nullable();
             $table->string('tags')->nullable();
