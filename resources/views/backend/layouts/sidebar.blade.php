@@ -244,6 +244,40 @@
             </ul>
         </li>
 
+    <!-- start group -->
+    <li>
+        <a href="javascript:;" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='group_list'||$active_menu=='group_add'||$active_menu=='kiot'|| $active_menu=='grouptype_list'|| $active_menu=='grouptype_add'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">
+            <div class="side-menu__icon"> <i data-lucide="box"></i> </div>
+                <div class="side-menu__title">
+                    Groups 
+                    <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                </div>
+        </a>
+        <ul class="{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='group_list'||$active_menu=='group_add'||$active_menu=='kiot'|| $active_menu=='gtype_list'|| $active_menu=='gtype_add'|| $active_menu=='banner_list')?'side-menu__sub-open':''}}">
+            <li>
+                <a href="{{route('admin.group.index')}}" class="side-menu {{$active_menu=='groups'?'side-menu--active':''}}">
+                    <div class="side-menu__icon"> <i data-lucide="users"></i> </div>
+                    <div class="side-menu__title">Nhóm </div>
+                </a>
+            </li>
+                <li>
+                    <a href="{{route('admin.grouptype.index')}}" class="side-menu {{$active_menu=='gtype_add'?'side-menu--active':''}}">
+                        <div class="side-menu__icon"> <i data-lucide="file-text"></i> </div>
+                        <div class="side-menu__title"> Loại nhóm </div>
+                    </a>
+                </li>
+                <!-- <li>
+                    <a href="" class="side-menu">
+                        <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
+                        <div class="side-menu__title"> Top Menu </div>
+                    </a>
+                </li> -->
+            </ul>
+        </li>
+     <!-- end group -->
+
+
+        
      <!-- setting menu -->
      <li>
         <a href="javascript:;.html" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='role_list'||$active_menu=='role_add'||$active_menu=='kiot'|| $active_menu=='setting_list'|| $active_menu=='log_list'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">

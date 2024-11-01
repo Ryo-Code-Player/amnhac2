@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use App\Modules\Group\Models\Group;
 
 class User extends Authenticatable
 {
@@ -88,6 +89,11 @@ class User extends Authenticatable
         return $pro;
     }
     
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'group_members');
+    }
     
 }   
 

@@ -48,14 +48,14 @@ class UGroupController extends Controller
             ->paginate($this->pagesize)->withQueryString();
             $breadcrumb = '
             <li class="breadcrumb-item"><a href="#">/</a></li>
-            <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.admin.ugroup.index').'">nhóm người dùng</a></li>
+            <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.ugroup.index').'">nhóm người dùng</a></li>
             <li class="breadcrumb-item active" aria-current="page"> tìm kiếm </li>';
             
             return view('backend.ugroups.search',compact('ugroups','breadcrumb','searchdata','active_menu'));
         }
         else
         {
-            return redirect()->route('admin.admin.ugroup.index')->with('success','Không có thông tin tìm kiếm!');
+            return redirect()->route('admin.ugroup.index')->with('success','Không có thông tin tìm kiếm!');
         }
 
     }
@@ -94,7 +94,7 @@ class UGroupController extends Controller
         $active_menu="ugroup_add";
         $breadcrumb = '
         <li class="breadcrumb-item"><a href="#">/</a></li>
-        <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.admin.ugroup.index').'">Nhóm người dùng</a></li>
+        <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.ugroup.index').'">Nhóm người dùng</a></li>
         <li class="breadcrumb-item active" aria-current="page"> tạo nhóm người dùng </li>';
         return view('backend.ugroups.create',compact('breadcrumb','active_menu'));
     }
@@ -119,7 +119,7 @@ class UGroupController extends Controller
         
         $status = ugroup::create($data);
         if($status){
-            return redirect()->route('admin.admin.ugroup.index')->with('success','Tạo ugroup thành công!');
+            return redirect()->route('admin.ugroup.index')->with('success','Tạo ugroup thành công!');
         }
         else
         {
@@ -156,7 +156,7 @@ class UGroupController extends Controller
             $active_menu="ugroup_list";
             $breadcrumb = '
             <li class="breadcrumb-item"><a href="#">/</a></li>
-            <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.admin.ugroup.index').'">Nhóm người dùng</a></li>
+            <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.ugroup.index').'">Nhóm người dùng</a></li>
             <li class="breadcrumb-item active" aria-current="page"> điều chỉnh nhóm người dùng </li>';
             return view('backend.ugroups.edit',compact('breadcrumb','ugroup','active_menu'));
         }
@@ -192,7 +192,7 @@ class UGroupController extends Controller
             $data = $request->all();
             $status = $ugroup->fill($data)->save();
             if($status){
-                return redirect()->route('admin.admin.ugroup.index')->with('success','Cập nhật thành công');
+                return redirect()->route('admin.ugroup.index')->with('success','Cập nhật thành công');
             }
             else
             {
@@ -221,7 +221,7 @@ class UGroupController extends Controller
         {
             $status = UGroup::deleteUgroup($id);
             if($status){
-                return redirect()->route('admin.admin.ugroup.index')->with('success','Xóa nhóm người dùng thành công!');
+                return redirect()->route('admin.ugroup.index')->with('success','Xóa nhóm người dùng thành công!');
             }
             else
             {
