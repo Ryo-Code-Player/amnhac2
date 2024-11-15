@@ -279,6 +279,7 @@
 
         
     <!-- start interact -->
+
     <li>
         <a href="javascript:;" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='interact_list'||$active_menu=='interact_add'||$active_menu=='kiot'|| $active_menu=='interactype_list'|| $active_menu=='interactype_add'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">
             <div class="side-menu__icon"> <i data-lucide="book"></i> </div>
@@ -294,12 +295,18 @@
                     <div class="side-menu__title">Cá nhân </div>
                 </a>
             </li>
-                <li>
-                    <a href="{{route('admin.grouptype.index')}}" class="side-menu {{$active_menu=='gtype_add'?'side-menu--active':''}}">
-                        <div class="side-menu__icon"> <i data-lucide="file-text"></i> </div>
-                        <div class="side-menu__title"> Loại nhóm </div>
-                    </a>
-                </li>
+            <li>
+                <a href="{{route('admin.motion.index')}}" class="side-menu {{$active_menu=='motion_list'?'side-menu--active':''}}">
+                    <div class="side-menu__icon"> <i data-lucide="layers"></i> </div>
+                    <div class="side-menu__title">Danh sách motion</div>
+                </a>
+            </li>
+            <li>
+                <a href="{{route('admin.motion.create')}}" class="side-menu {{$active_menu=='motion_add'?'side-menu--active':''}}">
+                    <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                    <div class="side-menu__title">Thêm motion</div>
+                </a>
+            </li>
                 <!-- <li>
                     <a href="" class="side-menu">
                         <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
@@ -308,6 +315,47 @@
                 </li> -->
             </ul>
         </li>
+
+    <!-- start fanclub -->
+
+    <li>
+        <a href="javascript:;" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='fanclub_list'||$active_menu=='fanclub_add'||$active_menu=='kiot'|| $active_menu=='fanclubtype_list'|| $active_menu=='fanclubtype_add'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">
+            <div class="side-menu__icon"> <i data-lucide="globe"></i> </div>
+                <div class="side-menu__title">
+                    Câu lạc bộ người hâm mộ
+                    <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                </div>
+        </a>
+        <ul class="{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='interact_list'||$active_menu=='interact_add'||$active_menu=='kiot')?'side-menu__sub-open':''}}">
+            <li>
+                <a href="{{route('admin.Fanclub.index')}}" class="side-menu {{$active_menu=='interact_list'?'side-menu--active':''}}">
+                    <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                    <div class="side-menu__title">Danh sách câu lạc bộ</div>
+                </a>
+            </li>
+            <li>
+                <a href="{{route('admin.Fanclub.create')}}" class="side-menu {{$active_menu=='motion_list'?'side-menu--active':''}}">
+                    <div class="side-menu__icon"> <i data-lucide="file-plus"></i> </div>
+                    <div class="side-menu__title">Tạo câu lạc bộ người hâm mộ</div>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{route('admin.FanclubItem.index')}}" class="side-menu {{$active_menu=='interact_list'?'side-menu--active':''}}">
+                    <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                    <div class="side-menu__title">Danh sách tài nguyên</div>
+                </a>
+            </li>
+
+            <li>
+                <a href="" class="side-menu {{$active_menu=='interact_list'?'side-menu--active':''}}">
+                    <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                    <div class="side-menu__title">Danh sách thành viên</div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <!-- end fanclub -->
     
      
      <!-- setting menu -->
