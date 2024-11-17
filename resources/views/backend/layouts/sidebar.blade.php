@@ -76,35 +76,7 @@
         </ul>
     </li>
 
-    <!-- role -->
-
-    <li>
-        <a href="javascript:;.html" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='role_list'||$active_menu=='role_add'||$active_menu=='kiot'|| $active_menu=='setting_list'|| $active_menu=='log_list'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">
-              <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
-              <div class="side-menu__title">
-                  Quyền người dùng
-                  <div class="side-menu__sub-icon transform"> <i data-lucide="chevron-down"></i> </div>
-              </div>
-        </a>
-        <ul class="{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='role_list'||$active_menu=='role_add'||$active_menu=='kiot'|| $active_menu=='setting_list'|| $active_menu=='banner_add'|| $active_menu=='banner_list')?'side-menu__sub-open':''}}">
-             
-              <li>
-                  <a href="{{route('admin.roleuser.index')}}" class="side-menu {{$active_menu=='role_list'||$active_menu=='roles'?'side-menu--active':''}}">
-                      <div class="side-menu__icon"> <i data-lucide="octagon"></i> </div>
-                      <div class="side-menu__title"> Danh sách quyền</div>
-                  </a>
-              </li>
-              <li>
-                  <a href="{{route('admin.roleuser.create')}}" class="side-menu {{$active_menu=='role_list'?'side-menu--active':''}}">
-                      <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
-                      <div class="side-menu__title"> Thêm quyền người dùng</div>
-                  </a>
-              </li>
-              
-              
-              
-          </ul>
-    </li>
+   
     <!-- Comments -->
     <li>
     <a href="javascript:;.html" class="side-menu side-menu {{($active_menu =='comment_add'|| $active_menu=='comment_list') ? 'side-menu--active' : ''}}">
@@ -125,75 +97,143 @@
     </ul>
 </li>
 <!-- Quản lý Bài hát -->
+<!-- Quản lý Âm nhạc -->
 <li>
-    <a href="javascript:;" class="side-menu side-menu{{ ($active_menu=='music_management') ? '--active' : '' }}">
+    <a href="javascript:;" class="side-menu {{ in_array($active_menu, ['listener_management','playlist_management','music_management', 'musiccompany_management', 'singer_management', 'musictype_management', 'composer_management', 'song_management']) ? 'side-menu--active' : '' }}">
         <div class="side-menu__icon"> <i data-lucide="music"></i> </div>
         <div class="side-menu__title">
-            Quản lý Âm Nhạc
-            <div class="side-menu__sub-icon transform"> <i data-lucide="chevron-down"></i> </div>
+            Quản lý âm nhạc
+            <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
         </div>
     </a>
-    <ul class="{{ ($active_menu=='music_management') ? 'side-menu__sub-open' : '' }}">
-    <!-- Music Company -->
-    <li>
-        <a href="javascript:;" class="side-menu {{ $active_menu=='musiccompany_management' ? 'side-menu--active' : '' }}" onclick="toggleMusicCompany()">
-            <div class="side-menu__icon"> <i data-lucide="building"></i> </div>
-            <div class="side-menu__title">Công ty Âm nhạc</div>
-            <div class="side-menu__sub-icon transform"> <i data-lucide="chevron-down"></i> </div>
-        </a>
-        <ul id="musicCompanyList" class="{{ ($active_menu=='musiccompany_management') ? 'side-menu__sub-open' : '' }}" style="display: none;">
-            <li>
-                <a href="{{ route('admin.musiccompany.index') }}" class="side-menu {{ $active_menu=='musiccompany_list' ? 'side-menu--active' : '' }}">
-                    <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
-                    <div class="side-menu__title">Danh sách Công ty Âm nhạc</div>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.musiccompany.create') }}" class="side-menu {{ $active_menu=='musiccompany_add' ? 'side-menu--active' : '' }}">
-                    <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
-                    <div class="side-menu__title">Thêm Công ty Âm nhạc</div>
-                </a>
-            </li>
-        </ul>
-    </li>
-         <!-- Thêm folder cho  Bài hát -->
-<li>
-    <a href="javascript:;" class="side-menu {{ $active_menu=='song_management' ? 'side-menu--active' : '' }}">
-        <div class="side-menu__icon"> <i data-lucide="headphones"></i> </div> <!-- Đổi thành biểu tượng nhạc -->
-        <div class="side-menu__title">Bài hát</div>
-        <div class="side-menu__sub-icon transform"> <i data-lucide="chevron-down"></i> </div>
-    </a>
-    <ul class="{{ ($active_menu=='song_management') ? 'side-menu__sub-open' : '' }}">
+    <ul class="{{ in_array($active_menu, ['listener_management','playlist_management','music_management', 'musiccompany_management', 'singer_management', 'musictype_management', 'composer_management', 'song_management']) ? 'side-menu__sub-open' : '' }}">
+        <!-- Công ty Âm nhạc -->
         <li>
-            <a href="" class="side-menu {{ $active_menu=='song_list' ? 'side-menu--active' : '' }}">
-                <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
-                <div class="side-menu__title">Danh sách Bài hát</div>
+            <a href="javascript:;" class="side-menu {{ $active_menu == 'musiccompany_management' ? 'side-menu--active' : '' }}">
+                <div class="side-menu__icon"> <i data-lucide="building"></i> </div>
+                <div class="side-menu__title">Công ty âm nhạc</div>
+                <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
             </a>
+            <ul class="{{ $active_menu == 'musiccompany_management' ? 'side-menu__sub-open' : '' }}">
+                <li>
+                    <a href="{{ route('admin.musiccompany.index') }}" class="side-menu {{ $active_menu == 'musiccompany_list' ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                        <div class="side-menu__title">Danh sách công ty âm nhạc</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.musiccompany.create') }}" class="side-menu {{ $active_menu == 'musiccompany_add' ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                        <div class="side-menu__title">Thêm công ty âm nhạc</div>
+                    </a>
+                </li>
+            </ul>
         </li>
+        <!-- Ca Sĩ -->
         <li>
-            <a href="" class="side-menu {{ $active_menu=='song_add' ? 'side-menu--active' : '' }}">
-                <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
-                <div class="side-menu__title">Thêm Bài hát</div>
+            <a href="javascript:;" class="side-menu {{ $active_menu == 'singer_management' ? 'side-menu--active' : '' }}">
+                <div class="side-menu__icon"> <i data-lucide="user"></i> </div>
+                <div class="side-menu__title">Ca sĩ</div>
+                <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
             </a>
+            <ul class="{{ $active_menu == 'singer_management' ? 'side-menu__sub-open' : '' }}">
+                <li>
+                    <a href="{{ route('admin.singer.index') }}" class="side-menu {{ $active_menu == 'singer_list' ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                        <div class="side-menu__title">Danh sách ca sĩ</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.singer.create') }}" class="side-menu {{ $active_menu == 'singer_add' ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                        <div class="side-menu__title">Thêm ca sĩ</div>
+                    </a>
+                </li>
+            </ul>
         </li>
-    </ul>
-</li>
-<!-- Thêm folder cho quản lý Playlist -->
+        <!-- Loại Nhạc -->
+        <li>
+            <a href="javascript:;" class="side-menu {{ $active_menu == 'musictype_management' ? 'side-menu--active' : '' }}">
+                <div class="side-menu__icon"> <i data-lucide="music"></i> </div>
+                <div class="side-menu__title">Loại nhạc</div>
+                <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
+            </a>
+            <ul class="{{ $active_menu == 'musictype_management' ? 'side-menu__sub-open' : '' }}">
+                <li>
+                    <a href="{{ route('admin.musictype.index') }}" class="side-menu {{ $active_menu == 'musictype_list' ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                        <div class="side-menu__title">Danh sách loại nhạc</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.musictype.create') }}" class="side-menu {{ $active_menu == 'musictype_add' ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                        <div class="side-menu__title">Thêm loại nhạc</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <!-- Nhà Soạn Nhạc -->
+        <li>
+            <a href="javascript:;" class="side-menu {{ $active_menu == 'composer_management' ? 'side-menu--active' : '' }}">
+                <div class="side-menu__icon"> <i data-lucide="Mic"></i> </div>
+                <div class="side-menu__title">Nhạc sĩ</div>
+                <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
+            </a>
+            <ul class="{{ $active_menu == 'composer_management' ? 'side-menu__sub-open' : '' }}">
+                <li>
+                    <a href="{{ route('admin.composer.index') }}" class="side-menu {{ $active_menu == 'composer_list' ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                        <div class="side-menu__title">Danh sách nhạc sĩ sáng tác</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.composer.create') }}" class="side-menu {{ $active_menu == 'composer_add' ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                        <div class="side-menu__title">Thêm nhạc sĩ</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <!-- Bài Hát -->
+        <li>
+            <a href="javascript:;" class="side-menu {{ $active_menu == 'song_management' ? 'side-menu--active' : '' }}">
+                <div class="side-menu__icon"> <i data-lucide="Headphones"></i>
+                </div>
+                <div class="side-menu__title">Bài hát</div>
+                <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
+            </a>
+            <ul class="{{ $active_menu == 'song_management' ? 'side-menu__sub-open' : '' }}">
+                <li>
+                    <a href="{{ route('admin.song.index') }}" class="side-menu {{ $active_menu == 'song_list' ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                        <div class="side-menu__title">Danh sách bài hát</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.song.create') }}" class="side-menu {{ $active_menu == 'song_add' ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                        <div class="side-menu__title">Thêm bài hát</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+       <!-- Playlist -->
 <li>
-    <a href="javascript:;" class="side-menu {{ $active_menu=='playlist_management' ? 'side-menu--active' : '' }}">
-        <div class="side-menu__icon"> <i data-lucide="album"></i>  </div> <!-- Biểu tượng cho Playlist -->
+    <a href="javascript:;" class="side-menu {{ $active_menu == 'playlist_management' ? 'side-menu--active' : '' }}">
+        <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
         <div class="side-menu__title">Playlist</div>
-        <div class="side-menu__sub-icon transform"> <i data-lucide="chevron-down"></i> </div>
+        <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
     </a>
-    <ul class="{{ ($active_menu=='playlist_management') ? 'side-menu__sub-open' : '' }}">
+    <ul class="{{ $active_menu == 'playlist_management' ? 'side-menu__sub-open' : '' }}">
         <li>
-            <a href="" class="side-menu {{ $active_menu=='playlist_list' ? 'side-menu--active' : '' }}">
+            <a href="{{ route('admin.playlist.index') }}" class="side-menu {{ $active_menu == 'playlist_list' ? 'side-menu--active' : '' }}">
                 <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
                 <div class="side-menu__title">Danh sách Playlist</div>
             </a>
         </li>
         <li>
-            <a href="" class="side-menu {{ $active_menu=='playlist_add' ? 'side-menu--active' : '' }}">
+            <a href="{{ route('admin.playlist.create') }}" class="side-menu {{ $active_menu == 'playlist_add' ? 'side-menu--active' : '' }}">
                 <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
                 <div class="side-menu__title">Thêm Playlist</div>
             </a>
@@ -201,11 +241,32 @@
     </ul>
 </li>
 
-
-        <!-- Các mục khác cho Bài hát có thể được thêm vào đây -->
-        
+<!-- Listener -->
+<li>
+    <a href="javascript:;" class="side-menu {{ $active_menu == 'listener_management' ? 'side-menu--active' : '' }}">
+        <div class="side-menu__icon"> <i data-lucide="user"></i> </div>
+        <div class="side-menu__title">Listener</div>
+        <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
+    </a>
+    <ul class="{{ $active_menu == 'listener_management' ? 'side-menu__sub-open' : '' }}">
+        <li>
+            <a href="{{ route('admin.listener.index') }}" class="side-menu {{ $active_menu == 'listener_list' ? 'side-menu--active' : '' }}">
+                <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                <div class="side-menu__title">Danh sách Listener</div>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.listener.create') }}" class="side-menu {{ $active_menu == 'listener_add' ? 'side-menu--active' : '' }}">
+                <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                <div class="side-menu__title">Thêm Listener</div>
+            </a>
+        </li>
     </ul>
 </li>
+    </ul>
+</li>
+
+
 
  <!-- Resource  -->
  <li>
@@ -244,39 +305,56 @@
             </ul>
         </li>
 
-    <!-- start group -->
-    <li>
-        <a href="javascript:;" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='group_list'||$active_menu=='group_add'||$active_menu=='kiot'|| $active_menu=='grouptype_list'|| $active_menu=='grouptype_add'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">
-            <div class="side-menu__icon"> <i data-lucide="box"></i> </div>
+   <!-- group -->
+   <li>
+            <a href="javascript:;.html" class="side-menu side-menu{{( $active_menu=='group_list'|| $active_menu=='group_add' )?'--active':''}}">
+                <div class="side-menu__icon"> <i data-lucide="align-center"></i> </div>
                 <div class="side-menu__title">
-                    Groups 
-                    <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                    Nhóm
+                    <div class="side-menu__sub-icon transform"> <i data-lucide="chevron-down"></i> </div>
                 </div>
-        </a>
-        <ul class="{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='group_list'||$active_menu=='group_add'||$active_menu=='kiot'|| $active_menu=='gtype_list'|| $active_menu=='gtype_add'|| $active_menu=='banner_list')?'side-menu__sub-open':''}}">
-            <li>
-                <a href="{{route('admin.group.index')}}" class="side-menu {{$active_menu=='groups'?'side-menu--active':''}}">
-                    <div class="side-menu__icon"> <i data-lucide="users"></i> </div>
-                    <div class="side-menu__title">Nhóm </div>
-                </a>
-            </li>
+            </a>
+            <ul class="{{ ($active_menu=='group_list'|| $active_menu=='group_add')?'side-menu__sub-open':''}}">
                 <li>
-                    <a href="{{route('admin.grouptype.index')}}" class="side-menu {{$active_menu=='gtype_add'?'side-menu--active':''}}">
-                        <div class="side-menu__icon"> <i data-lucide="file-text"></i> </div>
-                        <div class="side-menu__title"> Loại nhóm </div>
+                    <a href="{{route('admin.group.index')}}" class="side-menu {{$active_menu=='group_list'?'side-menu--active':''}}">
+                        <div class="side-menu__icon"> <i data-lucide="compass"></i> </div>
+                        <div class="side-menu__title">Danh sách nhóm </div>
                     </a>
                 </li>
-                <!-- <li>
-                    <a href="" class="side-menu">
-                        <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
-                        <div class="side-menu__title"> Top Menu </div>
+                <li>
+                    <a href="{{route('admin.group.create')}}" class="side-menu {{$active_menu=='group_add'?'side-menu--active':''}}">
+                        <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                        <div class="side-menu__title"> Thêm nhóm</div>
                     </a>
-                </li> -->
+                </li>
+                
+          </ul>
+        </li>
+       
+ <!-- Tag -->
+ <li>
+            <a href="javascript:;" class="side-menu {{($active_menu=='tag_list'|| $active_menu=='tag_add')?'side-menu--active':''}}">
+                <div class="side-menu__icon"> <i data-lucide="anchor"></i> </div>
+                <div class="side-menu__title">
+                    Tag
+                    <div class="side-menu__sub-icon transform"> <i data-lucide="chevron-down"></i> </div>
+                </div>
+            </a>
+            <ul class="{{($active_menu=='tag_list'|| $active_menu=='tag_add')?'side-menu__sub-open':''}}">
+                <li>
+                    <a href="{{ route('admin.tag.index') }}" class="side-menu {{$active_menu=='tag_list'?'side-menu--active':''}}">
+                        <div class="side-menu__icon"> <i data-lucide="anchor"></i> </div>
+                        <div class="side-menu__title">Danh sách Tag </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.tag.create') }}" class="side-menu {{$active_menu=='tag_add'?'side-menu--active':''}}">
+                        <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                        <div class="side-menu__title"> Thêm Tag</div>
+                    </a>
+                </li>
             </ul>
         </li>
-     <!-- end group -->
-
-
         
      <!-- setting menu -->
      <li>
