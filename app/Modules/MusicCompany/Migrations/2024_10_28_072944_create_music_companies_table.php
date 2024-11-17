@@ -16,11 +16,13 @@ return new class extends Migration
             $table->mediumText('photo')->nullable();
             $table->text('summary')->nullable();
             $table->text('content')->nullable();
-            $table->string('tags')->nullable();
-            $table->string('status')->default('active');
+             $table->json('resources')->nullable(); // Thêm trường resources kiểu JSON
+             $table->string('tags')->nullable(); // Lưu tags dưới dạng chuỗi
+            $table->enum('status',['active','inactive'])->default('active');
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->unsignedBigInteger('user_id')->nullable(); // Khóa ngoại cho user
+           
             $table->timestamps();
 
             // Thiết lập khóa ngoại cho user_id

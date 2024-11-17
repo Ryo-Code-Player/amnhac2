@@ -18,7 +18,6 @@
                     <th class="text-center whitespace-nowrap">LOGO</th>
                     <th class="whitespace-nowrap">NGƯỜI DÙNG</th>
                     <th class="text-center whitespace-nowrap">TRẠNG THÁI</th>
-                    <th class="text-center whitespace-nowrap">TÀI NGUYÊN</th> <!-- Cột mới cho tài nguyên -->
                     <th class="text-center whitespace-nowrap">HÀNH ĐỘNG</th>
                 </tr>
             </thead>
@@ -44,27 +43,18 @@
                     <img class="tooltip rounded-full h-10 w-10 object-cover" src="{{ asset($company->photo) }}" alt="Company Logo">
                 </div>
             </td>
-            <td class="text-left">{{ optional($company->user)->full_name ?? 'N/A' }}</td>
+            <td class="text-left">{{ optional($company->user)->full_name ?? 'N/A' }}</td>   
             <td class="text-center"> 
-                <input type="checkbox" 
-                data-toggle="switchbutton" 
-                data-onlabel="active"
-                data-offlabel="inactive"
-                {{ $company->status == "active" ? "checked" : "" }}
-                data-size="sm"
-                name="toggle"
-                value="{{ $company->id }}"
-                data-style="ios">
-            </td>
-            <td>
-                @if ($company->resources->isNotEmpty())
-                    @foreach ($company->resources as $resource)
-                        {{ $resource->title }}{{ !$loop->last ? ', ' : '' }} <!-- Hiển thị tên tài nguyên -->
-                    @endforeach
-                @else
-                    N/A
-                @endif
-            </td>
+                            <input type="checkbox" 
+                            data-toggle="switchbutton" 
+                            data-onlabel="active"
+                            data-offlabel="inactive"
+                            {{$company->status=="active"?"checked":""}}
+                            data-size="sm"
+                            name="toogle"
+                            value="{{$company->id}}"
+                            data-style="ios">
+                        </td>
             <td class="table-report__action w-56">
                 <div class="flex justify-center items-center">
                     <a href="{{ route('admin.musiccompany.edit', $company->id) }}" class="flex items-center mr-3"> 
@@ -118,5 +108,65 @@
             }
         });
     });
+</script>
+
+
+<script>
+    $(".ipsearch").on('keyup', function (e) {
+        e.preventDefault();
+        if (e.key === 'Enter' || e.keyCode === 13) {
+           
+            // Do something
+            var data=$(this).val();
+            var form=$(this).closest('form');
+            if(data.length > 0)
+            {
+                form.submit();
+            }
+            else
+            {
+                  Swal.fire(
+                    'Không tìm được!',
+                    'Bạn cần nhập thông tin tìm kiếm.',
+                    'error'
+                );
+            }
+        }
+    });
+
+    $("[name='toogle']").change(function() {
+    var mode = $(this).prop('checked') ? 'active' : 'inactive'; // Xác định trạng thái
+    var id = $(this).val(); // ID của công ty âm nhạc
+
+    // Đảm bảo URL đúng, truyền id vào URL
+    $.ajax({
+        url: "{{ route('admin.musiccompany.status', ['id' => '__id__']) }}".replace('__id__', id), // Thay thế __id__ bằng id thực tế
+        type: "POST",
+        data: {
+            _token: '{{ csrf_token() }}',
+            mode: mode // Trạng thái cần cập nhật
+        },
+        success: function(response) {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: response.msg,
+                showConfirmButton: false,
+                timer: 1000
+            });
+        },
+        error: function(xhr) {
+            console.log(xhr.responseText); // Log lỗi nếu có
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Không thể cập nhật trạng thái.',
+            });
+        }
+    });
+});
+
+
+    
 </script>
 @endsection
