@@ -14,6 +14,7 @@ Route::group( ['prefix'=>'admin/'  , 'as' => 'admin.' ],function(){
     Route::post('musiccompany/{id}/status', [MusicCompanyController::class, 'status'])->name('musiccompany.status');
     Route::get('musiccompany/{id}', [MusicCompanyController::class, 'show'])->name('musiccompany.show');
     Route::post('upload/avatar', [MusicCompanyController::class, 'uploadAvatar'])->name('upload.avatar');
-
+    Route::post('musiccompany/{companyId}/upload-resource', [MusicCompanyController::class, 'uploadResource'])->name('musiccompany.uploadResource');
+    Route::post('musiccompany/{companyId}/deleteResource', [MusicCompanyController::class, 'deleteResource'])->name('musiccompany.deleteResource');
 
 });
