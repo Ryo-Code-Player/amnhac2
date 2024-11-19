@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('groups', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('type_id')->constrained('group_types')->onDelete('cascade');
             $table->string('title');
-            $table->string('photo')->nullable();
             $table->string('slug')->unique();
+            $table->text('summary')->nullable();
             $table->text('description')->nullable();
-            $table->enum('is_private', ['public','private'])->default('public');
-            $table->enum('status',['active','inactive'])->default('active');
+            $table->text('resources')->nullable();
+            $table->timestamp('timestart')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('timeend')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->text('diadiem');
+            $table->string('tags')->nullable();
+            $table->foreignId('event_type_id')->constrained('event_types')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('groups');
+        Schema::dropIfExists('events');
     }
 };

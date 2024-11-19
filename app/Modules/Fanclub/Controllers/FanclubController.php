@@ -4,6 +4,7 @@ namespace App\Modules\Fanclub\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Fanclub\Models\Fanclub;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -20,7 +21,7 @@ class FanclubController extends Controller
         $active_menu="fanclub_list";
         $breadcrumb = '
         <li class="breadcrumb-item"><a href="#">/</a></li>
-        <li class="breadcrumb-item active" aria-current="page"> Tương tác </li>';
+        <li class="breadcrumb-item active" aria-current="page"> Danh sách câu lạc bộ </li>';
         $fanclub=Fanclub::orderBy('id','DESC')->paginate($this->pagesize);
         return view('Fanclub::fanclub.index',compact('fanclub','breadcrumb','active_menu'));
     }
@@ -73,6 +74,13 @@ class FanclubController extends Controller
 
             // Lấy tất cả dữ liệu từ form
             // dd($request->all());
+            $photoUrl = null;
+            if ($request->hasFile('photo')) {
+                $photoPath = $request->file('photo')->store('photos', 'public');
+                $photoUrl = Storage::url($photoPath);
+                $photoUrl = Str::replaceFirst('http://localhost', '', $photoUrl); // Remove "http://localhost" from URL
+                $validate['photo'] = $photoUrl;
+            }
 
             $data = $request->all();
             $data['slug'] = Str::slug($request->title);
@@ -91,7 +99,7 @@ class FanclubController extends Controller
             $status = Fanclub::create($data);
 
             if ($status) {
-                return redirect()->route('admin.Fanclub.index')->with('success', 'Tạo trang cá nhân thành công!');
+                return redirect()->route('admin.Fanclub.index')->with('success', 'Tạo câu lạc bộ thành công!');
             } else {
                 return back()->with('error', 'Có lỗi xãy ra!');
             }
@@ -139,6 +147,13 @@ class FanclubController extends Controller
                 'content' => 'nullable|string',
                 'status' => 'required|in:active,inactive',
             ]);
+            if ($request->hasFile('photo')) {
+                $photoPath = $request->file('photo')->store('photos', 'public');
+                $photoUrl = Storage::url($photoPath);
+                $photoUrl = Str::replaceFirst('http://localhost', '', $photoUrl); // Remove "http://localhost" from URL
+                $validated['photo'] = $photoUrl;
+            }
+
             $data = $request->all();
             $data['slug'] = Str::slug($request->title);
             $status = $fanclub->fill($data)->save();

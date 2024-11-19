@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('group_types', function (Blueprint $table) {
+        Schema::create('group_roles', function (Blueprint $table) {
             $table->id();
-            $table->string('nametitle');
-            $table->text('description')->nullable();
+            $table->string('title');
+            $table->string('type_code')->nullable();
+            $table->enum('status',['active','inactive'])->default('active');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('group_types');
+        Schema::dropIfExists('group_roles');
     }
 };

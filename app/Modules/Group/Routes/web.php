@@ -1,26 +1,40 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Modules\Group\Controllers\GroupTypeController;
+ 
+// Define routes here
 use App\Modules\Group\Controllers\GroupController;
-
+use App\Modules\Group\Controllers\GroupTypeController;
+use App\Modules\Group\Controllers\GroupRoleController;
+use App\Modules\Group\Controllers\GroupBlogController;
+use App\Modules\Group\Controllers\GroupMemberController;
+use App\Modules\Group\Controllers\GroupFolderController;
 Route::group( ['prefix'=>'admin/'  , 'as' => 'admin.' ],function(){
-    Route::resource('group', GroupController::class);
-    Route::get('group_search',[GroupController::class,'GroupSearch'])->name('group.search');
-    Route::get('group_edit/{id}/edit', [GroupController::class, 'edit'])->name('admin.group.edit');
-    Route::post('group_store', [GroupController::class, 'store'])->name('admin.group.store');
-    Route::post('group_update/{id}', [GroupController::class, 'update'])->name('admin.group.update');
-    Route::post('group_destroy/{id}', [GroupController::class, 'destroy'])->name('admin.group.destroy');
-    Route::get('group_show/{id}', [GroupController::class, 'show'])->name('admin.group.show');
-    Route::get('group_add/{id}/{link}', [GroupController::class, 'add'])->name('group.add');
-    Route::get('group_addgroupuser/{groupid}/{id}/{$link}', [GroupController::class, 'addgroupuser'])->name('group.addgroupuser');
-    Route::delete('group_remove/{groupid}/{id}/{$link}', [GroupController::class, 'remove'])->name('group.remove');
+   
+    ///BlogCategory section
+    Route::resource('grouptype',  GroupTypeController::class);
+    Route::post('grouptype_status',[GroupTypeController::class,'grouptypeStatus'])->name('grouptype.status');
+    Route::get('grouptype_search',[GroupTypeController::class,'grouptypeSearch'])->name('grouptype.search');
+    
+    Route::resource('grouprole',  GroupRoleController::class);
+    Route::post('grouprole_status',[GroupRoleController::class,'grouproleStatus'])->name('grouprole.status');
+    Route::get('grouprole_search',[GroupRoleController::class,'grouproleSearch'])->name('grouprole.search');
+    
 
+    Route::resource('groupblog',  GroupBlogController::class);
 
+    Route::resource('groupmember',  GroupMemberController::class);
+    Route::post('groupmember_status',[GroupMemberController::class,'groupmemberStatus'])->name('groupmember.status');
+    Route::get('groupmember_search',[GroupMemberController::class,'groupmemberSearch'])->name('groupmember.search');
+   
+    Route::resource('groupfolder',  GroupFolderController::class);
 
-    Route::resource('grouptype', GroupTypeController::class);
-    Route::get('grouptype_search',[GroupTypeController::class,'GroupTypeSearch'])->name('grouptype.search');
-    Route::get('grouptype_edit/{id}/edit', [GroupTypeController::class, 'edit'])->name('admin.grouptype.edit');
-    Route::post('grouptype_update/{id}', [GroupTypeController::class, 'update'])->name('admin.grouptype.update');
-    Route::post('grouptype_destroy/{id}', [GroupTypeController::class, 'update'])->name('admin.grouptype.destroy');
+    Route::resource('group',  GroupController::class);
+    Route::post('group/upload/avatar', [GroupController::class, 'uploadAvatar'])->name('upload.avatar');
+    Route::post('group_status',[GroupController::class,'groupStatus'])->name('group.status');
+    Route::get('group_search',[GroupController::class,'groupSearch'])->name('group.search');
+    Route::get('group_member/{slug}',[GroupMemberController::class,'groupMemberList'])->name('group.members');
+    Route::get('group_addmember/{slug}',[GroupMemberController::class,'groupAddMember'])->name('groupmember.addmember');
+  
 });
+ 

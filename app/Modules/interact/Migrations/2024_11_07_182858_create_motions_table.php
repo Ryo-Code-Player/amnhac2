@@ -20,6 +20,13 @@ return new class extends Migration
             $table->integer('count');
             $table->timestamps();
         });
+        
+        // Schema::create('motions', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('title');
+        //     $table->string('icon');
+        //     $table->timestamps();
+        // });
     }
 
     /**

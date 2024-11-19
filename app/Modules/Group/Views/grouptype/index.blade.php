@@ -4,18 +4,23 @@
 <div class="content">
 @include('backend.layouts.notification')
     <h2 class="intro-y text-lg font-medium mt-10">
-        Danh sách các nhóm
+      @if(isset($datasearch) && $datasearch)
+        Kết quả tìm kiếm
+            
+    @else
+         Danh sách loại nhóm
+    @endif
     </h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
             <a href="{{route('admin.grouptype.create')}}" class="btn btn-primary shadow-md mr-2">Thêm loại nhóm</a>
             
-            <div class="hidden md:block mx-auto text-slate-500">Hiển thị trang {{$gtype->currentPage()}} trong {{$gtype->lastPage()}} trang</div>
+            <div class="hidden md:block mx-auto text-slate-500">Hiển thị trang {{$grouptypes->currentPage()}} trong {{$grouptypes->lastPage()}} trang</div>
             <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                 <div class="w-56 relative text-slate-500">
                     <form action="{{route('admin.grouptype.search')}}" method = "get">
-                        @csrf
-                        <input type="text" name="datasearch" class="ipsearch form-control w-56 box pr-10" placeholder="Search...">
+                        
+                        <input type="text" name="datasearch" value='{{isset($datasearch) && $datasearch?$datasearch:''}}' class="ipsearch form-control w-56 box pr-10" placeholder="tìm kiếm">
                         <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i> 
                     </form>
                 </div>
@@ -26,44 +31,41 @@
             <table class="table table-report -mt-2">
                 <thead>
                     <tr>
-                        <th class="whitespace-nowrap">ID</th>
-                        <th class="whitespace-nowrap">Tên phân loại</th>
-                        <th class="text-center whitespace-nowrap">Mô tả</th>
-                        <th class="text-center whitespace-nowrap">Hoạt động</th>
-                         
+                        <th class="whitespace-nowrap">TÊN</th>
+                        <th class="whitespace-nowrap">CODE</th>
+                        <th class="text-center whitespace-nowrap">TRẠNG THÁI</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($gtype as $item)
-                    <tr class="i.0ntro-x">
+                    @foreach($grouptypes as $item)
+                    <tr class="intro-x">
                         <td>
-                             {{$item->id}} 
+                            <a href="" class="font-medium whitespace-nowrap">{{$item->title}}</a> 
                         </td>
-                        <td>
-                        {{$item->nametitle}} 
+                        <td class="text-left"><?php echo $item->type_code; ?></td>
+                        
+                        <td class="text-center"> 
+                            <input type="checkbox" 
+                            data-toggle="switchbutton" 
+                            data-onlabel="active"
+                            data-offlabel="inactive"
+                            {{$item->status=="active"?"checked":""}}
+                            data-size="sm"
+                            name="toogle"
+                            value="{{$item->id}}"
+                            data-style="ios">
                         </td>
-                        <td class="text-left">{{$item->description}}</td>
-                       
+                         
                         <td class="table-report__action w-56">
                             <div class="flex justify-center items-center">
-                            <div class="dropdown py-3 px-1 ">  
-                                <a class="btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown"> 
-                                    Hoạt động
-                                </a>
-                                <div class="dropdown-menu w-40"> 
-                                    <ul class="dropdown-content">
-                                    <li><a class="dropdown-item" href="{{route('admin.grouptype.edit',$item->id)}}" class="flex items-center mr-3" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a></li>
-                                    <li>
-                                        <form action="{{route('admin.grouptype.destroy',$item->id)}}" method = "post">
-                                            @csrf
-                                            @method('delete')
-                                            <a class=" dropdown-item flex items-center text-danger dltBtn" data-id="{{$item->id}}" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"> <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete </a>
-                                        </form>
-                                    </li>
-                                    </ul>
-                                </div> 
-                            </div> 
+                                <a href="{{route('admin.grouptype.edit',$item->id)}}" class="flex items-center mr-3" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a>
+                                <form action="{{route('admin.grouptype.destroy',$item->id)}}" method = "post">
+                                    @csrf
+                                    @method('delete')
+                                    <a class="flex items-center text-danger dltBtn" data-id="{{$item->id}}" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"> <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete </a>
+                                </form>
+                               
                             </div>
                         </td>
                     </tr>
@@ -79,7 +81,7 @@
         <!-- BEGIN: Pagination -->
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
             <nav class="w-full sm:w-auto sm:mr-auto">
-                {{$gtype->links('vendor.pagination.tailwind')}}
+                {{$grouptypes->links('vendor.pagination.tailwind')}}
             </nav>
            
         </div>
@@ -127,18 +129,9 @@
             // Do something
             var data=$(this).val();
             var form=$(this).closest('form');
-            if(data.length > 0)
-            {
+            
                 form.submit();
-            }
-            else
-            {
-                  Swal.fire(
-                    'Không tìm được!',
-                    'Bạn cần nhập thông tin tìm kiếm.',
-                    'error'
-                );
-            }
+             
         }
     });
 
@@ -146,7 +139,7 @@
         var mode = $(this).prop('checked');
         var id=$(this).val();
         $.ajax({
-            url:"route('admin.roles.store')",
+            url:"{{route('admin.grouptype.status')}}",
             type:"post",
             data:{
                 _token:'{{csrf_token()}}',
@@ -169,5 +162,4 @@
 });  
     
 </script>
- 
 @endsection

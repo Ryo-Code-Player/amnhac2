@@ -17,6 +17,15 @@ return new class extends Migration
             $table->string('icon');
             $table->timestamps();
         });
+
+        // Schema::create('motion_items', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('id_motion')->constrained('motions')->onDelete('cascade');
+        //     $table->foreignId('id_item')->constrained('item_types')->onDelete('cascade');
+        //     $table->string('item_code');
+        //     $table->integer('count');
+        //     $table->timestamps();
+        // });
     }
 
     /**

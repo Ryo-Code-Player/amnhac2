@@ -29,7 +29,7 @@
                         <label for="" class="form-label">Ảnh đại diện</label>
                         <div class="px-4 pb-4 mt-5 flex items-center cursor-pointer relative">
                             <div data-single="true" id="mydropzone" class="dropzone" url="{{ route('admin.upload.avatar') }}">
-                                <div class="fallback"><input name="photos[]" type="file" multiple /></div>
+                                <div class="fallback"><input name="photos" type="file" multiple /></div>
                                 <div class="dz-message" data-dz-message>
                                     <div class="font-medium">Kéo thả hoặc chọn ảnh.</div>
                                 </div>

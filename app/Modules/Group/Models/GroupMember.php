@@ -8,16 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class GroupMember extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'group_id',
+        'role',
+        'status',
+      
+    ];
 
-    protected $fillable = ['group_id', 'user_id', 'role'];
-
-    public function group()
-    {
-        return $this->belongsTo(Group::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(\App\Models\User::class);
-    }
+   
 }

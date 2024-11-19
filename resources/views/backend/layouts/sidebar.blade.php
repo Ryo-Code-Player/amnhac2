@@ -397,43 +397,194 @@
     <!-- start fanclub -->
 
     <li>
-        <a href="javascript:;" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='fanclub_list'||$active_menu=='fanclub_add'||$active_menu=='kiot'|| $active_menu=='fanclubtype_list'|| $active_menu=='fanclubtype_add'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">
-            <div class="side-menu__icon"> <i data-lucide="globe"></i> </div>
-                <div class="side-menu__title">
-                    Câu lạc bộ người hâm mộ
-                    <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
-                </div>
+        <a href="javascript:;" class="side-menu {{ in_array($active_menu, ['fanclub_list','fanclub_add','fanclub_edit', 'fanclub_delete']) ? 'side-menu--active' : '' }}">
+            <div class="side-menu__icon"> <i data-lucide="codesandbox"></i> </div>
+            <div class="side-menu__title">
+                Quản lí câu lạc bộ
+                <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
+            </div>
         </a>
-        <ul class="{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='interact_list'||$active_menu=='interact_add'||$active_menu=='kiot')?'side-menu__sub-open':''}}">
+        <ul class="{{ in_array($active_menu, ['fanclub_list','fanclub_add','fanclub_edit', 'fanclub_delete']) ? 'side-menu__sub-open' : '' }}">
+            <!-- Câu lạc bộ -->
             <li>
-                <a href="{{route('admin.Fanclub.index')}}" class="side-menu {{$active_menu=='interact_list'?'side-menu--active':''}}">
-                    <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
-                    <div class="side-menu__title">Danh sách câu lạc bộ</div>
+                <a href="javascript:;" class="side-menu {{ $active_menu == 'fanclub_list' ? 'side-menu--active' : '' }}">
+                    <div class="side-menu__icon"> <i data-lucide="package
+"></i> </div>
+                    <div class="side-menu__title">Câu lạc bộ</div>
+                    <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
                 </a>
-            </li>
-            <li>
-                <a href="{{route('admin.Fanclub.create')}}" class="side-menu {{$active_menu=='motion_list'?'side-menu--active':''}}">
-                    <div class="side-menu__icon"> <i data-lucide="file-plus"></i> </div>
-                    <div class="side-menu__title">Tạo câu lạc bộ người hâm mộ</div>
-                </a>
+                <ul class="{{ $active_menu == 'fanclub_list' ? 'side-menu__sub-open' : '' }}">
+                    <li>
+                        <a href="{{ route('admin.Fanclub.index') }}" class="side-menu {{ $active_menu == 'musiccompany_list' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                            <div class="side-menu__title">Danh sách câu lạc bộ</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.Fanclub.create') }}" class="side-menu {{ $active_menu == 'fanclub_add' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                            <div class="side-menu__title">Thêm câu lạc bộ</div>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
+            <!--Tài nguyên -->
             <li>
-                <a href="{{route('admin.FanclubItem.index')}}" class="side-menu {{$active_menu=='interact_list'?'side-menu--active':''}}">
-                    <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
-                    <div class="side-menu__title">Danh sách tài nguyên</div>
+                <a href="javascript:;" class="side-menu {{ $active_menu == 'fanclub_list' ? 'side-menu--active' : '' }}">
+                    <div class="side-menu__icon"> <i data-lucide="shopping-bag
+"></i> </div>
+                    <div class="side-menu__title">Tài nguyên</div>
+                    <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
                 </a>
+                <ul class="{{ $active_menu == 'fanclub_list' ? 'side-menu__sub-open' : '' }}">
+                    <li>
+                        <a href="{{ route('admin.FanclubItem.index') }}" class="side-menu {{ $active_menu == 'musiccompany_list' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                            <div class="side-menu__title">Danh sách tài nguyên </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.FanclubItem.create') }}" class="side-menu {{ $active_menu == 'fanclub_add' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                            <div class="side-menu__title">Thêm tài nguyên</div>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
+            <!-- Thành viên câu lạc bộ -->
             <li>
-                <a href="" class="side-menu {{$active_menu=='interact_list'?'side-menu--active':''}}">
-                    <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
-                    <div class="side-menu__title">Danh sách thành viên</div>
+                <a href="javascript:;" class="side-menu {{ $active_menu == 'fanclub_list' ? 'side-menu--active' : '' }}">
+                    <div class="side-menu__icon"> <i data-lucide="building"></i> </div>
+                    <div class="side-menu__title">Thành viên câu lạc bộ</div>
+                    <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
                 </a>
+                <ul class="{{ $active_menu == 'fanclub_list' ? 'side-menu__sub-open' : '' }}">
+                    <li>
+                        <a href="{{ route('admin.FanclubUser.index') }}" class="side-menu {{ $active_menu == 'fanclub_list' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="users"></i> </div>
+                            <div class="side-menu__title">Danh sách thành viên</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.FanclubUser.create') }}" class="side-menu {{ $active_menu == 'fanclub_add' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                            <div class="side-menu__title">Thêm thành viên</div>
+                        </a>
+                    </li>
+                </ul>
             </li>
+
         </ul>
     </li>
     <!-- end fanclub -->
+
+    <!-- start event -->
+
+    <li>
+        <a href="javascript:;" class="side-menu {{ in_array($active_menu, ['event_list','event_add','event_edit', 'event_delete', 'eventtype_list','eventtype_add','eventtype_edit', 'eventtype_delete','event_group_add', 'event_group_list','event_group_edit', 'event_group_delete','event_user_list','event_user_add','event_user_edit', 'event_user_delete']) ? 'side-menu--active' : '' }}">
+            <div class="side-menu__icon"> <i data-lucide="globe"></i> </div>
+            <div class="side-menu__title">
+                Quản lí sự kiện
+                <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
+            </div>
+        </a>
+        <ul class="{{ in_array($active_menu, ['event_list','event_add','event_edit', 'event_delete', 'eventtype_list','eventtype_add','eventtype_edit', 'eventtype_delete','event_group_add', 'event_group_list','event_group_edit', 'event_group_delete','event_user_list','event_user_add','event_user_edit', 'event_user_delete']) ? 'side-menu__sub-open' : '' }}">
+            <!-- Sự kiện -->
+            <li>
+                <a href="javascript:;" class="side-menu {{ $active_menu == 'event_list' ? 'side-menu--active' : '' }}">
+                    <div class="side-menu__icon"> <i data-lucide="briefcase"></i> </div>
+                    <div class="side-menu__title">Sự kiện</div>
+                    <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
+                </a>
+                <ul class="{{ $active_menu == 'event_list' ? 'side-menu__sub-open' : '' }}">
+                    <li>
+                        <a href="{{ route('admin.Event.index') }}" class="side-menu {{ $active_menu == 'event_list' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                            <div class="side-menu__title">Danh sách sự kiện</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.Event.create') }}" class="side-menu {{ $active_menu == 'event_add' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                            <div class="side-menu__title">Thêm sự kiện</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Loại sự kiện -->
+            <li>
+                <a href="javascript:;" class="side-menu {{ $active_menu == 'eventtype_list' ? 'side-menu--active' : '' }}">
+                    <div class="side-menu__icon"> <i data-lucide="code"></i> </div>
+                    <div class="side-menu__title">Loại hình sự kiện</div>
+                    <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
+                </a>
+                <ul class="{{ $active_menu == 'eventtype_list' ? 'side-menu__sub-open' : '' }}">
+                    <li>
+                        <a href="{{ route('admin.EventType.index') }}" class="side-menu {{ $active_menu == 'eventtype_list' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                            <div class="side-menu__title">Danh sách loại sự kiện</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.EventType.create') }}" class="side-menu {{ $active_menu == 'eventtype_add' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                            <div class="side-menu__title">Thêm loại sự kiện</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- người tham gia -->
+            <li>
+                <a href="javascript:;" class="side-menu {{ $active_menu == 'event_user_list' ? 'side-menu--active' : '' }}">
+                    <div class="side-menu__icon"> <i data-lucide="user"></i> </div>
+                    <div class="side-menu__title">Người tham gia</div>
+                    <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
+                </a>
+                <ul class="{{ $active_menu == 'event_user_list' ? 'side-menu__sub-open' : '' }}">
+                    <li>
+                        <a href="{{ route('admin.EventUser.index') }}" class="side-menu {{ $active_menu == 'event_user_list' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                            <div class="side-menu__title">Danh sách người tham gia</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.EventUser.create') }}" class="side-menu {{ $active_menu == 'event_user_add' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                            <div class="side-menu__title">Thêm người tham gia sự kiện</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Nhóm tham gia sự kiện -->  
+            <li>
+                <a href="javascript:;" class="side-menu {{ $active_menu == 'event_group_list' ? 'side-menu--active' : '' }}">
+                    <div class="side-menu__icon"> <i data-lucide="users"></i> </div>
+                    <div class="side-menu__title">Nhóm tham gia</div>
+                    <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
+                </a>
+                <ul class="{{ $active_menu == 'event_group_list' ? 'side-menu__sub-open' : '' }}">
+                    <li>
+                        <a href="{{ route('admin.EventGroup.index') }}" class="side-menu {{ $active_menu == 'event_group_list' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                            <div class="side-menu__title">Danh sách nhóm tham gia</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.EventGroup.create') }}" class="side-menu {{ $active_menu == 'event_group_add' ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                            <div class="side-menu__title">Thêm nhóm tham gia sự kiện</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <!-- end event -->
     
      
      <!-- setting menu -->

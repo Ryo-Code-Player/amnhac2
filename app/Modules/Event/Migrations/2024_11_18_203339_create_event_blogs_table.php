@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('group_blogs', function (Blueprint $table) {
+        Schema::create('event_blogs', function (Blueprint $table) {
             $table->id();
-            if (Schema::hasTable('groups')) {
-                $table->foreignId('group_id')->constrained('groups')->onDelete('cascade');
-            }
-            if (Schema::hasTable('users')) {
-                $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            }
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
+            $table->foreignId('blog_id')->constrained('blogs')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('group_blogs');
+        Schema::dropIfExists('event_blogs');
     }
 };
