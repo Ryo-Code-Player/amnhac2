@@ -17,7 +17,7 @@ class PlaylistController extends Controller
         $active_menu = "playlist_management";
         $breadcrumb = '
             <li class="breadcrumb-item"><a href="#">/</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Danh sách Bài Hát</li>'; 
+            <li class="breadcrumb-item active" aria-current="page">Danh sách Playlists</li>'; 
         $songs = Song::with('resources')->paginate(10);
         return view('Playlist::playlist.index', compact('playlists','songs', 'active_menu',  'breadcrumb'));
     }

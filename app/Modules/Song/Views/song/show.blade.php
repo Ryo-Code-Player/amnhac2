@@ -15,46 +15,73 @@
 
     <div class="grid grid-cols-12 gap-6">
         <!-- BEGIN: Profile Menu -->
-        <div class="col-span-12 lg:col-span-3 2xl:col-span-2 flex lg:block flex-col-reverse"> <!-- Giảm độ rộng của cột -->
-        <div class="intro-y box mt-5">
-    <div class="relative flex items-center p-5">
-        <div class="p-6">
-            @if($resources->count() > 0)
-                @foreach ($resources as $resource)
-                    @if ($resource->file_type == 'video/mp4')
-                        <div class="my-2">
-                            <label class="font-medium">Video:</label>
-                            <video controls class="w-full h-auto mx-auto rounded-md">
-                                <!-- Sửa lại đường dẫn: Không thêm 'storage' lần nữa nếu $resource->url đã có -->
-                                <source src="{{ asset($resource->url) }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
-                    @elseif (in_array($resource->file_type, ['image/jpeg', 'image/png', 'image/gif']))
-                        <div class="my-2">
-                            <label class="font-medium">Ảnh:</label>
-                            <img src="{{ asset($resource->url) }}" alt="Resource Image" class="w-full h-32 object-cover rounded-md mx-auto">
-                        </div>
-                    @elseif ($resource->file_type == 'audio/mp3')
-                        <div class="my-2">
-                            <label class="font-medium">Âm thanh:</label>
-                            <audio controls class="w-full h-24 mx-auto rounded-md">
-                                <source src="{{ asset($resource->url) }}" type="audio/mp3">
-                                Your browser does not support the audio tag.
-                            </audio>
-                        </div>
-                    @else
-                        <div class="my-2">
-                            <p>Không hỗ trợ định dạng tệp này.</p>
-                        </div>
-                    @endif
-                @endforeach
-            @else
-                <p>Không có tài nguyên nào.</p>
-            @endif
-        </div>
-    </div>
+        <div class="col-span-12 lg:col-span-3 2xl:col-span-2 flex lg:block flex-col-reverse">
+            <div class="intro-y box mt-5">
+                <div class="relative flex items-center p-5">
+                    <div class="p-6">
+                        @if($resources->count() > 0)
+                            @foreach ($resources as $index => $resource)
+                                <div class="my-2 resource-item" id="resource-{{$index}}" style="display: none;">
+                                    <label class="font-medium">Tài nguyên:</label>
+                                    <div id="resources" data-resources="{{ json_encode($resources) }}" style="display: none;"></div>
+
+                                    @if (str_contains($resource->url, '.mp4'))
+                                        <p class="font-medium">Video</p>
+                                        <video controls class="w-full h-48 object-cover mx-auto rounded-md" id="video-{{$index}}">
+                                            <source src="{{ asset($resource->url) }}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        <button class="mt-2 text-blue-500" onclick="togglePiP('video-{{$index}}')">PiP</button>
+                                    @elseif (in_array(pathinfo($resource->url, PATHINFO_EXTENSION), ['jpeg', 'jpg', 'png', 'gif']))
+                                        <p class="font-medium">Ảnh</p>
+                                        <img src="{{ asset($resource->url) }}" alt="Resource Image" class="w-full h-48 object-cover rounded-md mx-auto">
+                                    @elseif (pathinfo($resource->url, PATHINFO_EXTENSION) == 'pdf')
+                                        <p class="font-medium">Tài liệu PDF</p>
+                                        <iframe src="{{ asset($resource->url) }}" width="100%" height="300px" class="mx-auto"></iframe>
+                                        <div class="mt-2">
+                                            <a href="{{ asset($resource->url) }}" target="_blank" class="text-blue-500 hover:underline">
+                                                Mở file PDF
+                                            </a>
+                                        </div>
+                                    @elseif (pathinfo($resource->url, PATHINFO_EXTENSION) == 'mp3')
+                                        <p class="font-medium">Âm thanh</p>
+                                        <audio controls class="w-full h-auto mx-auto rounded-md">
+                                            <source src="{{ asset($resource->url) }}" type="audio/mpeg">
+                                            Your browser does not support the audio tag.
+                                        </audio>
+                                        <div class="mt-2">
+                                            <a href="{{ asset($resource->url) }}" target="_blank" class="text-blue-500 hover:underline">
+                                                Mở hoặc tải file MP3
+                                            </a>
+                                        </div>
+                                    @elseif (str_contains($resource->url, 'youtube.com/watch?v=')) 
+                                        @php
+                                            preg_match('/v=([^&]+)/', $resource->url, $matches);
+                                            $videoId = $matches[1] ?? '';
+                                        @endphp
+                                        @if($videoId)
+                                            <p class="font-medium">Video YouTube</p>
+                                            <iframe width="230" height="150" src="https://www.youtube.com/embed/{{ $videoId }}" frameborder="0" allowfullscreen class="mx-auto"></iframe>
+                                        @else
+                                            <p>Không có video YouTube hợp lệ.</p>
+                                        @endif
+                                    @else
+                                        <p>Không hỗ trợ định dạng tệp này.</p>
+                                    @endif
+
+                                    <div class="relative mt-4">
+    <button id="prevButton" class="btn btn-primary position-absolute left-0 ml-4" onclick="navigateResources(-1)">← Trước</button>
+    <button id="nextButton" class="btn btn-primary position-absolute right-0 mr-4" onclick="navigateResources(1)">Sau →</button>
 </div>
+
+                                </div>
+                            @endforeach
+                        @else
+                            <p>Không có tài nguyên nào.</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- END: Resources Section -->
 
@@ -70,17 +97,15 @@
                 <div class="flex flex-col xl:flex-row gap-6">
                     <div class="flex-1">
                         <div class="grid grid-cols-12 gap-x-5">
-                        <div class="col-span-12 sm:col-span-6">
-    <label for="update-profile-form-1" class="font-medium form-label">Ca sĩ:</label>
-    <p>{{ $song->singer->alias ?? 'Không có ca sĩ' }}</p> <!-- Lấy alias của ca sĩ từ mối quan hệ -->
-</div>
+                            <div class="col-span-12 sm:col-span-6">
+                                <label for="update-profile-form-1" class="font-medium form-label">Ca sĩ:</label>
+                                <p>{{ $song->singer->alias ?? 'Không có ca sĩ' }}</p>
+                            </div>
 
-<div class="col-span-12 sm:col-span-6">
-    <label for="update-profile-form-1" class="font-medium form-label">Nhạc sĩ:</label>
-    <p>{{ $song->composer->fullname ?? 'Không có nhạc sĩ' }}</p> <!-- Lấy fullname của nhạc sĩ từ mối quan hệ -->
-</div>
-
-
+                            <div class="col-span-12 sm:col-span-6">
+                                <label for="update-profile-form-1" class="font-medium form-label">Nhạc sĩ:</label>
+                                <p>{{ $song->composer->fullname ?? 'Không có nhạc sĩ' }}</p>
+                            </div>
 
                             <div class="col-span-12 sm:col-span-6">
                                 <label for="update-profile-form-1" class="font-medium form-label">Trạng thái:</label>
@@ -98,16 +123,16 @@
                             </div>
 
                             <div class="col-span-12">
-    <label for="update-profile-form-1" class="font-medium form-label">Tags:</label>
-    <p>
-        @foreach (json_decode($song->tags) as $tagId)
-            @php
-                $tag = \App\Models\Tag::find($tagId);
-            @endphp
-            {{ $tag ? $tag->title : 'Tag not found' }}@if(!$loop->last), @endif
-        @endforeach
-    </p>
-</div>
+                                <label for="update-profile-form-1" class="font-medium form-label">Tags:</label>
+                                <p>
+                                    @foreach (json_decode($song->tags) as $tagId)
+                                        @php
+                                            $tag = \App\Models\Tag::find($tagId);
+                                        @endphp
+                                        {{ $tag ? $tag->title : 'Tag not found' }}@if(!$loop->last), @endif
+                                    @endforeach
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -121,28 +146,24 @@
 
 @section('scripts')
 <script>
-    function togglePiP(videoId) {
-    const videoElement = document.getElementById(videoId);
+    let currentResourceIndex = 0;
+    const resources = @json($resources);
 
-    // Kiểm tra xem trình duyệt có hỗ trợ Picture-in-Picture không
-    if (document.pictureInPictureEnabled) {
-        if (videoElement !== document.pictureInPictureElement) {
-            // Kích hoạt Picture-in-Picture
-            videoElement.requestPictureInPicture()
-                .catch(error => {
-                    console.log("Error entering Picture-in-Picture: ", error);
-                });
-        } else {
-            // Thoát khỏi Picture-in-Picture
-            document.exitPictureInPicture()
-                .catch(error => {
-                    console.log("Error exiting Picture-in-Picture: ", error);
-                });
-        }
-    } else {
-        alert("Your browser does not support Picture-in-Picture.");
+    function navigateResources(direction) {
+        currentResourceIndex += direction;
+
+        if (currentResourceIndex < 0) currentResourceIndex = resources.length - 1;
+        if (currentResourceIndex >= resources.length) currentResourceIndex = 0;
+
+        document.querySelectorAll('.resource-item').forEach(element => {
+            element.style.display = 'none';
+        });
+
+        document.getElementById(`resource-${currentResourceIndex}`).style.display = 'block';
     }
-}
 
+    document.addEventListener('DOMContentLoaded', () => {
+        navigateResources(0);
+    });
 </script>
 @endsection
