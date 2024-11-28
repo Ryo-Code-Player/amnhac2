@@ -53,13 +53,20 @@
                     <textarea class="editor" name="content" id="editor2">{{ old('content') }}</textarea>
                 </div>
 
-                <div class="mt-3">
-                    <label for="resources" class="form-label">Tải lên tài nguyên (File)</label>
-                    <input type="file" name="resources[]" id="resources" class="form-control" multiple>
-                    @error('resources')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
-                </div>
+                        <div class="mt-3">
+            <label for="resources_file" class="form-label">Tải lên tài nguyên (File)</label>
+            <input type="file" name="resources[]" id="resources_file" class="form-control" multiple>
+            
+            <label for="resources_url" class="form-label">Hoặc nhập URL tài nguyên</label>
+            <input type="url" name="resources[]" placeholder="Nhập URL từ YouTube" class="form-control">
+
+            
+            @error('resources')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+
 
       <!-- Trường Tags -->
 <div class="form-group">

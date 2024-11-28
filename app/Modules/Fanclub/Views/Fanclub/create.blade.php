@@ -35,6 +35,19 @@
                         </div>
                     </div>
 
+                    <div class="mt-3">
+                    <label for="" class="form-label">Photo</label>
+                    <div class="px-4 pb-4 mt-5 flex items-center cursor-pointer relative">
+                        <div data-single="true" id="mydropzone" class="dropzone" url="{{route('admin.upload.avatar')}}">
+                            <div class="fallback"><input name="file" type="file" /></div>
+                            <div class="dz-message" data-dz-message>
+                                <div class="font-medium">Kéo thả hoặc chọn ảnh.</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="photo" name="photo"/>
+                    </div>
+                </div>
+
                     <label for="regular-form-1" class="form-label">Mô tả</label>
                     <input id="summary" name="summary" type="text" class="form-control" placeholder="Mô tả">
                         
@@ -86,7 +99,7 @@
     Dropzone.instances[0].options.multiple = false;
     Dropzone.instances[0].options.autoQueue = true;
     Dropzone.instances[0].options.maxFilesize = 2; // MB
-    Dropzone.instances[0].options.maxFiles = 3;
+    Dropzone.instances[0].options.maxFiles = 1;
     Dropzone.instances[0].options.dictDefaultMessage = 'Drop images anywhere to upload (1 image Max)';
     Dropzone.instances[0].options.acceptedFiles = "image/jpeg,image/png,image/gif";
     Dropzone.instances[0].options.addRemoveLinks = true;

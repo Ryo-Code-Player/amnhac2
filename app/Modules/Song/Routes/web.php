@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Modules\Song\Controllers\SongController; // Thay đổi controller tương ứng
+use App\Modules\Resource\Controllers\ResourceController;
 
 
 // Define routes here
@@ -21,5 +22,13 @@ Route::group(['prefix' => 'admin/', 'as' => 'admin.'], function() {
     // Các route liên quan đến tài nguyên (resource)
     Route::post('upload/avatar', [SongController::class, 'uploadAvatar'])->name('upload.avatar'); // Upload avatar
     Route::post('song/{songId}/upload-resource', [SongController::class, 'uploadResource'])->name('song.uploadResource'); // Upload tài nguyên cho bài hát
-    Route::post('song/{songId}/deleteResource', [SongController::class, 'deleteResource'])->name('song.deleteResource'); // Xóa tài nguyên của bài hát
+    Route::post('song/resource/delete', [SongController::class, 'deleteResource'])->name('song.resource.delete');
+
+
+
+
+
+
+
+
 });

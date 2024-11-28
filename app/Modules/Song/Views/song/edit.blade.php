@@ -4,7 +4,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{ asset('js/js/tom-select.complete.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('/js/css/tom-select.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+   
 @endsection
 
 @section('content')
@@ -56,24 +56,38 @@
                         <label for="content" class="form-label">Nội dung</label>
                         <textarea class="form-control" name="content" id="editor2">{{ old('content', $song->content) }}</textarea>
                     </div>
+<!-- Phần tài nguyên (file nhạc, MV, v.v.) -->
+<div class="form-group mt-3">
+    <label for="resources">Tài nguyên hiện có:</label>
+    <ul>
+        @foreach($resources as $resource)
+            <li id="resource-{{ $resource->resource_id }}">
+                <!-- Hiển thị tên tài nguyên -->
+                <a href="{{ $resource->url }}" target="_blank">{{ $resource->file_name }}</a>
 
-                    <!-- Phần tài nguyên (file nhạc, MV, v.v.) -->
-                    <div class="form-group mt-3">
-                        <label for="resources">Tài nguyên hiện có:</label>
-                        <ul>
-                            @foreach($resources as $resource)
-                                <li>
-                                    <a href="{{ $resource['url'] }}" target="_blank">{{ $resource['file_name'] }}</a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
+                <!-- Nút xóa tài nguyên -->
+                <button class="delete-resource btn btn-danger btn-sm" data-id="{{ $resource->id }}" data-song-id="{{ $song->id }}">Xóa</button>
+            </li>
+        @endforeach
+    </ul>
+</div>
 
-                    <!-- Thêm file mới -->
-                    <div class="form-group">
-                        <label for="resources">Tải tài nguyên mới:</label>
-                        <input type="file" name="resources[]" multiple>
-                    </div>
+
+
+
+
+<!-- Thêm tài nguyên mới -->
+<div class="form-group">
+    <label for="resources_file">Tải tài nguyên mới:</label>
+    <input type="file" name="resources[]" multiple class="form-control" id="resources_file">
+
+    <label for="resources_url" class="form-label mt-2">Hoặc nhập URL tài nguyên:</label>
+    <input type="url" name="resources[]" placeholder="Nhập URL từ YouTube hoặc tài nguyên khác" class="form-control" id="resources_url">
+</div>
+
+
+
+
 
                       <!-- Trường Tags (chọn các tags đã có từ trước) -->
 <div class="form-group">
@@ -166,6 +180,52 @@
         });
     });
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Bắt sự kiện khi nhấn nút xóa tài nguyên
+        $('.delete-resource').click(function(e) {
+            e.preventDefault();
+
+            var resourceId = $(this).data('id');
+            var songId = $(this).data('song-id');
+            
+            // Xác nhận xóa tài nguyên
+            if (confirm('Bạn có chắc chắn muốn xóa tài nguyên này?')) {
+                // Gửi yêu cầu Ajax để xóa tài nguyên
+                $.ajax({
+                    url: '{{ route('admin.song.resource.delete') }}',  // Đảm bảo route đúng
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}', // Thêm csrf token
+                        resource_id: resourceId,
+                        song_id: songId
+                    },
+                    success: function(response) {
+                        // Kiểm tra phản hồi từ server
+                        if (response.success) {
+                            // Ẩn hoặc xóa tài nguyên khỏi giao diện
+                            $('#resource-' + resourceId).remove(); // Xóa phần tử khỏi giao diện
+
+                            alert(response.message); // Hiển thị thông báo thành công
+                            location.reload(); // Tải lại trang (hoặc hiển thị lại tài nguyên nếu cần)
+                        } else {
+                            alert('Lỗi: ' + response.message); // Hiển thị thông báo lỗi
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Xử lý lỗi khi gửi yêu cầu Ajax
+                        console.log('Error:', error);
+                        alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
 
 
 @endsection
