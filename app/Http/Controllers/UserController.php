@@ -214,10 +214,13 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $user = User::findOrFail($id); // Tìm người dùng theo ID
+        return view('admin.users.show', compact('user')); // Trả về view với thông tin người dùng
+        
     }
+    
     public function userDetail (Request $request)
     {
         //

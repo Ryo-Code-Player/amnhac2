@@ -94,6 +94,11 @@ class DatabaseSeeder extends Seeder
                 'title'=>"soft",
                 'status'=>'active',
             ],
+            [   
+                'alias'=>'member',
+                'title'=>"Thành viên",
+                'status'=>'active',
+            ],
         ]);
     }
 }

@@ -11,7 +11,7 @@
             <div class="hidden md:block mx-auto text-slate-500">Hiển thị trang {{$ugroups->currentPage()}} trong {{$ugroups->lastPage()}} trang</div>
             <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                 <div class="w-56 relative text-slate-500">
-                    <form action="{{route('ugroup.search')}}" method = "get">
+                    <form action="{{route('admin.ugroup.search')}}" method = "get">
                         @csrf
                         <input type="text" name="datasearch" value="{{$searchdata}}" class="ipsearch form-control w-56 box pr-10" placeholder="Search...">
                         <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i> 
@@ -52,8 +52,8 @@
                          
                         <td class="table-report__action w-56">
                             <div class="flex justify-center items-center">
-                                <a href="{{route('ugroup.edit',$item->id)}}" class="flex items-center mr-3" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a>
-                                <form action="{{route('ugroup.destroy',$item->id)}}" method = "post">
+                                <a href="{{route('admin.ugroup.edit',$item->id)}}" class="flex items-center mr-3" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a>
+                                <form action="{{route('admin.ugroup.destroy',$item->id)}}" method = "post">
                                     @csrf
                                     @method('delete')
                                     <a class="flex items-center text-danger dltBtn" data-id="{{$item->id}}" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"> <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete </a>
@@ -141,7 +141,7 @@
         var mode = $(this).prop('checked');
         var id=$(this).val();
         $.ajax({
-            url:"{{route('ugroup.status')}}",
+            url:"{{route('admin.ugroup.status')}}",
             type:"post",
             data:{
                 _token:'{{csrf_token()}}',

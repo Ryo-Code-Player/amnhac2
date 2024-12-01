@@ -10,7 +10,7 @@
     <div class="grid grid-cols-12 gap-12 mt-5">
         <div class="intro-y col-span-12 lg:col-span-12">
             <!-- BEGIN: Form Layout -->
-            <form method="post" action="{{route('ugroup.store')}}">
+            <form method="post" action="{{route('admin.ugroup.store')}}">
                 @csrf
                 <div class="intro-y box p-5">
                     <div>
