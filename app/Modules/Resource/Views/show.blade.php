@@ -25,18 +25,63 @@
                         @endif
                     @break
 
-                    @case('image')
-                        <!-- Nếu type_code là image, hiển thị hình ảnh -->
-                        <img src="{{ $resource->url }}" alt="{{ $resource->title }}" class="w-full h-96 object-cover" />
+                    @case('instagram')
+                        <!-- Nếu type_code là instagram, hiển thị ảnh/ video Instagram -->
+                        <iframe width="100%" height="500" src="https://www.instagram.com/p/{{ extractInstagramId($resource->url) }}/embed"
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     @break
 
-                    @case('document')
-                        <!-- Nếu type_code là document, hiển thị tài liệu -->
-                        <a href="{{ $resource->url }}" class="text-blue-500 underline">Tải tài liệu</a>
+                    @case('vimeo')
+                        <!-- Nếu type_code là vimeo, hiển thị video Vimeo -->
+                        @php
+                            $videoId = basename(parse_url($resource->url, PHP_URL_PATH));
+                        @endphp
+                        <iframe width="100%" height="500" src="https://player.vimeo.com/video/{{ $videoId }}" frameborder="0" allowfullscreen></iframe>
+                    @break
+                    
+                    @case('spotify')
+                        <!-- Nếu type_code là spotify, hiển thị bài hát/ podcast Spotify -->
+                        <iframe src="https://open.spotify.com/embed/track/{{ substr($resource->url, strrpos($resource->url, '/') + 1) }}"
+                                width="100%" height="500" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
+                    @break
+
+                    @case('dailymotion')
+                        <!-- Nếu type_code là dailymotion, hiển thị video Dailymotion -->
+                        @php
+                            $videoId = basename(parse_url($resource->url, PHP_URL_PATH));
+                        @endphp
+                        <iframe width="100%" height="500" src="https://www.dailymotion.com/embed/video/{{ $videoId }}"
+                                frameborder="0" allowfullscreen></iframe>
+                    @break
+
+                    @case('facebook')
+                        <!-- Nếu type_code là facebook, hiển thị video Facebook -->
+                        <iframe style="width: 100%; height: 50rem;"
+                                            src="https://www.facebook.com/plugins/video.php?href={{ urlencode($resource->url) }}"
+                                            frameborder="0" allowfullscreen></iframe>
+                    @break
+
+                    @case('twitter')
+                        <!-- Nếu type_code là twitter, hiển thị tweet -->
+                        <blockquote class="twitter-tweet">
+                            <a href="{{ $resource->url }}"></a>
+                        </blockquote>
+                        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    @break
+
+                    @case('googleMaps')
+                        <!-- Nếu type_code là Google Maps, hiển thị bản đồ -->
+                        <iframe src="{{ $resource->url }}" width="100%" height="500" frameborder="0" allowfullscreen></iframe>
+                    @break
+
+                    @case('flickr')
+                        <!-- Nếu type_code là Flickr, hiển thị ảnh từ Flickr -->
+                        <iframe src="https://www.flickr.com/photos/{{ extractFlickrUser($resource->url) }}/{{ extractFlickrPhotoId($resource->url) }}/embed"
+                                width="100%" height="500" frameborder="0" allowfullscreen></iframe>
                     @break
 
                     @default
-                        <!-- Nếu không phải các loại trên, xử lý linh hoạt theo loại file -->
+                        <!-- Xử lý các loại khác như ảnh, video, tài liệu -->
                         @switch(true)
                             @case(strpos($resource->file_type, 'image/') === 0)
                                 <img src="{{ $resource->url }}" alt="{{ $resource->title }}" class="w-full h-96 object-cover" />
@@ -56,12 +101,13 @@
                             @case($resource->file_type === 'application/pdf')
                                 <embed src="{{ $resource->url }}" type="application/pdf" class="w-full h-96" />
                             @break
+                            
                             @default
                                 <img src="{{ asset('backend/assets/icons/icon1.png') }}" alt="{{ $resource->title }}" class="w-full h-96 object-cover" />
                         @endswitch
                 @endswitch
             @else
-                <!-- Xử lý tài nguyên nếu không có link_code (ví dụ: file đã được tải lên hoặc có URL không phải YouTube) -->
+                <!-- Xử lý tài nguyên nếu không có link_code -->
                 @switch(true)
                     @case(strpos($resource->file_type, 'image/') === 0)
                         <img src="{{ $resource->url }}" alt="{{ $resource->title }}" class="w-full h-96 object-cover" />
@@ -87,6 +133,7 @@
             @endif
         </div>
 
+        <!-- Các thông tin khác về tài nguyên -->
         <div class="mb-4">
             <p class="font-medium">File type: <span class="font-normal">{{ $resource->file_type }}</span></p>
             <p class="font-medium">File size: <span class="font-normal">{{ $resource->file_size }} bytes</span></p>
@@ -110,6 +157,7 @@
             </p>
         </div>
 
+        <!-- Các nút chức năng -->
         <div class="flex space-x-2">
             <a href="{{ route('admin.resources.edit', $resource->id) }}" class="flex items-center text-blue-600">
                 <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
@@ -126,39 +174,10 @@
                 </a>
             </form>
 
-            <a href="{{ route('admin.resources.index') }}" class="flex items-center text-secondary">
-                <i data-lucide="arrow-left-circle" class="w-4 h-4 mr-1"></i>
-                Quay lại danh sách
+            <a href="{{ route('admin.resources.index') }}" class="flex items-center text-green-600">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
+                Quay lại
             </a>
         </div>
     </div>
-@endsection
-
-@section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        $('.dltBtn').click(function(e) {
-            var resourceId = $(this).data('id');
-            var form = $('#delete-form-' + resourceId);
-            e.preventDefault();
-            Swal.fire({
-                title: 'Bạn có chắc muốn xóa không?',
-                text: "Bạn không thể lấy lại dữ liệu sau khi xóa",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Vâng, tôi muốn xóa!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                    Swal.fire(
-                        'Đã xóa!',
-                        'Tài nguyên của bạn đã được xóa.',
-                        'success'
-                    );
-                }
-            });
-        });
-    </script>
 @endsection

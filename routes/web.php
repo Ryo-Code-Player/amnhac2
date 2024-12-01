@@ -54,8 +54,7 @@ Route::group( ['prefix'=>'admin/','middleware'=>'admin.auth', 'as'=>'admin.'],fu
 
     Route::post('product-upload', [\App\Http\Controllers\FilesController::class, 'productUpload' ])->name('upload.product');
     Route::post('upload-ckeditor', [\App\Http\Controllers\FilesController::class, 'ckeditorUpload' ])->name('upload.ckeditor');
-    
-    // Route::get('role/index',[\App\Modules\role\Controllers\roleController::class,'index'])->name('admin.role.index');
+
    
 });
 

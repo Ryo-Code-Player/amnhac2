@@ -3,6 +3,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{ asset('js/js/tom-select.complete.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('/js/css/tom-select.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.css">
 @endsection
 
 @section('content')
@@ -33,10 +34,18 @@
                     <label for="title" class="form-label">Tiêu đề</label>
                     <input id="title" name="title" type="text" class="form-control" placeholder="Nhập tiêu đề"
                         value="{{ old('title') }}" required>
-                    <div class="mt-3">
+                       <!-- HTML -->
+                       <div class="mt-3">
                         <label for="description" class="form-label">Mô tả chi tiết</label>
-                        <textarea id="description" name="description" class="form-control" placeholder="Nhập mô tả chi tiết">{{ old('description') }}</textarea>
+                        <div id="description" name="description" contenteditable="true" class="form-control">
+                            {{ old('description') }}
+                        </div>
                     </div>
+                    <a href="https://www.youtube.com/watch?v=cnHHCR7EW10" target="_blank">
+    Click here to watch the video
+</a>
+
+
                     <div class="mt-3">
                         <label for="" class="form-label">Loại tài nguyên</label>
                         <select name="type_code" class="form-select mt-2" required>
@@ -144,25 +153,92 @@
 
     </script>
 
-    <script src="{{ asset('js/js/ckeditor.js') }}"></script>
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#description'), {
-                ckfinder: {
-                    uploadUrl: '{{ route('admin.upload.ckeditor') . '?_token=' . csrf_token() }}'
-                },
-                mediaEmbed: {
-                    previewsInData: true
+<script type="importmap">
+    {
+        "imports": {
+            "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.js",
+            "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.3.1/"
+        }
+    }
+</script>
+
+<script type="module">
+    import {
+        ClassicEditor,
+        Essentials,
+        Paragraph,
+        Bold,
+        Italic,
+        Font,
+        MediaEmbed
+    } from 'ckeditor5';
+
+    // Tạo một plugin tùy chỉnh để khởi tạo YouTube Player API
+    class YouTubePlugin {
+        constructor(editor) {
+            this.editor = editor;
+        }
+
+        init() {
+            console.log('YouTube Plugin initialized');
+            // Thêm logic để khởi tạo video YouTube Player API khi cần
+        }
+    }
+
+    ClassicEditor
+    .create(document.querySelector('#description'), {
+        plugins: [ Essentials, Paragraph, Bold, Italic, Font, MediaEmbed, YouTubePlugin ],
+        toolbar: [
+            'undo', 'redo', '|', 'bold', 'italic', 'mediaEmbed', '|',
+            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+        ],
+        mediaEmbed: {
+            previewsInData: true
+           
+        }
+    })
+    .then(editor => {
+        window.editor = editor;
+        // Khởi tạo YouTube Player API khi CKEditor đã sẵn sàng
+        const youtubePlayers = document.querySelectorAll('.youtube-player');
+        youtubePlayers.forEach(playerElement => {
+            const videoId = playerElement.getAttribute('data-video-id');
+            new YT.Player(playerElement, {
+                height: '270',
+                width: '480',
+                videoId: videoId,
+                playerVars: {
+                    autoplay: 1,
+                    controls: 1,
+                    rel: 0,
+                    modestbranding: 1,
+                    showinfo: 0
                 }
-            })
-            .then(editor => {
-                console.log(editor);
-            })
-            .catch(error => {
-                console.error(error);
             });
+        });
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
+    // Tải YouTube Player API
+    function loadYouTubeAPI() {
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+    loadYouTubeAPI();
+</script>
+
+
+    <script>
+        window.onload = function() {
+            if (window.location.protocol === "file:") {
+                alert("This sample requires an HTTP server. Please serve this file with a web server.");
+            }
+        };
     </script>
-
-
     
 @endsection

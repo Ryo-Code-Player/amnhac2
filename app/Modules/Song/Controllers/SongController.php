@@ -42,166 +42,204 @@ class SongController extends Controller
     }
 
     public function store(Request $request)
-    {
-        // Validate input
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'summary' => 'nullable|string',
-            'content' => 'nullable|string',
-            'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id',
-            'new_tags' => 'nullable|string',
-            'status' => 'required|in:active,inactive',
-            'composer_id' => 'required|exists:composers,id',
-            'singer_id' => 'required|exists:singers,id',
-            'resources' => 'nullable|array',
-        ]);
-    
-        // Khởi tạo mảng tagsArray từ tags đã chọn
-        $tagsArray = $request->tags ?? [];
-    
-        // Xử lý tag mới nhập vào (nếu có)
-        if ($request->new_tags) {
-            $newTags = explode(',', $request->new_tags);
-    
-            foreach ($newTags as $newTag) {
-                $newTag = trim($newTag);
-                if (!empty($newTag)) {
-                    $tag = Tag::firstOrCreate(['title' => $newTag]);
-                    $tagsArray[] = $tag->id;
-                }
+{
+    // Validate input
+    $validatedData = $request->validate([
+        'title' => 'required|string|max:255',
+        'summary' => 'nullable|string',
+        'content' => 'nullable|string',
+        'tags' => 'nullable|array',
+        'tags.*' => 'exists:tags,id',
+        'new_tags' => 'nullable|string',
+        'status' => 'required|in:active,inactive',
+        'composer_id' => 'required|exists:composers,id',
+        'singer_id' => 'required|exists:singers,id',
+        'resources' => 'nullable|array',
+    ]);
+
+    // Khởi tạo mảng tagsArray từ tags đã chọn
+    $tagsArray = $request->tags ?? [];
+
+    // Xử lý tag mới nhập vào (nếu có)
+    if ($request->new_tags) {
+        $newTags = explode(',', $request->new_tags);
+
+        foreach ($newTags as $newTag) {
+            $newTag = trim($newTag);
+            if (!empty($newTag)) {
+                $tag = Tag::firstOrCreate(['title' => $newTag]);
+                $tagsArray[] = $tag->id;
             }
         }
-    
-        // Làm tương tự cho summary và content
-        $validatedData['summary'] = strip_tags($validatedData['summary'], '<p>');
-        $validatedData['summary'] = nl2br($validatedData['summary']);
-    
-        $validatedData['content'] = strip_tags($validatedData['content'], '<p>');
-        $validatedData['content'] = nl2br($validatedData['content']);
-    
-        // Tạo mới bài hát
-        $song = new Song($validatedData);
-        $song->slug = $this->createSlug($song->title);
-        $song->status = $validatedData['status'];
-        $song->tags = json_encode($tagsArray);
-        $song->save();
-    
-        $songId = $song->id;
-    
-        // Mảng lưu trữ các tài nguyên
-        $resourcesArray = [];
-    
-        // Xử lý tài nguyên và lưu vào bảng resources
-        if ($request->has('resources') && is_array($request->resources)) {
-            foreach ($request->resources as $resource) {
-                $Code = Str::random(8);
-    
-                if (filter_var($resource, FILTER_VALIDATE_URL)) {
-                    $resourceUrl = $resource;
-                    $slug = Str::slug($song->title) . '-' . Str::random(6);
-                    $fileType = 'URL';
-                    $linkCode = '';
-    
-                    // Kiểm tra nếu URL là video YouTube
-                    if (strpos($resourceUrl, 'youtube.com') !== false || strpos($resourceUrl, 'youtu.be') !== false) {
-                        $linkCode = 'youtube';
-                        $typeCode = 'youtube'; // Type code và link code cho YouTube
-                    }
-                    // Kiểm tra nếu URL là mp3
-                    elseif (strpos($resourceUrl, '.mp3') !== false) {
-                        $linkCode = 'audio';
-                        $typeCode = 'audio';
-                    }
-                    // Kiểm tra nếu URL là PDF
-                    elseif (strpos($resourceUrl, '.pdf') !== false) {
-                        $linkCode = 'document';
-                        $typeCode = 'document';
-                    }
-                    // Kiểm tra nếu URL là hình ảnh
-                    elseif (preg_match('/\.(jpg|jpeg|png|gif)$/i', $resourceUrl)) {
-                        $linkCode = 'image';
-                        $typeCode = 'image';
-                    }
-    
-                    // Lưu tài nguyên vào bảng resources
-                    $resourceRecord = Resource::create([
-                        'song_id' => $songId,
-                        'title' => $song->title,
-                        'slug' => $slug,
-                        'url' => $resourceUrl,
-                        'file_type' => $fileType,
-                        'type_code' => $typeCode,
-                        'file_name' => basename($resourceUrl),
-                        'file_size' => 0,
-                        'code' => 'songs',
-                        'link_code' => $linkCode,
-                        
-                    ]);
-    
-                    $resourcesArray[] = [
-                        'song_id' => $songId,
-                        'resource_id' => $resourceRecord->id,
-                    ];
-    
-                } elseif ($resource instanceof \Illuminate\Http\UploadedFile) {
-                    // Nếu là file tải lên
-                    $resourcePath = $resource->store('uploads/resources', 'public');
-                    $resourceUrl = Storage::url($resourcePath);
-                    $resourceUrl = Str::replaceFirst('http://localhost', '', $resourceUrl);
-    
-                    $slug = Str::slug($song->title) . '-' . Str::random(6);
-                    $fileType = $resource->getMimeType();
-                    $linkCode = '';
-                    $typeCode = '';
-    
-                    // Xử lý các loại MIME type
-                    if (strpos($fileType, 'image') !== false) {
-                        $linkCode = 'image';
-                        $typeCode = 'image';
-                    } elseif (strpos($fileType, 'audio') !== false) {
-                        $linkCode = 'audio';
-                        $typeCode = 'audio';
-                    } elseif (strpos($fileType, 'video') !== false) {
-                        $linkCode = 'video';
-                        $typeCode = 'video';
-                    } elseif (strpos($fileType, 'pdf') !== false) {
-                        $linkCode = 'document';
-                        $typeCode = 'document';
-                    }
-    
-                    // Lưu tài nguyên vào bảng resources
-                    $resourceRecord = Resource::create([
-                        'song_id' => $songId,
-                        'title' => $song->title,
-                        'slug' => $slug,
-                        'url' => $resourceUrl,
-                        'file_type' => $fileType,
-                        'type_code' => $typeCode,
-                        'file_name' => $resource->getClientOriginalName(),
-                        'file_size' => $resource->getSize(),
-                        'code' => 'songs',
-                        'link_code' => $linkCode,
-                        
-                    ]);
-    
-                    $resourcesArray[] = [
-                        'song_id' => $songId,
-                        'resource_id' => $resourceRecord->id,
-                    ];
-                }
-            }
-        }
-    
-        // Lưu mảng tài nguyên vào Song
-        if (!empty($resourcesArray)) {
-            $song->resources = json_encode($resourcesArray);
-            $song->save();
-        }
-    
-        return redirect()->route('admin.song.index')->with('success', 'Bài hát đã được thêm thành công.');
     }
-    
+
+    // Làm tương tự cho summary và content
+    $validatedData['summary'] = strip_tags($validatedData['summary'], '<p>');
+    $validatedData['summary'] = nl2br($validatedData['summary']);
+
+    $validatedData['content'] = strip_tags($validatedData['content'], '<p>');
+    $validatedData['content'] = nl2br($validatedData['content']);
+
+    // Tạo mới bài hát
+    $song = new Song($validatedData);
+    $song->slug = $this->createSlug($song->title);
+    $song->status = $validatedData['status'];
+    $song->tags = json_encode($tagsArray);
+    $song->save();
+
+    $songId = $song->id;
+
+    // Mảng lưu trữ các tài nguyên
+    $resourcesArray = [];
+
+    // Xử lý tài nguyên và lưu vào bảng resources
+    if ($request->has('resources') && is_array($request->resources)) {
+        foreach ($request->resources as $resource) {
+            $Code = Str::random(8);
+
+            if (filter_var($resource, FILTER_VALIDATE_URL)) {
+                $resourceUrl = $resource;
+                $slug = Str::slug($song->title) . '-' . Str::random(6);
+                $fileType = 'URL';
+                $linkCode = '';
+                $typeCode = '';
+
+                // Kiểm tra nếu URL là video YouTube
+                if (strpos($resourceUrl, 'youtube.com') !== false || strpos($resourceUrl, 'youtu.be') !== false) {
+                    $linkCode = 'youtube';
+                    $typeCode = 'youtube';
+                }
+                // Kiểm tra nếu URL là video Vimeo
+                elseif (strpos($resourceUrl, 'vimeo.com') !== false) {
+                    $linkCode = 'vimeo';
+                    $typeCode = 'vimeo';
+                }
+                // Kiểm tra nếu URL là Instagram
+                elseif (strpos($resourceUrl, 'instagram.com') !== false) {
+                    $linkCode = 'instagram';
+                    $typeCode = 'instagram'; // Có thể là ảnh hoặc video
+                }
+                // Kiểm tra nếu URL là Spotify
+                elseif (strpos($resourceUrl, 'spotify.com') !== false) {
+                    $linkCode = 'spotify';
+                    $typeCode = 'spotify';
+                }
+                // Kiểm tra nếu URL là Dailymotion
+                elseif (strpos($resourceUrl, 'dailymotion.com') !== false) {
+                    $linkCode = 'dailymotion';
+                    $typeCode = 'dailymotion';
+                }
+                // Kiểm tra nếu URL là Facebook
+                elseif (strpos($resourceUrl, 'facebook.com') !== false) {
+                    $linkCode = 'facebook';
+                    $typeCode = 'facebook'; // Hoặc 'image' nếu là ảnh
+                }
+                // Kiểm tra nếu URL là Twitter
+                elseif (strpos($resourceUrl, 'twitter.com') !== false) {
+                    $linkCode = 'twitter';
+                    $typeCode = 'twitter'; // Hoặc 'image' nếu là ảnh
+                }
+                // Kiểm tra nếu URL là Google Maps
+                elseif (strpos($resourceUrl, 'google.com/maps') !== false) {
+                    $linkCode = 'googleMaps';
+                    $typeCode = 'googleMaps';
+                }
+                // Kiểm tra nếu URL là Flickr
+                elseif (strpos($resourceUrl, 'flickr.com') !== false) {
+                    $linkCode = 'flickr';
+                    $typeCode = 'flickr';
+                }
+                // Kiểm tra nếu URL là file mp3
+                elseif (strpos($resourceUrl, '.mp3') !== false) {
+                    $linkCode = 'audio';
+                    $typeCode = 'audio';
+                }
+                // Kiểm tra nếu URL là file PDF
+                elseif (strpos($resourceUrl, '.pdf') !== false) {
+                    $linkCode = 'document';
+                    $typeCode = 'document';
+                }
+                // Kiểm tra nếu URL là hình ảnh
+                elseif (preg_match('/\.(jpg|jpeg|png|gif)$/i', $resourceUrl)) {
+                    $linkCode = 'image';
+                    $typeCode = 'image';
+                }
+
+                // Lưu tài nguyên vào bảng resources
+                $resourceRecord = Resource::create([
+                    'song_id' => $songId,
+                    'title' => $song->title,
+                    'slug' => $slug,
+                    'url' => $resourceUrl,
+                    'file_type' => $fileType,
+                    'type_code' => $typeCode,
+                    'file_name' => basename($resourceUrl),
+                    'file_size' => 0,
+                    'code' => 'songs',
+                    'link_code' => $linkCode,
+                ]);
+
+                $resourcesArray[] = [
+                    'song_id' => $songId,
+                    'resource_id' => $resourceRecord->id,
+                ];
+            } elseif ($resource instanceof \Illuminate\Http\UploadedFile) {
+                // Nếu là file tải lên
+                $resourcePath = $resource->store('uploads/resources', 'public');
+                $resourceUrl = Storage::url($resourcePath);
+                $resourceUrl = Str::replaceFirst('http://localhost', '', $resourceUrl);
+
+                $slug = Str::slug($song->title) . '-' . Str::random(6);
+                $fileType = $resource->getMimeType();
+                $linkCode = '';
+                $typeCode = '';
+
+                // Xử lý các loại MIME type
+                if (strpos($fileType, 'image') !== false) {
+                    $linkCode = 'image';
+                    $typeCode = 'image';
+                } elseif (strpos($fileType, 'audio') !== false) {
+                    $linkCode = 'audio';
+                    $typeCode = 'audio';
+                } elseif (strpos($fileType, 'video') !== false) {
+                    $linkCode = 'video';
+                    $typeCode = 'video';
+                } elseif (strpos($fileType, 'pdf') !== false) {
+                    $linkCode = 'document';
+                    $typeCode = 'document';
+                }
+
+                // Lưu tài nguyên vào bảng resources
+                $resourceRecord = Resource::create([
+                    'song_id' => $songId,
+                    'title' => $song->title,
+                    'slug' => $slug,
+                    'url' => $resourceUrl,
+                    'file_type' => $fileType,
+                    'type_code' => $typeCode,
+                    'file_name' => $resource->getClientOriginalName(),
+                    'file_size' => $resource->getSize(),
+                    'code' => 'songs',
+                    'link_code' => $linkCode,
+                ]);
+
+                $resourcesArray[] = [
+                    'song_id' => $songId,
+                    'resource_id' => $resourceRecord->id,
+                ];
+            }
+        }
+    }
+
+    // Lưu mảng tài nguyên vào Song
+    if (!empty($resourcesArray)) {
+        $song->resources = json_encode($resourcesArray);
+        $song->save();
+    }
+
+    return redirect()->route('admin.song.index')->with('success', 'Bài hát đã được thêm thành công.');
+}
+
 
 
 
@@ -258,7 +296,7 @@ public function update(Request $request, $id)
         'status' => 'required|in:active,inactive',
         'composer_id' => 'required|exists:composers,id',
         'singer_id' => 'required|exists:singers,id',
-        'resources' => 'nullable|array', // Tài nguyên có thể thêm hoặc không
+        'resources' => 'nullable|array',
     ]);
 
     // Lấy bài hát cần cập nhật
@@ -307,8 +345,45 @@ public function update(Request $request, $id)
                 $slug = Str::slug($song->title) . '-' . Str::random(6);
                 $resourceUrl = $resource;
                 $fileType = 'URL';
-                $linkCode = 'youtube'; // Đặt link_code là youtube
-                $typeCode = 'youtube'; // Đặt type_code là youtube
+                $linkCode = ''; 
+                $typeCode = ''; 
+
+                // Phân loại URL theo tên miền
+                $urlParts = parse_url($resource);
+                if (isset($urlParts['host'])) {
+                    $host = strtolower($urlParts['host']);
+                    if (strpos($host, 'youtube.com') !== false) {
+                        $linkCode = 'youtube';
+                        $typeCode = 'youtube';
+                    } elseif (strpos($host, 'vimeo.com') !== false) {
+                        $linkCode = 'vimeo';
+                        $typeCode = 'vimeo';
+                    } elseif (strpos($host, 'instagram.com') !== false) {
+                        $linkCode = 'instagram';
+                        $typeCode = 'instagram';
+                    } elseif (strpos($host, 'spotify.com') !== false) {
+                        $linkCode = 'spotify';
+                        $typeCode = 'spotify';
+                    } elseif (strpos($host, 'dailymotion.com') !== false) {
+                        $linkCode = 'dailymotion';
+                        $typeCode = 'dailymotion';
+                    } elseif (strpos($host, 'facebook.com') !== false) {
+                        $linkCode = 'facebook';
+                        $typeCode = 'facebook';
+                    } elseif (strpos($host, 'twitter.com') !== false) {
+                        $linkCode = 'twitter';
+                        $typeCode = 'twitter';
+                    } elseif (strpos($host, 'google.com/maps') !== false) {
+                        $linkCode = 'googleMaps';
+                        $typeCode = 'googleMaps';
+                    } elseif (strpos($host, 'flickr.com') !== false) {
+                        $linkCode = 'flickr';
+                        $typeCode = 'flickr';
+                    } else {
+                        $linkCode = 'other';
+                        $typeCode = 'other';
+                    }
+                }
 
                 // Lưu tài nguyên vào cơ sở dữ liệu
                 $resourceRecord = Resource::create([
@@ -333,13 +408,12 @@ public function update(Request $request, $id)
                 $resourcePath = $resource->store('uploads/resources', 'public');
                 $resourceUrl = 'http://127.0.0.1:8000/storage/' . str_replace('public/', '', $resourcePath);
 
-
                 $slug = Str::slug($song->title) . '-' . Str::random(6);
                 $fileType = $resource->getMimeType();
                 $linkCode = ''; // Ban đầu không xác định
                 $typeCode = ''; // Ban đầu không xác định
-
-                // Kiểm tra và phân loại tệp tải lên
+                
+                // Kiểm tra kiểu MIME của tệp tải lên
                 if (strpos($fileType, 'image') !== false) {
                     $linkCode = 'image';
                     $typeCode = 'image';
@@ -349,9 +423,20 @@ public function update(Request $request, $id)
                 } elseif (strpos($fileType, 'video') !== false) {
                     $linkCode = 'video';
                     $typeCode = 'video';
-                } elseif (strpos($fileType, 'pdf') !== false) {
-                    $linkCode = 'document';
+                }  elseif (
+                    strpos($fileType, 'pdf') !== false || 
+                    strpos($fileType, 'doc') !== false || 
+                    strpos($fileType, 'txt') !== false || 
+                    strpos($fileType, 'rar') !== false || 
+                    strpos($fileType, 'zip') !== false || 
+                    strpos($fileType, 'xls') !== false || 
+                    strpos($fileType, 'ppt') !== false
+                ) {
                     $typeCode = 'document';
+                    $linkCode = 'document';
+                } else {
+                    $linkCode = 'other';
+                    $typeCode = 'other';
                 }
 
                 // Lưu tài nguyên vào cơ sở dữ liệu

@@ -143,19 +143,7 @@
 </script>
 
 <script src="{{ asset('js/js/ckeditor.js') }}"></script>
-<script>
-    ClassicEditor
-        .create(document.querySelector('#summary'))
-        .catch(error => {
-            console.error(error);
-        });
 
-    ClassicEditor
-        .create(document.querySelector('#content'))
-        .catch(error => {
-            console.error(error);
-        });
-</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -176,7 +164,7 @@
         });
     });
 </script>
-<script src="{{ asset('js/js/ckeditor.js') }}"></script>
+
 <script>
     ClassicEditor
         .create(document.querySelector('#editor1'))
