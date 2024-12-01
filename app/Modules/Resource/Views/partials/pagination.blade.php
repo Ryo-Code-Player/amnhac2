@@ -16,12 +16,53 @@
                                             allowfullscreen></iframe>
                                     @endif
                                     @break
-                                @case('video')
-                                    @if ($resource->type_code == 'video')
-                                        <video controls style="width: 100%; height: 10rem;">
-                                            <source src="{{ $resource->url }}" type="video/mp4">
-                                            Trình duyệt của bạn không hỗ trợ thẻ video.
-                                        </video>
+                                @case('vimeo')
+                                    @if ($resource->type_code == 'vimeo')
+                                        <iframe style="width: 100%; height: 10rem;"
+                                            src="https://player.vimeo.com/video/{{ substr($resource->url, strrpos($resource->url, '/') + 1) }}"
+                                            frameborder="0" allowfullscreen></iframe>
+                                    @endif
+                                    @break
+                                @case('spotify')
+                                    @if ($resource->type_code == 'spotify')
+                                        <iframe style="width: 100%; height: 10rem;"
+                                            src="https://open.spotify.com/embed/track/{{ substr($resource->url, strrpos($resource->url, '/') + 1) }}"
+                                            frameborder="0" allowfullscreen></iframe>
+                                    @endif
+                                    @break
+                                @case('dailymotion')
+                                    @if ($resource->type_code == 'dailymotion')
+                                        <iframe style="width: 100%; height: 10rem;"
+                                            src="https://www.dailymotion.com/embed/video/{{ substr($resource->url, strrpos($resource->url, '/') + 1) }}"
+                                            frameborder="0" allowfullscreen></iframe>
+                                    @endif
+                                    @break
+                                @case('facebook')
+                                    @if ($resource->type_code == 'facebook')
+                                        <iframe style="width: 100%; height: 10rem;"
+                                            src="https://www.facebook.com/plugins/video.php?href={{ urlencode($resource->url) }}"
+                                            frameborder="0" allowfullscreen></iframe>
+                                    @endif
+                                    @break
+                                @case('twitter')
+                                    @if ($resource->type_code == 'twitter')
+                                        <iframe style="width: 100%; height: 10rem;"
+                                            src="https://platform.twitter.com/embed/tweet?url={{ urlencode($resource->url) }}"
+                                            frameborder="0" allowfullscreen></iframe>
+                                    @endif
+                                    @break
+                                @case('googleMaps')
+                                    @if ($resource->type_code == 'googleMaps')
+                                        <iframe style="width: 100%; height: 10rem;"
+                                            src="https://www.google.com/maps/embed?pb={{ urlencode($resource->url) }}"
+                                            frameborder="0" allowfullscreen></iframe>
+                                    @endif
+                                    @break
+                                @case('flickr')
+                                    @if ($resource->type_code == 'flickr')
+                                        <iframe style="width: 100%; height: 10rem;"
+                                            src="https://www.flickr.com/embed/{{ substr($resource->url, strrpos($resource->url, '/') + 1) }}"
+                                            frameborder="0" allowfullscreen></iframe>
                                     @endif
                                     @break
                                 @case('audio')
@@ -30,6 +71,14 @@
                                             <source src="{{ $resource->url }}" type="audio/mpeg">
                                             Trình duyệt của bạn không hỗ trợ thẻ audio.
                                         </audio>
+                                    @endif
+                                    @break
+                                @case('video')
+                                    @if ($resource->type_code == 'video')
+                                        <video controls style="width: 100%; height: 10rem;">
+                                            <source src="{{ $resource->url }}" type="video/mp4">
+                                            Trình duyệt của bạn không hỗ trợ thẻ video.
+                                        </video>
                                     @endif
                                     @break
                                 @case('image')
@@ -77,7 +126,7 @@
                                     </audio>
                                 @break
 
-                                @case($fileType === 'application/pdf')
+                                @case($fileType === 'application/pdf,application/docx,application/ppt')
                                     <embed src="{{ $resource->url }}" type="application/pdf"
                                         style="width: 100%; height: 10rem;" />
                                 @break
@@ -111,7 +160,6 @@
                                 </form>
                             </div>
                         </div>
-
                     </div>
                 </a>
             </div>

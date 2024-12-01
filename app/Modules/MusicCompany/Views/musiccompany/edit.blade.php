@@ -73,21 +73,21 @@
 </div>
 
 
-                   <!-- Phần quản lý tài nguyên -->
-     <!-- Hiển thị các file hiện có -->
-     @if(!empty($resources))
-        <div class="form-group">
-            <label for="resources">Tài nguyên hiện có:</label>
-            <ul>
-                @foreach($resources as $resource)
-                    <li>
-                        <a href="{{ $resource['url'] }}" target="_blank">{{ $resource['file_name'] }}</a>
-                       
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+          <!-- Phần tài nguyên (file nhạc, MV, v.v.) -->
+<div class="form-group mt-3">
+    <label for="resources">Tài nguyên hiện có:</label>
+    <ul>
+        @foreach($resources as $resource)
+            <li id="resource-{{ $resource->resource_id }}">
+                <!-- Hiển thị tên tài nguyên -->
+                <a href="{{ $resource->url }}" target="_blank">{{ $resource->file_name }}</a>
+
+                <!-- Nút xóa tài nguyên -->
+                <button class="delete-resource btn btn-danger btn-sm" data-id="{{ $resource->id }}" data-company-id="{{ $musicCompany->id }}">Xóa</button>
+            </li>
+        @endforeach
+    </ul>
+</div>
 
     <!-- Thêm file mới -->
     <div class="form-group">
@@ -276,6 +276,49 @@
             console.error(error);
         });
     </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Bắt sự kiện khi nhấn nút xóa tài nguyên
+        $('.delete-resource').click(function(e) {
+            e.preventDefault();
+
+            var resourceId = $(this).data('id');
+            var companyId = $(this).data('company-id');
+            
+            // Xác nhận xóa tài nguyên
+            if (confirm('Bạn có chắc chắn muốn xóa tài nguyên này?')) {
+                // Gửi yêu cầu Ajax để xóa tài nguyên
+                $.ajax({
+                    url: '{{ route('admin.musiccompany.resource.delete') }}',  // Đảm bảo route đúng
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}', // Thêm csrf token
+                        resource_id: resourceId,
+                        company_id: companyId
+                    },
+                    success: function(response) {
+                        // Kiểm tra phản hồi từ server
+                        if (response.success) {
+                            // Ẩn hoặc xóa tài nguyên khỏi giao diện
+                            $('#resource-' + resourceId).remove(); // Xóa phần tử khỏi giao diện
+
+                            alert(response.message); // Hiển thị thông báo thành công
+                            location.reload(); // Tải lại trang (hoặc hiển thị lại tài nguyên nếu cần)
+                        } else {
+                            alert('Lỗi: ' + response.message); // Hiển thị thông báo lỗi
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Xử lý lỗi khi gửi yêu cầu Ajax
+                        console.log('Error:', error);
+                        alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
+                    }
+                });
+            }
+        });
+    });
+</script>
 
 
 @endsection
