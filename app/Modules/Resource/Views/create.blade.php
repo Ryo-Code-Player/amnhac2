@@ -41,9 +41,7 @@
                             {{ old('description') }}
                         </div>
                     </div>
-                    <a href="https://www.youtube.com/watch?v=cnHHCR7EW10" target="_blank">
-    Click here to watch the video
-</a>
+          
 
 
                     <div class="mt-3">
@@ -125,31 +123,36 @@
         });
         select.clear();
     
-        // JavaScript để ẩn/hiện các trường
         document.querySelectorAll('input[name="resource_type"]').forEach(function(elem) {
-            elem.addEventListener("change", function(event) {
-                if (event.target.value === "resource") {
-                    document.getElementById("resourceFields").classList.remove("hidden");
-                    document.getElementById("linkFields").classList.add("hidden");
-                } else {
-                    document.getElementById("resourceFields").classList.add("hidden");
-                    document.getElementById("linkFields").classList.remove("hidden");
-                }
-            });
-        });
+    elem.addEventListener("change", function(event) {
+        if (event.target.value === "resource") {
+            document.getElementById("resourceFields").classList.remove("hidden");
+            document.getElementById("linkFields").classList.add("hidden");
+        } else {
+            document.getElementById("resourceFields").classList.add("hidden");
+            document.getElementById("linkFields").classList.remove("hidden");
+        }
 
-        document.getElementById('resource-form').addEventListener('submit', function(event) {
-            if (document.querySelector('input[name="resource_type"]:checked').value === 'link') {
-                var youtubeUrl = document.querySelector('input[name="youtube_url"]').value.trim();
-                var documentUrl = document.querySelector('input[name="document_url"]').value.trim();
-                var imageUrl = document.querySelector('input[name="image_url"]').value.trim();
+        // Đồng bộ type_code và link_code theo giá trị chọn
+        syncResourceType();
+    });
+});
 
-                if (!youtubeUrl && !documentUrl && !imageUrl) {
-                    event.preventDefault();
-                    alert('Vui lòng nhập ít nhất một liên kết (YouTube, Tài liệu, hoặc Hình ảnh).');
-                }
-            }
-        });
+document.getElementById('resource-form').addEventListener('submit', function(event) {
+    var resourceType = document.querySelector('input[name="resource_type"]:checked').value;
+
+    if (resourceType === 'link') {
+        var youtubeUrl = document.querySelector('input[name="youtube_url"]').value.trim();
+        var documentUrl = document.querySelector('input[name="document_url"]').value.trim();
+        var imageUrl = document.querySelector('input[name="image_url"]').value.trim();
+        var facebookUrl = document.querySelector('input[name="facebook_url"]').value.trim(); // Thêm kiểm tra URL Facebook
+
+        if (!youtubeUrl && !documentUrl && !imageUrl && !facebookUrl) {
+            event.preventDefault();
+            alert('Vui lòng nhập ít nhất một liên kết (YouTube, Tài liệu, Hình ảnh, hoặc Facebook).');
+        }
+    }
+});
 
     </script>
 

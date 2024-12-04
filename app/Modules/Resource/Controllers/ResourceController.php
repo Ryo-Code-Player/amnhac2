@@ -66,6 +66,7 @@ class ResourceController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'link_code' => 'nullable|exists:resource_link_types,code',
+            'type_code' => 'nullable|exists:resource_types,code',
             'file' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mp3,pdf,doc,mov,docx,ppt,pptx,xls,xlsx|max:204800',
             'code' => 'nullable|string',
             'url' => 'nullable|url',
