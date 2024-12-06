@@ -19,7 +19,7 @@ class CreateResourcesTable extends Migration
             $table->string('url')->nullable();
             $table->string('code')->nullable();
             $table->string('description')->nullable();
-
+            $table->string('tags')->nullable(); // Lưu tags dưới dạng chuỗi
             $table->string('type_code');
             $table->string('link_code')->nullable()->default(null);
             $table->timestamps();

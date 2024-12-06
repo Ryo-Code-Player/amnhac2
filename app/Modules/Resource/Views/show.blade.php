@@ -140,11 +140,18 @@
 
             <p class="font-medium">Tags:</p>
             <p class="font-normal">
+            @foreach (json_decode($resource->tags) as $tagId)
                 @php
-                    $tags = \App\Models\Tag::whereIn('id', $tag_ids)->pluck('title');
+                     $tag = \App\Models\Tag::find($tagId);
                 @endphp
-                {{ $tags->implode(', ') }}
+                {{ $tag ? $tag->title : 'Tag not found' }}@if(!$loop->last), @endif
+                @endforeach
+
             </p>
+
+
+           
+
 
             <p class="font-medium">Description:</p>
             <div class="font-normal">

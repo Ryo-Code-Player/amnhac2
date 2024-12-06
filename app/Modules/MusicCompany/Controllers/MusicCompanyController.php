@@ -337,8 +337,8 @@ public function update(Request $request, $id)
                     // Xóa tài nguyên khỏi bảng 'resources'
                     $resourceRecord = Resource::find($resourceId);
                     if ($resourceRecord) {
-                        if (Storage::disk('public')->exists($resourceRecord->path)) {
-                            Storage::disk('public')->delete($resourceRecord->path);
+                        if (Storage::disk('public')->exists($resourceRecord->url)) {
+                            Storage::disk('public')->delete($resourceRecord->url);
                         }
     
                         $resourceRecord->delete();

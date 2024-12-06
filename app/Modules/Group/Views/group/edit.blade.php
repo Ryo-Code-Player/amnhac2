@@ -47,7 +47,7 @@
                     <div class="mt-3">
                         <label for="" class="form-label">Photo</label>
                         <div class="px-4 pb-4 mt-5 flex items-center  cursor-pointer relative">
-                            <div data-single="true" id="mydropzone" class="dropzone  "    url="{{route('upload.avatar')}}" >
+                            <div data-single="true" id="mydropzone" class="dropzone  "    url="{{route('admin.upload.avatar')}}" >
                                 <div class="fallback"> <input name="file" type="file" /> </div>
                                 <div class="dz-message" data-dz-message>
                                     <div class=" font-medium">Kéo thả hoặc chọn ảnh.</div>
@@ -132,7 +132,7 @@
         ClassicEditor.create( document.querySelector( '#editor1' ), 
         {
             ckfinder: {
-                uploadUrl: '{{route("upload.ckeditor")."?_token=".csrf_token()}}'
+                uploadUrl: '{{route("admin.upload.ckeditor")."?_token=".csrf_token()}}'
                 }
                 ,
                 mediaEmbed: {previewsInData: true}

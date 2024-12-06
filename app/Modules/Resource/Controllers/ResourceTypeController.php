@@ -24,7 +24,7 @@ class ResourceTypeController extends Controller
         $breadcrumb = '
         <li class="breadcrumb-item"><a href="#">/</a></li>
         <li class="breadcrumb-item active" aria-current="page">Danh sách loại tài nguyên</li>';
-        $active_menu = "resource_type_list";
+        $active_menu = "resourcetype_list";
 
         return view('Resource::type.index', compact('resourceTypes', 'breadcrumb', 'active_menu'));
     }

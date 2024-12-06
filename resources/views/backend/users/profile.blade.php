@@ -17,7 +17,7 @@
     <div class="grid grid-cols-12 gap-12 mt-5">
         <div class="intro-y col-span-12 lg:col-span-12">
             <!-- BEGIN: Form Layout -->
-            <form method="post" action="{{route('user.profileupdate' )}}">
+            <form method="post" action="{{route('admin.user.profileupdate' )}}">
                 @csrf
                 
                 <div class="intro-y box p-5">
@@ -128,31 +128,31 @@
     });
      console.log(Dropzone.instances[0].options   );
  
-    // console.log(Dropzone.optionsForElement);
+    console.log(Dropzone.optionsForElement);
  
 </script>
 
-<!-- <script src="{{asset('backend/assets/dist/js/ckeditor-classic.js')}}"></script> -->
+<script src="{{asset('backend/assets/dist/js/ckeditor-classic.js')}}"></script>
 <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
 <script>
-    // $('#lfm').filemanager('image');
+    $('#lfm').filemanager('image');
 </script>
  
 
 <script>
-        // document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function() {
 
-        // document.getElementById('button-image').addEventListener('click', (event) => {
-        // event.preventDefault();
+        document.getElementById('button-image').addEventListener('click', (event) => {
+        event.preventDefault();
 
-        // window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
-        // });
-        // });
+        window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
+        });
+        });
 
-        // // set file link
-        // function fmSetLink($url) {
-        // document.getElementById('image_label').value = $url;
-        // document.getElementById('holder').innerHTML = '<img src = "'+ $url +'" width ="100"/>';
-        // }
+        // set file link
+        function fmSetLink($url) {
+        document.getElementById('image_label').value = $url;
+        document.getElementById('holder').innerHTML = '<img src = "'+ $url +'" width ="100"/>';
+        }
 </script>
 @endsection

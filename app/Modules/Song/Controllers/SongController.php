@@ -404,14 +404,14 @@ public function update(Request $request, $id)
                     'resource_id' => $resourceRecord->id,
                 ];
             } elseif ($resource instanceof \Illuminate\Http\UploadedFile) {
-                // Nếu là tệp tải lên, xử lý tài nguyên tải lên
-                $resourcePath = $resource->store('uploads/resources', 'public');
-                $resourceUrl = 'http://127.0.0.1:8000/storage/' . str_replace('public/', '', $resourcePath);
+                 $resourcePath = $resource->store('uploads/resources', 'public');
+                $resourceUrl = Storage::url($resourcePath);
+                $resourceUrl = Str::replaceFirst('http://localhost', '', $resourceUrl);
 
                 $slug = Str::slug($song->title) . '-' . Str::random(6);
                 $fileType = $resource->getMimeType();
-                $linkCode = ''; // Ban đầu không xác định
-                $typeCode = ''; // Ban đầu không xác định
+                $linkCode = ''; 
+                $typeCode = '';
                 
                 // Kiểm tra kiểu MIME của tệp tải lên
                 if (strpos($fileType, 'image') !== false) {
