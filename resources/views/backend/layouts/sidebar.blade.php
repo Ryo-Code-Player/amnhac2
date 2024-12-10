@@ -380,7 +380,43 @@
             </ul>
         </li>
         
- <!-- Tương tác -->
+  <!-- start interact -->
+
+  <li>
+        <a href="javascript:;" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='interact_list'||$active_menu=='interact_add'||$active_menu=='kiot'|| $active_menu=='interactype_list'|| $active_menu=='interactype_add'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">
+            <div class="side-menu__icon"> <i data-lucide="book"></i> </div>
+                <div class="side-menu__title">
+                    Tương tác 
+                    <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                </div>
+        </a>
+        <ul class="{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='interact_list'||$active_menu=='interact_add'||$active_menu=='kiot')?'side-menu__sub-open':''}}">
+            <li>
+                <a href="{{route('admin.userpage.index')}}" class="side-menu {{$active_menu=='interact_list'?'side-menu--active':''}}">
+                    <div class="side-menu__icon"> <i data-lucide="user-check"></i> </div>
+                    <div class="side-menu__title">Cá nhân </div>
+                </a>
+            </li>
+            <li>
+                <a href="{{route('admin.motion.index')}}" class="side-menu {{$active_menu=='motion_list'?'side-menu--active':''}}">
+                    <div class="side-menu__icon"> <i data-lucide="layers"></i> </div>
+                    <div class="side-menu__title">Danh sách motion</div>
+                </a>
+            </li>
+            <li>
+                <a href="{{route('admin.motion.create')}}" class="side-menu {{$active_menu=='motion_add'?'side-menu--active':''}}">
+                    <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                    <div class="side-menu__title">Thêm motion</div>
+                </a>
+            </li>
+                <!-- <li>
+                    <a href="" class="side-menu">
+                        <div class="side-menu__icon"> <i data-lucide="activity"></i> </div>
+                        <div class="side-menu__title"> Top Menu </div>
+                    </a>
+                </li> -->
+            </ul>
+        </li>
 
     <!-- start fanclub -->
 
