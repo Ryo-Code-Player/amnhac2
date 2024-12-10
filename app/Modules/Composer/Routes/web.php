@@ -14,4 +14,5 @@ Route::group(['prefix' => 'admin/', 'as' => 'admin.'], function () {
     Route::post('composer/{id}/status', [ComposerController::class, 'status'])->name('composer.status');
     Route::get('composer/{id}', [ComposerController::class, 'show'])->name('composer.show');
     Route::post('upload/avatar', [ComposerController::class, 'uploadAvatar'])->name('upload.avatar');
+    Route::get('composer_search',[ ComposerController::class,'search'])->name('composer.search');
 });

@@ -7,10 +7,17 @@ use App\Modules\Playlist\Models\Playlist; // Mô hình Playlist
 use App\Modules\Song\Models\Song; // Mô hình Song (nếu bạn có sử dụng song trong Playlist)
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\DB;
 
 class PlaylistController extends Controller
 {
+    protected $pagesize;
+    public function __construct( )
+    {
+        $this->pagesize = env('NUMBER_PER_PAGE','10');
+        $this->middleware('auth');
+        
+    }
     public function index()
     {
         $playlists = Playlist::paginate(10);
@@ -166,4 +173,31 @@ public function update(Request $request, $id)
     }
 
 
+    public function search(Request $request)
+    {
+        
+        $func = "playlist_management";
+        if(!$this->check_function($func))
+        {
+            return redirect()->route('unauthorized');
+        }
+        if($request->datasearch)
+        {
+            $active_menu="playlist_management";
+            $searchdata =$request->datasearch;
+            $playlists = DB::table('playlists')->where('title','LIKE','%'.$request->datasearch.'%')->orWhere('type','LIKE','%'.$request->datasearch.'%')
+            ->paginate($this->pagesize)->withQueryString();
+            $breadcrumb = '
+             <li class="breadcrumb-item"><a href="#">/</a></li>
+            <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.playlist.index').'">Danh sách Playlist</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> tìm kiếm </li>';
+            return view('Playlist::playlist.search', compact('playlists', 'breadcrumb', 'searchdata', 'active_menu'));
+
+        }
+        else
+        {
+            return redirect()->route('admin.playlist.index')->with('success','Không có thông tin tìm kiếm!');
+        }
+
+    }
 }

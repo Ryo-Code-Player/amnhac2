@@ -79,14 +79,12 @@
 
                     </div>
 
-                    <div class="mt-3">
-
-                
+            
 
       <!-- Trường Tags -->
       <div class="mt-3">
-    <label for="tags">Tags</label>
-    <select id="tags" name="tags[]" multiple placeholder=" ..." autocomplete="off">
+      <label for="tags" class="form-label">Tags</label>
+    <select id="select-junk" name="tags[]" multiple placeholder=" ..." autocomplete="off">
         @foreach ($tags as $tag)
             <option value="{{ $tag->id }}" {{ in_array($tag->id, old('tags', [])) ? 'selected' : '' }}>{{ $tag->title }}</option>
         @endforeach

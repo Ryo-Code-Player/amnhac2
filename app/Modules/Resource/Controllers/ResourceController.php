@@ -60,10 +60,8 @@ class ResourceController extends Controller
 
         return view('Resource::create', compact('resourceTypes', 'linkTypes', 'breadcrumb', 'active_menu', 'tags'));
     }
-
     public function store(Request $request)
     {
-        //dd($request->all());
         $request->validate([
             'title' => 'required|string|max:255',
             'link_code' => 'nullable|exists:resource_link_types,code',
@@ -73,44 +71,50 @@ class ResourceController extends Controller
             'url' => 'nullable|url',
             'description' => 'nullable|string|max:25555',
             'tags' => 'nullable|array',
-        'tags.*' => 'exists:tags,id',
+            'tags.*' => 'exists:tags,id',
         ]);
-
+    
         $resourceType = ResourceType::first();
         $linkTypes = ResourceLinkType::first();
+        
         if (!$resourceType) {
             return redirect()->back()->with('error', 'Không tìm thấy loại tài nguyên.');
         }
         if (!$linkTypes) {
             return redirect()->back()->with('error', 'Không tìm thấy loại link.');
         }
+        
+        // Gán type_code từ request hoặc mặc định là của resourceType
         $data = $request->only(['title', 'url', 'description']);
-        $data['type_code'] = $resourceType->code;
-        $data['link_code'] = $linkTypes->code;
-
+        $data['type_code'] = $request->type_code ?? $resourceType->code;
+        
+        // Lấy link_code dựa vào type_code
+        $linkType = ResourceLinkType::where('code', $data['type_code'])->first();
+        $data['link_code'] = $linkType ? $linkType->code : null;
+    
         $resource = Resource::createResource((object) $data, $request->file('file'), 'Resource');
-
-     // Khởi tạo mảng tagsArray từ tags đã chọn
-     $tagsArray = $request->tags ?? [];
-
-     // Xử lý tag mới nhập vào (nếu có)
-     if ($request->new_tags) {
-         $newTags = explode(',', $request->new_tags);
- 
-         foreach ($newTags as $newTag) {
-             $newTag = trim($newTag);
-             if (!empty($newTag)) {
-                 $tag = Tag::firstOrCreate(['title' => $newTag]);
-                 $tagsArray[] = $tag->id;
-             }
-         }
-     }
-     $resource->tags = json_encode($tagsArray);
-     $resource->save();
+    
+        // Khởi tạo mảng tagsArray từ tags đã chọn
+        $tagsArray = $request->tags ?? [];
+    
+        // Xử lý tag mới nhập vào (nếu có)
+        if ($request->new_tags) {
+            $newTags = explode(',', $request->new_tags);
+    
+            foreach ($newTags as $newTag) {
+                $newTag = trim($newTag);
+                if (!empty($newTag)) {
+                    $tag = Tag::firstOrCreate(['title' => $newTag]);
+                    $tagsArray[] = $tag->id;
+                }
+            }
+        }
+        $resource->tags = json_encode($tagsArray);
+        $resource->save();
+    
         return redirect()->route('admin.resources.index')->with('success', 'Tạo tài nguyên thành công.');
     }
-
-
+    
     public function edit($id)
     {
         $resource = Resource::findOrFail($id);

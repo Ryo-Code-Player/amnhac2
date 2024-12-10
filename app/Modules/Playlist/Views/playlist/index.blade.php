@@ -6,6 +6,17 @@
     <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
         <a href="{{ route('admin.playlist.create') }}" class="btn btn-primary shadow-md mr-2">Thêm Playlist</a>
         <div class="hidden md:block mx-auto text-slate-500">Hiển thị trang {{$playlists->currentPage()}} trong {{$playlists->lastPage()}} trang</div>
+        <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
+    <div class="relative">
+        <form action="{{ route('admin.playlist.search') }}" method="get" class="flex items-center">
+            <input type="text" name="datasearch" class="ipsearch form-control w-56 pl-10 pr-10 py-2 rounded-lg border-gray-300"
+                placeholder="Search..." autocomplete="off">
+            <button type="submit" class="absolute right-0 top-1/2 transform -translate-y-1 p-2 bg-transparent border-none cursor-pointer">
+                <i class="w-4 h-4 text-gray-500" data-lucide="search"></i>
+            </button>
+        </form>
+    </div>
+</div>
     </div>
     <!-- BEGIN: Data List -->
     <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">

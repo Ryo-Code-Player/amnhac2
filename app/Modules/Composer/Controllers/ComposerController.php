@@ -8,9 +8,17 @@ use App\Modules\Composer\Models\Composer; // Mô hình Composer
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ComposerController extends Controller
 {
+    protected $pagesize;
+    public function __construct( )
+    {
+        $this->pagesize = env('NUMBER_PER_PAGE','10');
+        $this->middleware('auth');
+        
+    }
     public function index()
     {
         $active_menu = "composer_management";
@@ -161,4 +169,31 @@ class ComposerController extends Controller
     return response()->json(['msg' => 'Cập nhật thành công.']);
 }
 
+public function search(Request $request)
+    {
+        
+        $func = "composer_management";
+        if(!$this->check_function($func))
+        {
+            return redirect()->route('unauthorized');
+        }
+        if($request->datasearch)
+        {
+            $active_menu="composer_management";
+            $searchdata =$request->datasearch;
+            $composers = DB::table('composers')->where('fullname','LIKE','%'.$request->datasearch.'%')->orWhere('content','LIKE','%'.$request->datasearch.'%')
+            ->paginate($this->pagesize)->withQueryString();
+            $breadcrumb = '
+             <li class="breadcrumb-item"><a href="#">/</a></li>
+            <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.composer.index').'">Danh sách nhạc sĩ</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> tìm kiếm </li>';
+            return view('Composer::composer.search', compact('composers', 'breadcrumb', 'searchdata', 'active_menu'));
+
+        }
+        else
+        {
+            return redirect()->route('admin.composer.index')->with('success','Không có thông tin tìm kiếm!');
+        }
+
+    }
 }

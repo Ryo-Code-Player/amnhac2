@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\DB;
 
 class MusicCompanyController extends Controller
 {
+    protected $pagesize;
+    public function __construct( )
+    {
+        $this->pagesize = env('NUMBER_PER_PAGE','10');
+        $this->middleware('auth');
+        
+    }
     public function index()
     {
         $active_menu = "musiccompany_management";
@@ -83,8 +90,9 @@ class MusicCompanyController extends Controller
     	$musicCompany->user_id = Auth::id();
     	$musicCompany->status = $validatedData['status'];  // Thiết lập trạng thái cho công ty
     	$musicCompany->tags = json_encode($tagsArray);  // Lưu mảng tags dưới dạng JSON
+      
     	$musicCompany->save();
-    
+        $tagsArray = json_decode($musicCompany->tags, true); // Giải mã JSON để lấy mảng
         $musicCompanyId = $musicCompany->id;
     
         // Mảng lưu trữ các tài nguyên
@@ -118,7 +126,7 @@ class MusicCompanyController extends Controller
                         $linkCode = 'document';
                         $typeCode = 'document';
                     }
-    
+                    $tagsArray = json_decode($musicCompany->tags, true); // Giải mã JSON để lấy mảng
                     // Lưu tài nguyên vào bảng resources
                     $resourceRecord = Resource::create([
                          'company_id' => $musicCompanyId,
@@ -127,6 +135,7 @@ class MusicCompanyController extends Controller
                         'url' => $resourceUrl,
                         'file_type' => $fileType,
                         'type_code' => $typeCode,
+                        'tags' => !empty($tagsArray) ? json_encode($tagsArray) : null, // Gán tags từ musicCompany
                         'file_name' => $resource->getClientOriginalName(),
                         'file_size' => $resource->getSize(),
                         'code' => 'musiccompany',
@@ -291,6 +300,7 @@ public function update(Request $request, $id)
                     'url' => $resourceUrl,
                     'file_type' => $fileType,
                     'link_code' => $linkCode,
+                    'tags' => $tag,
                     'code' => 'musiccompany',
                     'type_code' => $typeCode,
                     'file_name' => $resource->getClientOriginalName(),
@@ -476,4 +486,32 @@ public function update(Request $request, $id)
 }
 
 
+
+public function search(Request $request)
+    {
+        
+        $func = "musiccompany_management";
+        if(!$this->check_function($func))
+        {
+            return redirect()->route('unauthorized');
+        }
+        if($request->datasearch)
+        {
+            $active_menu="musiccompany_management";
+            $searchdata =$request->datasearch;
+            $music_companies = DB::table('music_companies')->where('title','LIKE','%'.$request->datasearch.'%')->orWhere('address','LIKE','%'.$request->datasearch.'%')
+            ->paginate($this->pagesize)->withQueryString();
+            $breadcrumb = '
+             <li class="breadcrumb-item"><a href="#">/</a></li>
+            <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.musiccompany.index').'">Danh sách Công ty Âm nhạc</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> tìm kiếm </li>';
+            return view('MusicCompany::musiccompany.search', compact('music_companies', 'breadcrumb', 'searchdata', 'active_menu'));
+
+        }
+        else
+        {
+            return redirect()->route('admin.musiccompany.index')->with('success','Không có thông tin tìm kiếm!');
+        }
+
+    }
 }

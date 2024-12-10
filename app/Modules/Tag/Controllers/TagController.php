@@ -10,9 +10,17 @@ use App\Modules\Singer\Models\Singer;
 use App\Modules\Song\Models\Song; // Nạp thêm model Song
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class TagController extends Controller
 {
+    protected $pagesize;
+    public function __construct( )
+    {
+        $this->pagesize = env('NUMBER_PER_PAGE','10');
+        $this->middleware('auth');
+        
+    }
     public function index()
     {
         $active_menu = "tag_list";
@@ -113,5 +121,33 @@ class TagController extends Controller
     {
         $tag->delete();
         return redirect()->route('admin.tag.index')->with('success', 'Tag deleted successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        
+        $func = "tag_list";
+        if(!$this->check_function($func))
+        {
+            return redirect()->route('unauthorized');
+        }
+        if($request->datasearch)
+        {
+            $active_menu="tag_list";
+            $searchdata =$request->datasearch;
+            $tags = DB::table('tags')->where('title','LIKE','%'.$request->datasearch.'%')->orWhere('status','LIKE','%'.$request->datasearch.'%')
+            ->paginate($this->pagesize)->withQueryString();
+            $breadcrumb = '
+             <li class="breadcrumb-item"><a href="#">/</a></li>
+            <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.tag.index').'">Danh sách tags</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> tìm kiếm </li>';
+            return view('Tag::tag.search', compact('tags', 'breadcrumb', 'searchdata', 'active_menu'));
+
+        }
+        else
+        {
+            return redirect()->route('admin.tag.index')->with('success','Không có thông tin tìm kiếm!');
+        }
+
     }
 }

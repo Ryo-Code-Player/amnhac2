@@ -139,15 +139,23 @@
             <p class="font-medium">File size: <span class="font-normal">{{ $resource->file_size }} bytes</span></p>
 
             <p class="font-medium">Tags:</p>
-            <p class="font-normal">
-            @foreach (json_decode($resource->tags) as $tagId)
-                @php
-                     $tag = \App\Models\Tag::find($tagId);
-                @endphp
-                {{ $tag ? $tag->title : 'Tag not found' }}@if(!$loop->last), @endif
-                @endforeach
+<p class="font-normal">
+    @php
+        $tags = json_decode($resource->tags);
+    @endphp
 
-            </p>
+    @if(is_array($tags) || is_object($tags))
+        @foreach ($tags as $tagId)
+            @php
+                $tag = \App\Models\Tag::find($tagId);
+            @endphp
+            {{ $tag ? $tag->title : 'Tag not found' }}@if(!$loop->last), @endif
+        @endforeach
+    @else
+        Tag not found
+    @endif
+</p>
+
 
 
            

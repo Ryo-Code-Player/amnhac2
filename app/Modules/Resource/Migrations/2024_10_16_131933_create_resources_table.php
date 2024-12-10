@@ -19,7 +19,7 @@ class CreateResourcesTable extends Migration
             $table->string('url')->nullable();
             $table->string('code')->nullable();
             $table->string('description')->nullable();
-            $table->string('tags')->nullable(); // Lưu tags dưới dạng chuỗi
+            $table->json('tags')->nullable(); // Nếu sử dụng MySQL 5.7+ hoặc MariaDB 10.2.7+
             $table->string('type_code');
             $table->string('link_code')->nullable()->default(null);
             $table->timestamps();

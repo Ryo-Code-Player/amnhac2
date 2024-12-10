@@ -23,7 +23,7 @@ Route::group(['prefix' => 'admin/', 'as' => 'admin.'], function() {
     Route::post('upload/avatar', [SongController::class, 'uploadAvatar'])->name('upload.avatar'); // Upload avatar
     Route::post('song/{songId}/upload-resource', [SongController::class, 'uploadResource'])->name('song.uploadResource'); // Upload tài nguyên cho bài hát
     Route::post('song/resource/delete', [SongController::class, 'deleteResource'])->name('song.resource.delete');
-
+    Route::get('song_search',[ SongController::class,'search'])->name('song.search');
 
 
 

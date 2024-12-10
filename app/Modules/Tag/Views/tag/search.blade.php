@@ -1,25 +1,28 @@
 @extends('backend.layouts.master')
-
 @section('content')
-<h2 class="intro-y text-lg font-medium mt-10">Danh Sách Tags</h2>
-<div class="grid grid-cols-12 gap-6 mt-5">
-    <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-        <a href="{{ route('admin.tag.create') }}" class="btn btn-primary shadow-md mr-2">Thêm Tag Mới</a>
-        <div class="hidden md:block mx-auto text-slate-500">Hiển thị trang {{ $tags->currentPage() }} trong {{ $tags->lastPage() }} trang</div>
-        <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
-    <div class="relative">
+
+<div class="content">
+    <h2 class="intro-y text-lg font-medium mt-10">
+        Kết quả tìm kiếm tags
+    </h2>
+    <div class="grid grid-cols-12 gap-6 mt-5">
+        <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
+             
+            <div class="hidden md:block mx-auto text-slate-500">Hiển thị trang {{$tags->currentPage()}} trong {{$tags->lastPage()}} trang</div>
+            <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
+    <div class="relative text-slate-500">
         <form action="{{ route('admin.tag.search') }}" method="get" class="flex items-center">
-            <input type="text" name="datasearch" class="ipsearch form-control w-56 pl-10 pr-10 py-2 rounded-lg border-gray-300"
-                placeholder="Search..." autocomplete="off">
+            <input type="text" name="datasearch" value="{{ $searchdata }}" class="ipsearch form-control w-56 pr-10 py-2 rounded-lg border-gray-300" placeholder="Search...">
             <button type="submit" class="absolute right-0 top-1/2 transform -translate-y-1 p-2 bg-transparent border-none cursor-pointer">
                 <i class="w-4 h-4 text-gray-500" data-lucide="search"></i>
             </button>
         </form>
     </div>
 </div>
-    </div>
+
+        </div>
     <!-- BEGIN: Data List -->
-    <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
+    <div class="intro-y col-span-12 overflow-auto lg:overflow-visible mt-4">
         <table class="table table-report -mt-2">
             <thead>
                 <tr>
@@ -32,7 +35,7 @@
                 @if ($tags->isEmpty())
                     <tr>
                         <td colspan="3" class="text-center py-4">
-                            <strong>Không có tag nào hiển thị.</strong>
+                            <strong>Không tìm thấy tag nào.</strong>
                         </td>
                     </tr>
                 @else
@@ -66,14 +69,6 @@
     </div>
 </div>
 <!-- END: HTML Table Data -->
-<!-- BEGIN: Pagination -->
-<div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
-    <nav class="w-full sm:w-auto sm:mr-auto">
-        {{ $tags->links('vendor.pagination.tailwind') }}
-    </nav>
-</div>
-<!-- END: Pagination -->
-
 @endsection
 
 @section('scripts')
