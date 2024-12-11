@@ -26,3 +26,4 @@ Route::group( ['prefix'=>'admin/'  , 'as' => 'admin.' ],function(){
 
 
 });
+Route::post('avatar-upload', [\App\Http\Controllers\FilesController::class, 'avartarUpload' ])->name('upload.avatar');

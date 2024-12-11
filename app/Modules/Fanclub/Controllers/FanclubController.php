@@ -66,34 +66,22 @@ class FanclubController extends Controller
             // Validate input
             $this->validate($request, [
                 'title' => 'required|string|max:255',
-                'photo' => 'nullable|string',
+                'photo' => 'nullable|nullable',
                 'summary' => 'nullable|string',
                 'content' => 'nullable|string',
                 'status' => 'required|in:active,inactive',
             ]);
 
-            // Lấy tất cả dữ liệu từ form
-            // dd($request->all());
-            $photoUrl = null;
-            if ($request->hasFile('photo')) {
-                $photoPath = $request->file('photo')->store('photos', 'public');
-                $photoUrl = Storage::url($photoPath);
-                $photoUrl = Str::replaceFirst('http://localhost', '', $photoUrl); // Remove "http://localhost" from URL
-                $validate['photo'] = $photoUrl;
-            }
-
             $data = $request->all();
+            $helpController = new \App\Http\Controllers\HelpController();
+            $data['content'] = $helpController->uploadImageInContent( $data['content'] );
+            $data['content'] = $helpController->removeImageStyle( $data['content'] );
+
             $data['slug'] = Str::slug($request->title);
             $data['user_id'] = '1';
 
-            $photoPaths = [];
-            if ($request->hasFile('photo')) { 
-                foreach ($request->file('photo') as $file) {
-                    $photoPaths[] = $this->uploadAvatar($file);  // Gọi hàm upload ảnh
-                }
-            }
-
-            $data['photo'] = json_encode($photoPaths);
+            if($request->photo == null)
+                $data['photo'] = asset('backend/assets/dist/images/profile-6.jpg');
 
             // Tạo một câu lạc bộ mới
             $status = Fanclub::create($data);
@@ -147,14 +135,12 @@ class FanclubController extends Controller
                 'content' => 'nullable|string',
                 'status' => 'required|in:active,inactive',
             ]);
-            if ($request->hasFile('photo')) {
-                $photoPath = $request->file('photo')->store('photos', 'public');
-                $photoUrl = Storage::url($photoPath);
-                $photoUrl = Str::replaceFirst('http://localhost', '', $photoUrl); // Remove "http://localhost" from URL
-                $validated['photo'] = $photoUrl;
-            }
 
             $data = $request->all();
+
+            $helpController = new \App\Http\Controllers\HelpController();
+            $data['content'] = $helpController->uploadImageInContent( $data['content'] );
+
             $data['slug'] = Str::slug($request->title);
             $status = $fanclub->fill($data)->save();
             if($status){
