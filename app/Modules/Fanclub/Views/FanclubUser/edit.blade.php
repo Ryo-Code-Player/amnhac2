@@ -1,5 +1,5 @@
 @extends('backend.layouts.master')
-<!-- gagagag -->
+
 @section('content')
     <h2 class="intro-y text-lg font-medium mt-10">Sửa thành viên câu lạc bộ</h2>
 

@@ -1,5 +1,5 @@
 @extends('backend.layouts.master')
-<!-- fafaff -->
+
 @section('content')
     <h2 class="intro-y text-lg font-medium mt-10">Thêm thành viên câu lạc bộ</h2>
 

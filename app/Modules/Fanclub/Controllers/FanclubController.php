@@ -23,7 +23,7 @@ class FanclubController extends Controller
         <li class="breadcrumb-item"><a href="#">/</a></li>
         <li class="breadcrumb-item active" aria-current="page"> Danh sách câu lạc bộ </li>';
         $fanclub=Fanclub::orderBy('id','DESC')->paginate($this->pagesize);
-        return view('Fanclub::fanclub.index',compact('fanclub','breadcrumb','active_menu'));
+        return view('Fanclub::Fanclub.index',compact('fanclub','breadcrumb','active_menu'));
     }
 
     public function create()
@@ -41,7 +41,7 @@ class FanclubController extends Controller
         <li class="breadcrumb-item active" aria-current="page"> Tạo câu lạc bộ người hâm mộ </li>';
         
         $fanclub=Fanclub::orderBy('id','DESC')->paginate($this->pagesize);
-        return view('Fanclub::fanclub.create',compact('fanclub','breadcrumb','active_menu'));
+        return view('Fanclub::Fanclub.create',compact('fanclub','breadcrumb','active_menu'));
     }
 
     private function uploadAvatar($file)
@@ -109,7 +109,7 @@ class FanclubController extends Controller
             <li class="breadcrumb-item"><a href="#">/</a></li>
             <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.Fanclub.index').'">Danh sách câu lạc bộ</a></li>
             <li class="breadcrumb-item active" aria-current="page"> Điều chỉnh câu lạc bộ </li>';
-            return view('Fanclub::fanclub.edit',compact('breadcrumb','fanclub','active_menu'));
+            return view('Fanclub::Fanclub.edit',compact('breadcrumb','fanclub','active_menu'));
         }
         else
         {
