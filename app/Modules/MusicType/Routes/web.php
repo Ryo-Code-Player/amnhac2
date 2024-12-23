@@ -15,4 +15,5 @@ Route::group(['prefix' => 'admin/', 'as' => 'admin.'], function () {
     Route::delete('musictype/{id}', [MusicTypeController::class, 'destroy'])->name('musictype.destroy'); // Xóa
     Route::post('musictype/{id}/status', [MusicTypeController::class, 'status'])->name('musictype.status');
     Route::get('musictype/{id}', [MusicTypeController::class, 'show'])->name('musictype.show');
+    Route::get('musictype_search',[ MusicTypeController::class,'search'])->name('musictype.search');
 });

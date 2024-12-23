@@ -79,15 +79,27 @@
 
                     <div class="mt-3">
                         <label for="post-form-4" class="form-label">Tags</label>
-                        <select id="select-junk" name="tag_ids[]" multiple placeholder="..." autocomplete="off">
-                            @foreach ($tags as $tag)
-                                <option value="{{ $tag->id }}"
-                                    @if(in_array($tag->id, $tag_ids)) selected @endif>
-                                    {{ $tag->title }}
-                                </option>
-                            @endforeach
+                        <select id="select-junk" name="tags[]" multiple placeholder="..." autocomplete="off">
+                        @foreach ($tags as $tag)
+            <option value="{{ $tag->id }}" 
+                {{ in_array($tag->id, old('tags', $attachedTags)) ? 'selected' : '' }}>
+                {{ $tag->title }}
+            </option>
+        @endforeach
                         </select>                        
                     </div>     
+
+
+<!-- Input field for new tags (nhập tags mới) -->
+<div class="form-group">
+    <label for="new_tags">Nhập tags mới (cách nhau bằng dấu phẩy)</label>
+    <input type="text" name="new_tags" class="form-control" id="new_tags" placeholder="Nhập tag mới" value="{{ old('new_tags') }}">
+</div>
+
+<!-- Chỗ để hiển thị thông tin khi nhập tag mới -->
+<input type="hidden" name="new_tags_input" id="new_tags_input" value="{{ old('new_tags_input') }}">
+
+
 
                     <div class="text-right mt-5">
                         <button type="submit" class="btn btn-primary w-24">Cập nhật</button>
@@ -115,9 +127,7 @@
         create: true
         
     });
-    @if (count($tag_ids)== 0)
-        select.clear();
-     @endif
+   
 </script>
     <script src="{{ asset('js/js/ckeditor.js') }}"></script>
     <script>
@@ -137,4 +147,24 @@
                 console.error(error);
             });
     </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Khởi tạo TomSelect cho trường select
+        var tagSelect = new TomSelect('#tags', {
+            create: false,  
+            maxItems: null,  // Không giới hạn số lượng tags
+            placeholder: 'Chọn tags',  // 
+            persist: false,  // Tránh tag trùng lặp trong danh sách chọn
+            tokenSeparators: [',', ' '],  // Phân tách tags bằng dấu phẩy hoặc dấu cách
+        });
+
+        // Lắng nghe sự kiện thay đổi trong ô nhập liệu tag mới
+        document.getElementById('new_tags').addEventListener('input', function() {
+            var newTags = this.value.split(',').map(tag => tag.trim()).filter(tag => tag);  // Lấy các tag mới nhập vào
+            // Cập nhật giá trị mới vào trường ẩn để gửi lên server
+            document.getElementById('new_tags_input').value = newTags.join(',');  // Nối các tag mới bằng dấu phẩy
+        });
+    });
+</script>
 @endsection

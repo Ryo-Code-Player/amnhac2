@@ -16,4 +16,5 @@ Route::group( ['prefix'=>'admin/'  , 'as' => 'admin.' ],function(){
     Route::post('upload/avatar', [MusicCompanyController::class, 'uploadAvatar'])->name('upload.avatar');
     Route::post('musiccompany/{companyId}/upload-resource', [MusicCompanyController::class, 'uploadResource'])->name('musiccompany.uploadResource');
     Route::post('musiccompany/resource/delete', [MusicCompanyController::class, 'deleteResource'])->name('musiccompany.resource.delete');
+    Route::get('musiccompany_search',[ MusicCompanyController::class,'search'])->name('musiccompany.search');
 });

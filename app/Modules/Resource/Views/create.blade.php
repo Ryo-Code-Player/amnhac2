@@ -41,9 +41,7 @@
                             {{ old('description') }}
                         </div>
                     </div>
-                    <a href="https://www.youtube.com/watch?v=cnHHCR7EW10" target="_blank">
-    Click here to watch the video
-</a>
+          
 
 
                     <div class="mt-3">
@@ -81,16 +79,26 @@
 
                     </div>
 
-                    <div class="mt-3">
+            
 
-                        <label for="post-form-4" class="form-label">Tags</label>
+      <!-- Trường Tags -->
+      <div class="mt-3">
+      <label for="tags" class="form-label">Tags</label>
+    <select id="select-junk" name="tags[]" multiple placeholder=" ..." autocomplete="off">
+        @foreach ($tags as $tag)
+            <option value="{{ $tag->id }}" {{ in_array($tag->id, old('tags', [])) ? 'selected' : '' }}>{{ $tag->title }}</option>
+        @endforeach
+    </select>
+</div>
 
-                        <select id="select-junk" name="tag_ids[]" multiple placeholder=" ..." autocomplete="off">
+<!-- Input field for new tags -->
+<div class="form-group">
+    <label for="new_tags">Nhập tags mới (cách nhau bằng dấu phẩy)</label>
+    <input type="text" name="new_tags" class="form-control" id="new_tags" placeholder="Nhập tag mới">
+</div>
 
-                            @foreach ($tags as $tag)
-                                <option value="{{ $tag->id }}">{{ $tag->title }}</option>
-                            @endforeach
-
+<!-- Chỗ để hiển thị thông tin khi nhập tag mới -->
+<input type="hidden" name="new_tags_input" id="new_tags_input">
 
                         </select>
 
@@ -125,31 +133,36 @@
         });
         select.clear();
     
-        // JavaScript để ẩn/hiện các trường
         document.querySelectorAll('input[name="resource_type"]').forEach(function(elem) {
-            elem.addEventListener("change", function(event) {
-                if (event.target.value === "resource") {
-                    document.getElementById("resourceFields").classList.remove("hidden");
-                    document.getElementById("linkFields").classList.add("hidden");
-                } else {
-                    document.getElementById("resourceFields").classList.add("hidden");
-                    document.getElementById("linkFields").classList.remove("hidden");
-                }
-            });
-        });
+    elem.addEventListener("change", function(event) {
+        if (event.target.value === "resource") {
+            document.getElementById("resourceFields").classList.remove("hidden");
+            document.getElementById("linkFields").classList.add("hidden");
+        } else {
+            document.getElementById("resourceFields").classList.add("hidden");
+            document.getElementById("linkFields").classList.remove("hidden");
+        }
 
-        document.getElementById('resource-form').addEventListener('submit', function(event) {
-            if (document.querySelector('input[name="resource_type"]:checked').value === 'link') {
-                var youtubeUrl = document.querySelector('input[name="youtube_url"]').value.trim();
-                var documentUrl = document.querySelector('input[name="document_url"]').value.trim();
-                var imageUrl = document.querySelector('input[name="image_url"]').value.trim();
+        // Đồng bộ type_code và link_code theo giá trị chọn
+        syncResourceType();
+    });
+});
 
-                if (!youtubeUrl && !documentUrl && !imageUrl) {
-                    event.preventDefault();
-                    alert('Vui lòng nhập ít nhất một liên kết (YouTube, Tài liệu, hoặc Hình ảnh).');
-                }
-            }
-        });
+document.getElementById('resource-form').addEventListener('submit', function(event) {
+    var resourceType = document.querySelector('input[name="resource_type"]:checked').value;
+
+    if (resourceType === 'link') {
+        var youtubeUrl = document.querySelector('input[name="youtube_url"]').value.trim();
+        var documentUrl = document.querySelector('input[name="document_url"]').value.trim();
+        var imageUrl = document.querySelector('input[name="image_url"]').value.trim();
+        var facebookUrl = document.querySelector('input[name="facebook_url"]').value.trim(); // Thêm kiểm tra URL Facebook
+
+        if (!youtubeUrl && !documentUrl && !imageUrl && !facebookUrl) {
+            event.preventDefault();
+            alert('Vui lòng nhập ít nhất một liên kết (YouTube, Tài liệu, Hình ảnh, hoặc Facebook).');
+        }
+    }
+});
 
     </script>
 
@@ -240,5 +253,23 @@
             }
         };
     </script>
-    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Khởi tạo TomSelect cho trường select
+        var tagSelect = new TomSelect('#tags', {
+            create: false,  
+            maxItems: null,  // Không giới hạn số lượng tags
+            placeholder: 'Chọn tags',  // 
+            persist: false,  // Tránh tag trùng lặp trong danh sách chọn
+            tokenSeparators: [',', ' '],  // Phân tách tags bằng dấu phẩy hoặc dấu cách
+        });
+
+        // Lắng nghe sự kiện thay đổi trong ô nhập liệu tag mới
+        document.getElementById('new_tags').addEventListener('input', function() {
+            var newTags = this.value.split(',').map(tag => tag.trim()).filter(tag => tag);  // Lấy các tag mới nhập vào
+            // Cập nhật giá trị mới vào trường ẩn để gửi lên server
+            document.getElementById('new_tags_input').value = newTags.join(',');  // Nối các tag mới bằng dấu phẩy
+        });
+    });
+</script>
 @endsection

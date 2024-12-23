@@ -59,13 +59,34 @@ class Resource extends Model
         }
 
         if (isset($request->url) && !$file) {
-            $youtubeID = self::getYouTubeID($request->url);
+            $url = $request->url;
+            $youtubeID = self::getYouTubeID($url);
+            $facebookID = self::getFacebookID($url);
+            $spotifyID = self::getSpotifyID($url);
+            $vimeoID = self::getVimeoID($url);
+        
             if ($youtubeID) {
                 $data['url'] = "https://www.youtube.com/watch?v=" . $youtubeID;
+                $data['link_code'] = 'youtube';
+                $data['type_code'] = 'youtube';
+            } elseif ($facebookID) {
+                $data['url'] = "https://www.facebook.com/watch?v=" . $facebookID;
+                $data['link_code'] = 'facebook';
+                $data['type_code'] = 'facebook';
+            } elseif ($spotifyID) {
+                $data['url'] = "https://open.spotify.com/track/" . $spotifyID;
+                $data['link_code'] = 'spotify';
+                $data['type_code'] = 'spotify';
+            } elseif ($vimeoID) {
+                $data['url'] = "https://vimeo.com/" . $vimeoID;
+                $data['link_code'] = 'vimeo';
+                $data['type_code'] = 'vimeo';
             } else {
-                $data['url'] = $request->url;
+                // Nếu không khớp với bất kỳ loại nào, giữ nguyên URL và không gán link_code
+                $data['url'] = $url;
             }
         }
+        
 
         return self::create($data);
     }
@@ -185,7 +206,26 @@ class Resource extends Model
         preg_match($pattern, $url, $matches);
         return $matches[1] ?? null;
     }
-
+    private static function getFacebookID($url)
+    {
+        $pattern = '/(?:https?:\/\/)?(?:www\.)?facebook\.com\/(?:watch\/?\?v=|[^\/\n]+\/videos\/)(\d+)/';
+        preg_match($pattern, $url, $matches);
+        return $matches[1] ?? null;
+    }
+    
+    private static function getSpotifyID($url)
+    {
+        $pattern = '/(?:https?:\/\/)?(?:open\.)?spotify\.com\/(?:track|album|playlist)\/([a-zA-Z0-9]+)/';
+        preg_match($pattern, $url, $matches);
+        return $matches[1] ?? null;
+    }
+    
+    private static function getVimeoID($url)
+    {
+        $pattern = '/(?:https?:\/\/)?(?:www\.)?vimeo\.com\/(\d+)/';
+        preg_match($pattern, $url, $matches);
+        return $matches[1] ?? null;
+    }
     // Xác định loại resource từ mimeType của file
     private static function determineResourceType($file)
     {

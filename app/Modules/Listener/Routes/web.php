@@ -13,6 +13,6 @@ Route::group(['prefix' => 'admin/', 'as' => 'admin.'], function () {
     Route::delete('listener/{id}', [ListenerController::class, 'destroy'])->name('listener.destroy'); // Xóa
     Route::post('listener/{id}/status', [ListenerController::class, 'status'])->name('listener.status'); // Thay đổi trạng thái
     Route::get('listener/{id}', [ListenerController::class, 'show'])->name('listener.show');
-  
+    Route::get('listener_search',[ ListenerController::class,'search'])->name('listener.search');
    
 });

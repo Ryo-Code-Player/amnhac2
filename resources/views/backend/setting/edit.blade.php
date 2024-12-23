@@ -8,7 +8,7 @@
             Điều chỉnh setting
         </h2>
     </div>
-    <form method="post" action="{{route('setting.update',$setting->id)}}">
+    <form method="post" action="{{route('admin.setting.update',$setting->id)}}">
                 @csrf
                 @method('patch')
         <div class="grid grid-cols-12 gap-12 mt-5">

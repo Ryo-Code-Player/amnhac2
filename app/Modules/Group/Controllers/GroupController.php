@@ -40,18 +40,20 @@ class GroupController extends Controller
     
     public function index()
     {
+        $active_menu = "group_list";
         $func = "group_list";
         if(!$this->check_function($func))
         {
             return redirect()->route('unauthorized');
         }
         //
-        $data['active_menu']="group";
+        $data['active_menu']="group_list";
         $data['breadcrumb'] = '
-        <li class="breadcrumb-item"><a href="#">/</a></li>
+        <li class="breadcrumb-item"><a href="Danh sách nhóm">/</a></li>
         <li class="breadcrumb-item active" aria-current="page"> nhóm </li>';
         $data['groups']=Group::orderBy('id','DESC')->paginate($this->pagesize);
         return view('Group::group.index',$data);
+        
     }
 
     public function groupSearch(Request $request)
@@ -110,7 +112,7 @@ class GroupController extends Controller
         }
         //
         $data['groupTypes'] = GroupType::where('status','active')->orderBy('id','asc')->get();
-        $data['active_menu']="group";
+        $data['active_menu']="group_add";
         $data['breadcrumb'] = '
         <li class="breadcrumb-item"><a href="#">/</a></li>
         <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.group.index').'">danh sách nhóm</a></li>

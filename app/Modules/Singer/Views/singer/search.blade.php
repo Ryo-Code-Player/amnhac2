@@ -1,23 +1,26 @@
 @extends('backend.layouts.master')
-
 @section('content')
-<h2 class="intro-y text-lg font-medium mt-10">Danh sách Ca sĩ</h2>
-<div class="grid grid-cols-12 gap-6 mt-5">
-    <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-        <a href="{{ route('admin.singer.create') }}" class="btn btn-primary shadow-md mr-2">Thêm Ca sĩ</a>
-        <div class="hidden md:block mx-auto text-slate-500">Hiển thị trang {{$singers->currentPage()}} trong {{$singers->lastPage()}} trang</div>
-        <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
-    <div class="relative">
+
+<div class="content">
+    <h2 class="intro-y text-lg font-medium mt-10">
+        Kết quả tìm kiếm ca sĩ
+    </h2>
+    <div class="grid grid-cols-12 gap-6 mt-5">
+        <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
+             
+            <div class="hidden md:block mx-auto text-slate-500">Hiển thị trang {{$singers->currentPage()}} trong {{$singers->lastPage()}} trang</div>
+            <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
+    <div class="relative text-slate-500">
         <form action="{{ route('admin.singer.search') }}" method="get" class="flex items-center">
-            <input type="text" name="datasearch" class="ipsearch form-control w-56 pl-10 pr-10 py-2 rounded-lg border-gray-300"
-                placeholder="Search..." autocomplete="off">
+            <input type="text" name="datasearch" value="{{ $searchdata }}" class="ipsearch form-control w-56 pr-10 py-2 rounded-lg border-gray-300" placeholder="Search...">
             <button type="submit" class="absolute right-0 top-1/2 transform -translate-y-1 p-2 bg-transparent border-none cursor-pointer">
                 <i class="w-4 h-4 text-gray-500" data-lucide="search"></i>
             </button>
         </form>
     </div>
-    </div>
-    </div>
+</div>
+
+        </div>
     <!-- BEGIN: Data List -->
     <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
         <table class="table table-report -mt-2">
@@ -26,17 +29,15 @@
                     <th class="whitespace-nowrap">ID</th>
                     <th class="whitespace-nowrap">TÊN CA SĨ</th>
                     <th class="text-center whitespace-nowrap">ẢNH</th>
-                    <th class="whitespace-nowrap">LOẠI</th>
-                    <th class="whitespace-nowrap">CÔNG TY</th>
+
                     <th class="text-center whitespace-nowrap">TRẠNG THÁI</th>
-                    
                     <th class="text-center whitespace-nowrap">HÀNH ĐỘNG</th>
                 </tr>
             </thead>
             <tbody>
     @if ($singers->isEmpty())
         <tr>
-            <td colspan="8" class="text-center py-4">
+            <td colspan="7" class="text-center py-4">
                 <strong>Không có ca sĩ nào hiển thị.</strong>
             </td>
         </tr>
@@ -54,30 +55,28 @@
                     <img class="tooltip rounded-full h-10 w-10 object-cover" src="{{ asset($singer->photo) }}" alt="Singer Photo">
                 </div>
             </td>
-            <td class="text-left">{{ optional($singer->musicType)->title ?? 'N/A' }}</td>
-            <td class="text-left">{{ optional($singer->company)->title ?? 'N/A' }}</td>
 
             <td class="text-center"> 
-                            <input type="checkbox" 
-                            data-toggle="switchbutton" 
-                            data-onlabel="active"
-                            data-offlabel="inactive"
-                            {{$singer->status=="active"?"checked":""}}
-                            data-size="sm"
-                            name="toogle"
-                            value="{{$singer->id}}"
-                            data-style="ios">
-                        </td>
+                <input type="checkbox" 
+                    data-toggle="switchbutton" 
+                    data-onlabel="active"
+                    data-offlabel="inactive"
+                    {{$singer->status=="active"?"checked":""}}
+                    data-size="sm"
+                    name="toogle"
+                    value="{{$singer->id}}"
+                    data-style="ios">
+            </td>
             <td class="table-report__action w-56">
                 <div class="flex justify-center items-center">
                     <a href="{{ route('admin.singer.edit', $singer->id) }}" class="flex items-center mr-3"> 
-                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit 
+                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Sửa 
                     </a>
                     <form action="{{ route('admin.singer.destroy', $singer->id) }}" method="post" style="display: inline;">
                         @csrf
                         @method('delete')
                         <a class="flex items-center text-danger dltBtn" data-id="{{ $singer->id }}" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"> 
-                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete 
+                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Xóa 
                         </a>
                     </form>
                 </div>
@@ -86,7 +85,6 @@
         @endforeach
     @endif
 </tbody>
-
         </table>
     </div>
 </div>
@@ -121,22 +119,16 @@
             }
         });
     });
-</script>
-<script>
+
     $(".ipsearch").on('keyup', function (e) {
         e.preventDefault();
         if (e.key === 'Enter' || e.keyCode === 13) {
-           
-            // Do something
-            var data=$(this).val();
-            var form=$(this).closest('form');
-            if(data.length > 0)
-            {
+            var data = $(this).val();
+            var form = $(this).closest('form');
+            if (data.length > 0) {
                 form.submit();
-            }
-            else
-            {
-                  Swal.fire(
+            } else {
+                Swal.fire(
                     'Không tìm được!',
                     'Bạn cần nhập thông tin tìm kiếm.',
                     'error'
@@ -146,38 +138,34 @@
     });
 
     $("[name='toogle']").change(function() {
-    var mode = $(this).prop('checked') ? 'active' : 'inactive'; // Xác định trạng thái
-    var id = $(this).val(); // ID của công ty âm nhạc
+        var mode = $(this).prop('checked') ? 'active' : 'inactive';
+        var id = $(this).val();
 
-    // Đảm bảo URL đúng, truyền id vào URL
-    $.ajax({
-        url: "{{ route('admin.singer.status', ['id' => '__id__']) }}".replace('__id__', id), // Thay thế __id__ bằng id thực tế
-        type: "POST",
-        data: {
-            _token: '{{ csrf_token() }}',
-            mode: mode // Trạng thái cần cập nhật
-        },
-        success: function(response) {
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: response.msg,
-                showConfirmButton: false,
-                timer: 1000
-            });
-        },
-        error: function(xhr) {
-            console.log(xhr.responseText); // Log lỗi nếu có
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi',
-                text: 'Không thể cập nhật trạng thái.',
-            });
-        }
+        $.ajax({
+            url: "{{ route('admin.singer.status', ['id' => '__id__']) }}".replace('__id__', id),
+            type: "POST",
+            data: {
+                _token: '{{ csrf_token() }}',
+                mode: mode
+            },
+            success: function(response) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: response.msg,
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+            },
+            error: function(xhr) {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không thể cập nhật trạng thái.',
+                });
+            }
+        });
     });
-});
-
-
-    
 </script>
 @endsection

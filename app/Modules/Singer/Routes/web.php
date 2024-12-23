@@ -14,4 +14,5 @@ Route::group(['prefix' => 'admin/', 'as' => 'admin.'], function () {
     Route::post('singer/{id}/status', [SingerController::class, 'status'])->name('singer.status');
     Route::get('singer/{id}', [SingerController::class, 'show'])->name('singer.show');
     Route::post('upload/avatar', [SingerController::class, 'uploadAvatar'])->name('upload.avatar');
+    Route::get('singer_search',[ SingerController::class,'search'])->name('singer.search');
 });

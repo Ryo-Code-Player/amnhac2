@@ -103,7 +103,7 @@
             source: function(request, response) {
                 $.ajax({
                     type: 'GET',
-                    url: '{{route('user.jsearch')}}',
+                    url: '{{route('admin.user.search')}}',
                     data: {
                         data: request.term,
                     },

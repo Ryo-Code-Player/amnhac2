@@ -18,11 +18,13 @@ class ResourceLinkTypeController extends Controller
 
     public function index()
     {
+        
+        
         $resourceLinkTypes = ResourceLinkType::orderBy('id', 'DESC')->paginate($this->pagesize);
         $breadcrumb = '
         <li class="breadcrumb-item"><a href="#">/</a></li>
         <li class="breadcrumb-item active" aria-current="page">Danh sách loại liên kết tài nguyên</li>';
-        $active_menu = "resource_link_type_list";
+        $active_menu = "resourcelinktype_list";
 
         return view('Resource::linktype.index', compact('resourceLinkTypes', 'breadcrumb', 'active_menu'));
     }

@@ -306,30 +306,54 @@
         </li>
 
    <!-- group -->
-   <li>
-            <a href="javascript:;.html" class="side-menu side-menu{{( $active_menu=='group_list'|| $active_menu=='group_add' )?'--active':''}}">
-                <div class="side-menu__icon"> <i data-lucide="align-center"></i> </div>
-                <div class="side-menu__title">
-                    Nhóm
-                    <div class="side-menu__sub-icon transform"> <i data-lucide="chevron-down"></i> </div>
-                </div>
+<li>
+    <a href="javascript:;" class="side-menu side-menu{{($active_menu=='group_list'||$active_menu=='group_add'||$active_menu=='groupmember'||$active_menu=='grouptype'||$active_menu=='grouprole')?'--active':''}}">
+        <div class="side-menu__icon"> <i data-lucide="align-center"></i> </div>
+        <div class="side-menu__title">
+            Nhóm
+            <div class="side-menu__sub-icon transform"> <i data-lucide="chevron-down"></i> </div>
+        </div>
+    </a>
+    <ul class="{{($active_menu=='group_list'||$active_menu=='group_add'||$active_menu=='groupmember'||$active_menu=='grouptype'||$active_menu=='grouprole')?'side-menu__sub-open':''}}">
+        <!-- Danh sách nhóm -->
+        <li>
+            <a href="{{route('admin.group.index')}}" class="side-menu {{$active_menu=='group_list'?'side-menu--active':''}}">
+                <div class="side-menu__icon"> <i data-lucide="compass"></i> </div>
+                <div class="side-menu__title">Danh sách nhóm</div>
             </a>
-            <ul class="{{ ($active_menu=='group_list'|| $active_menu=='group_add')?'side-menu__sub-open':''}}">
-                <li>
-                    <a href="{{route('admin.group.index')}}" class="side-menu {{$active_menu=='group_list'?'side-menu--active':''}}">
-                        <div class="side-menu__icon"> <i data-lucide="compass"></i> </div>
-                        <div class="side-menu__title">Danh sách nhóm </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{route('admin.group.create')}}" class="side-menu {{$active_menu=='group_add'?'side-menu--active':''}}">
-                        <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
-                        <div class="side-menu__title"> Thêm nhóm</div>
-                    </a>
-                </li>
-                
-          </ul>
         </li>
+        <!-- Thêm nhóm -->
+        <li>
+            <a href="{{route('admin.group.create')}}" class="side-menu {{$active_menu=='group_add'?'side-menu--active':''}}">
+                <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                <div class="side-menu__title">Thêm nhóm</div>
+            </a>
+        </li>
+        <!-- Thành viên nhóm -->
+        <li>
+            <a href="{{route('admin.groupmember.index')}}" class="side-menu {{$active_menu=='groupmember'?'side-menu--active':''}}">
+                <div class="side-menu__icon"> <i data-lucide="user"></i> </div>
+                <div class="side-menu__title">Thành viên nhóm</div>
+            </a>
+        </li>
+        <!-- Loại nhóm -->
+        <li>
+            <a href="{{route('admin.grouptype.index')}}" class="side-menu {{$active_menu=='grouptype'?'side-menu--active':''}}">
+                <div class="side-menu__icon"> <i data-lucide="layers"></i> </div>
+                <div class="side-menu__title">Loại nhóm</div>
+            </a>
+        </li>
+        <!-- Vai trò nhóm -->
+        <li>
+            <a href="{{route('admin.grouprole.index')}}" class="side-menu {{$active_menu=='grouprole'?'side-menu--active':''}}">
+                <div class="side-menu__icon"> <i data-lucide="briefcase"></i> </div>
+                <div class="side-menu__title">Vai trò nhóm</div>
+            </a>
+        </li>
+    </ul>
+</li>
+
+
        
  <!-- Tag -->
  <li>
@@ -356,9 +380,9 @@
             </ul>
         </li>
         
-    <!-- start interact -->
+  <!-- start interact -->
 
-    <li>
+  <li>
         <a href="javascript:;" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='interact_list'||$active_menu=='interact_add'||$active_menu=='kiot'|| $active_menu=='interactype_list'|| $active_menu=='interactype_add'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">
             <div class="side-menu__icon"> <i data-lucide="book"></i> </div>
                 <div class="side-menu__title">

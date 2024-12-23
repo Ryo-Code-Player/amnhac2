@@ -8,12 +8,12 @@
     </h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-            <a href="{{route('role.create')}}" class="btn btn-primary shadow-md mr-2">Thêm role</a>
+            <a href="{{route('admin.role.create')}}" class="btn btn-primary shadow-md mr-2">Thêm role</a>
             
             <div class="hidden md:block mx-auto text-slate-500">Hiển thị trang {{$roles->currentPage()}} trong {{$roles->lastPage()}} trang</div>
             <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                 <div class="w-56 relative text-slate-500">
-                    <form action="{{route('role.search')}}" method = "get">
+                    <form action="{{route('admin.role.search')}}" method = "get">
                         @csrf
                         <input type="text" name="datasearch" class="ipsearch form-control w-56 box pr-10" placeholder="Search...">
                         <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i> 
@@ -63,12 +63,12 @@
                                 </a>
                                 <div class="dropdown-menu w-40"> 
                                     <ul class="dropdown-content">
-                                    <li><a class="dropdown-item" href="{{route('role.function',$item->id)}}" class="flex items-center mr-3" href="javascript:;"> <i data-lucide="eye" class="w-4 h-4 mr-1"></i> Phân quyền</a></li>
-                                    <li><a class="dropdown-item" href="{{route('role.edit',$item->id)}}" class="flex items-center mr-3" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a></li>
+                                    <li><a class="dropdown-item" href="{{route('admin.role.function',$item->id)}}" class="flex items-center mr-3" href="javascript:;"> <i data-lucide="eye" class="w-4 h-4 mr-1"></i> Phân quyền</a></li>
+                                    <li><a class="dropdown-item" href="{{route('admin.role.edit',$item->id)}}" class="flex items-center mr-3" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a></li>
                                     
                                     
                                     <li>
-                                        <form action="{{route('role.destroy',$item->id)}}" method = "post">
+                                        <form action="{{route('admin.role.destroy',$item->id)}}" method = "post">
                                             @csrf
                                             @method('delete')
                                             <a class=" dropdown-item flex items-center text-danger dltBtn" data-id="{{$item->id}}" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"> <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete </a>
@@ -159,7 +159,7 @@
         var mode = $(this).prop('checked');
         var id=$(this).val();
         $.ajax({
-            url:"{{route('role.status')}}",
+            url:"{{route('admin.role.status')}}",
             type:"post",
             data:{
                 _token:'{{csrf_token()}}',

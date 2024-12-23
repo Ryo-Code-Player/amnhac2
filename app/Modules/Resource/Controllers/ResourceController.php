@@ -9,6 +9,7 @@ use App\Modules\Resource\Models\ResourceType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use app\Modules\Song\Models\Song;
+use App\Modules\Tag\Models\Tag;
 class ResourceController extends Controller
 {
     protected $pagesize;
@@ -59,57 +60,77 @@ class ResourceController extends Controller
 
         return view('Resource::create', compact('resourceTypes', 'linkTypes', 'breadcrumb', 'active_menu', 'tags'));
     }
-
     public function store(Request $request)
     {
-        //dd($request->all());
         $request->validate([
             'title' => 'required|string|max:255',
             'link_code' => 'nullable|exists:resource_link_types,code',
+            'type_code' => 'nullable|exists:resource_types,code',
             'file' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mp3,pdf,doc,mov,docx,ppt,pptx,xls,xlsx|max:204800',
             'code' => 'nullable|string',
             'url' => 'nullable|url',
             'description' => 'nullable|string|max:25555',
-            'tag_ids' => 'nullable|array',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
         ]);
-
+    
         $resourceType = ResourceType::first();
         $linkTypes = ResourceLinkType::first();
+        
         if (!$resourceType) {
             return redirect()->back()->with('error', 'Không tìm thấy loại tài nguyên.');
         }
         if (!$linkTypes) {
             return redirect()->back()->with('error', 'Không tìm thấy loại link.');
         }
+        
+        // Gán type_code từ request hoặc mặc định là của resourceType
         $data = $request->only(['title', 'url', 'description']);
-        $data['type_code'] = $resourceType->code;
-        $data['link_code'] = $linkTypes->code;
-
+        $data['type_code'] = $request->type_code ?? $resourceType->code;
+        
+        // Lấy link_code dựa vào type_code
+        $linkType = ResourceLinkType::where('code', $data['type_code'])->first();
+        $data['link_code'] = $linkType ? $linkType->code : null;
+    
         $resource = Resource::createResource((object) $data, $request->file('file'), 'Resource');
-
-        if ($request->tag_ids) {
-            $tagService = new \App\Http\Controllers\TagController();
-            $tagService->store_resource_tag($resource->id, $request->tag_ids);
+    
+        // Khởi tạo mảng tagsArray từ tags đã chọn
+        $tagsArray = $request->tags ?? [];
+    
+        // Xử lý tag mới nhập vào (nếu có)
+        if ($request->new_tags) {
+            $newTags = explode(',', $request->new_tags);
+    
+            foreach ($newTags as $newTag) {
+                $newTag = trim($newTag);
+                if (!empty($newTag)) {
+                    $tag = Tag::firstOrCreate(['title' => $newTag]);
+                    $tagsArray[] = $tag->id;
+                }
+            }
         }
-
+        $resource->tags = json_encode($tagsArray);
+        $resource->save();
+    
         return redirect()->route('admin.resources.index')->with('success', 'Tạo tài nguyên thành công.');
     }
-
-
+    
     public function edit($id)
     {
         $resource = Resource::findOrFail($id);
         $resourceTypes = ResourceType::all();
         $linkTypes = ResourceLinkType::all();
         $tags = \App\Models\Tag::where('status', 'active')->orderBy('title', 'ASC')->get();
-        $tag_ids = DB::table('tag_resources')->where('resource_id', $resource->id)->pluck('tag_id')->toArray();
+       
+// Giải mã cột tags nếu có dữ liệu
+$attachedTags = json_decode($resource->tags, true) ?? []; // Mặc định là mảng rỗng nếu không có dữ liệu
 
         $breadcrumb = '<li class="breadcrumb-item"><a href="#">/</a></li>
         <li class="breadcrumb-item" aria-current="page"><a href="' . route('admin.resources.index') . '">Danh sách tài nguyên</a></li>
         <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa tài nguyên</li>';
         $active_menu = "resource_edit";
 
-        return view('Resource::edit', compact('resource', 'resourceTypes', 'linkTypes', 'breadcrumb', 'active_menu', 'tags', 'tag_ids'));
+        return view('Resource::edit', compact('resource', 'resourceTypes', 'linkTypes', 'breadcrumb', 'active_menu', 'tags','attachedTags'));
     }
 
     public function update(Request $request, $id)
@@ -124,7 +145,8 @@ class ResourceController extends Controller
             'code' => 'nullable|string',
             'url' => 'nullable|url',
             'description' => 'nullable|string|max:25555',
-            'tag_ids' => 'nullable|array',
+            'tags' => 'nullable|array',
+        'tags.*' => 'exists:tags,id',
         ]);
 
         $resourceType = ResourceType::where('code', $request->type_code)->first();
@@ -147,11 +169,23 @@ class ResourceController extends Controller
 
         $resource->updateResource($data, $request->file('file'));
 
-        if ($request->tag_ids) {
-            $tagService = new \App\Http\Controllers\TagController();
-            $tagService->store_resource_tag($resource->id, $request->tag_ids);
-        }
+        // Khởi tạo mảng tags từ dữ liệu người dùng
+    $tagsArray = $request->tags ?? [];
 
+    // Xử lý các tag mới nếu có
+    if ($request->new_tags) {
+        $newTags = explode(',', $request->new_tags);
+
+        foreach ($newTags as $newTag) {
+            $newTag = trim($newTag);
+            if (!empty($newTag)) {
+                $tag = Tag::firstOrCreate(['title' => $newTag]);
+                $tagsArray[] = $tag->id;
+            }
+        }
+    }
+    $resource->tags = json_encode($tagsArray);
+    $resource->save();
         return redirect()->route('admin.resources.index')->with('success', 'Cập nhật tài nguyên thành công.');
     }
 
@@ -167,7 +201,7 @@ class ResourceController extends Controller
     {
         $resource = Resource::findOrFail($id);
         $tags = \App\Models\Tag::where('status', 'active')->orderBy('title', 'ASC')->get();
-        $tag_ids = DB::table('tag_resources')->where('resource_id', $resource->id)->pluck('tag_id')->toArray();
+       
 
         $breadcrumb = '
             <li class="breadcrumb-item"><a href="#">/</a></li>
@@ -177,7 +211,7 @@ class ResourceController extends Controller
 
         $resources = Resource::where('id', '!=', $id)->get();
 
-        return view('Resource::show', compact('resource', 'resources', 'breadcrumb', 'active_menu', 'tags', 'tag_ids'));
+        return view('Resource::show', compact('resource', 'resources', 'breadcrumb', 'active_menu', 'tags'));
     }
 
     public function resourceSearch(Request $request)

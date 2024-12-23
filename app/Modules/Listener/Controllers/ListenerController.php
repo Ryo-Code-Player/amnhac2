@@ -11,9 +11,19 @@ use App\Http\Controllers\Controller;
 use App\Modules\MusicType\Models\MusicType; 
 use App\Modules\Singer\Models\Singer; 
 use App\Modules\Composer\Models\Composer; 
+use Illuminate\Support\Facades\DB;
+
 
 class ListenerController extends Controller
 {
+    
+    protected $pagesize;
+    public function __construct( )
+    {
+        $this->pagesize = env('NUMBER_PER_PAGE','10');
+        $this->middleware('auth');
+        
+    }
     public function index()
     {
         
@@ -146,4 +156,31 @@ class ListenerController extends Controller
 }
 
     
+public function search(Request $request)
+    {
+        
+        $func = "listener_management";
+        if(!$this->check_function($func))
+        {
+            return redirect()->route('unauthorized');
+        }
+        if($request->datasearch)
+        {
+            $active_menu="listener_management";
+            $searchdata =$request->datasearch;
+            $listeners = DB::table('listeners')->where('favorite_type','LIKE','%'.$request->datasearch.'%')->orWhere('favorite_song','LIKE','%'.$request->datasearch.'%')
+            ->paginate($this->pagesize)->withQueryString();
+            $breadcrumb = '
+             <li class="breadcrumb-item"><a href="#">/</a></li>
+            <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.listener.index').'">Danh sách Listener</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> tìm kiếm </li>';
+            return view('Listener::listener.search', compact('listeners', 'breadcrumb', 'searchdata', 'active_menu'));
+
+        }
+        else
+        {
+            return redirect()->route('admin.listener.index')->with('success','Không có thông tin tìm kiếm!');
+        }
+
+    }
 }

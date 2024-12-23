@@ -14,6 +14,13 @@ use App\Modules\MusicCompany\Models\MusicCompany;
 use Illuminate\Support\Facades\DB; // Thêm dòng này
 class SingerController extends Controller
 {
+    protected $pagesize;
+    public function __construct( )
+    {
+        $this->pagesize = env('NUMBER_PER_PAGE','10');
+        $this->middleware('auth');
+        
+    }
     public function index()
     {
         $active_menu = "singer_management";
@@ -290,5 +297,34 @@ $validatedData['content'] = nl2br($validatedData['content']);
     // Trả về phản hồi thành công
     return response()->json(['msg' => 'Cập nhật thành công.']);
 }
+
+
+public function search(Request $request)
+    {
+        
+        $func = "singer_management";
+        if(!$this->check_function($func))
+        {
+            return redirect()->route('unauthorized');
+        }
+        if($request->datasearch)
+        {
+            $active_menu="singer_management";
+            $searchdata =$request->datasearch;
+            $singers = DB::table('singers')->where('alias','LIKE','%'.$request->datasearch.'%')->orWhere('content','LIKE','%'.$request->datasearch.'%')
+            ->paginate($this->pagesize)->withQueryString();
+            $breadcrumb = '
+             <li class="breadcrumb-item"><a href="#">/</a></li>
+            <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.singer.index').'">Danh sách ca sĩ</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> tìm kiếm </li>';
+            return view('Singer::singer.search', compact('singers', 'breadcrumb', 'searchdata', 'active_menu'));
+
+        }
+        else
+        {
+            return redirect()->route('admin.singer.index')->with('success','Không có thông tin tìm kiếm!');
+        }
+
+    }
 
 }

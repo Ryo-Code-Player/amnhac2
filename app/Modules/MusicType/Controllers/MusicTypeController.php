@@ -7,9 +7,16 @@ use App\Modules\MusicType\Models\MusicType; // Thay đổi model ở đây
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Modules\MusicCompany\Models\MusicCompany; 
-
+use Illuminate\Support\Facades\DB;
 class MusicTypeController extends Controller
 {
+    protected $pagesize;
+    public function __construct( )
+    {
+        $this->pagesize = env('NUMBER_PER_PAGE','10');
+        $this->middleware('auth');
+        
+    }
     public function index()
     {
         $active_menu = "musictype_management";
@@ -132,5 +139,31 @@ class MusicTypeController extends Controller
     return response()->json(['msg' => 'Cập nhật thành công.']);
 }
 
+public function search(Request $request)
+    {
+        
+        $func = "musictype_management";
+        if(!$this->check_function($func))
+        {
+            return redirect()->route('unauthorized');
+        }
+        if($request->datasearch)
+        {
+            $active_menu="musictype_management";
+            $searchdata =$request->datasearch;
+            $music_types = DB::table('music_types')->where('title','LIKE','%'.$request->datasearch.'%')->orWhere('slug','LIKE','%'.$request->datasearch.'%')
+            ->paginate($this->pagesize)->withQueryString();
+            $breadcrumb = '
+             <li class="breadcrumb-item"><a href="#">/</a></li>
+            <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.musictype.index').'">Danh sách Công ty Âm nhạc</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> tìm kiếm </li>';
+            return view('MusicType::musictype.search', compact('music_types', 'breadcrumb', 'searchdata', 'active_menu'));
 
+        }
+        else
+        {
+            return redirect()->route('admin.musictype.index')->with('success','Không có thông tin tìm kiếm!');
+        }
+
+    }
 }

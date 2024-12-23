@@ -12,5 +12,6 @@ Route::group(['prefix' => 'admin/', 'as' => 'admin.'], function () {
     Route::get('tag/{tag}/edit', [TagController::class, 'edit'])->name('tag.edit');
     Route::put('tag/{tag}', [TagController::class, 'update'])->name('tag.update');
     Route::delete('tag/{tag}', [TagController::class, 'destroy'])->name('tag.destroy'); // Xóa
+    Route::get('tag_search',[ TagController::class,'search'])->name('tag.search');
 });
 

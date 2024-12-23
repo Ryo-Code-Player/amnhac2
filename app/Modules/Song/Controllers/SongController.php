@@ -12,10 +12,19 @@ use Illuminate\Support\Str;
 use App\Modules\Composer\Models\Composer;
 use App\Modules\Singer\Models\Singer;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 
 class SongController extends Controller
 {
+
+    protected $pagesize;
+    public function __construct( )
+    {
+        $this->pagesize = env('NUMBER_PER_PAGE','10');
+        $this->middleware('auth');
+        
+    }
     public function index()
     {
         $active_menu = "song_management";
@@ -404,14 +413,14 @@ public function update(Request $request, $id)
                     'resource_id' => $resourceRecord->id,
                 ];
             } elseif ($resource instanceof \Illuminate\Http\UploadedFile) {
-                // Nếu là tệp tải lên, xử lý tài nguyên tải lên
-                $resourcePath = $resource->store('uploads/resources', 'public');
-                $resourceUrl = 'http://127.0.0.1:8000/storage/' . str_replace('public/', '', $resourcePath);
+                 $resourcePath = $resource->store('uploads/resources', 'public');
+                $resourceUrl = Storage::url($resourcePath);
+                $resourceUrl = Str::replaceFirst('http://localhost', '', $resourceUrl);
 
                 $slug = Str::slug($song->title) . '-' . Str::random(6);
                 $fileType = $resource->getMimeType();
-                $linkCode = ''; // Ban đầu không xác định
-                $typeCode = ''; // Ban đầu không xác định
+                $linkCode = ''; 
+                $typeCode = '';
                 
                 // Kiểm tra kiểu MIME của tệp tải lên
                 if (strpos($fileType, 'image') !== false) {
@@ -631,7 +640,33 @@ public function deleteResource(Request $request)
     ]);
 }
 
+public function search(Request $request)
+    {
+        
+        $func = "song_management";
+        if(!$this->check_function($func))
+        {
+            return redirect()->route('unauthorized');
+        }
+        if($request->datasearch)
+        {
+            $active_menu="song_management";
+            $searchdata =$request->datasearch;
+            $songs = DB::table('songs')->where('title','LIKE','%'.$request->datasearch.'%')->orWhere('content','LIKE','%'.$request->datasearch.'%')
+            ->paginate($this->pagesize)->withQueryString();
+            $breadcrumb = '
+             <li class="breadcrumb-item"><a href="#">/</a></li>
+            <li class="breadcrumb-item  " aria-current="page"><a href="'.route('admin.song.index').'">Danh sách bài hát</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> tìm kiếm </li>';
+            return view('Song::song.search', compact('songs', 'breadcrumb', 'searchdata', 'active_menu'));
 
+        }
+        else
+        {
+            return redirect()->route('admin.song.index')->with('success','Không có thông tin tìm kiếm!');
+        }
+
+    }
 
 
 }

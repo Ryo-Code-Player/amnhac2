@@ -68,7 +68,7 @@ class UserController extends Controller
         if(isset($data['photo']) && $data['photo'] != "")
             $user->photo = $data['photo'];
         $user->save();
-        return redirect()->route('admin.admin.user.profileview')->with('success','Cập nhật thành công!');
+        return redirect()->route('admin.user.profileview')->with('success','Cập nhật thành công!');
     }
     public function index()
     {
