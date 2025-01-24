@@ -158,7 +158,7 @@ class FanclubController extends Controller
             $data['slug'] = Str::slug($request->title);
             $status = $fanclub->fill($data)->save();
             if($status){
-                return redirect()->route('admin.Fanclub.index')->with('success','Cập nhật thành công');
+                return redirect()->route('admin.fanclub.index')->with('success','Cập nhật thành công');
             }
             else
             {
@@ -185,7 +185,7 @@ class FanclubController extends Controller
         {
             $status = $fanclub->delete();
             if($status){
-                return redirect()->route('admin.Fanclub.index')->with('success','Xóa thành công!');
+                return redirect()->route('admin.fanclub.index')->with('success','Xóa thành công!');
             }
             else
             {

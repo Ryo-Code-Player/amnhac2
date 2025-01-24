@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title') ;
             $table->string('slug')->unique();
-            $table->integer('hit')->default(0);
+            $table->string('tags')->nullable(); // Lưu tags dưới dạng chuỗi
             $table->mediumText('photo');
             $table->mediumText('summary')->nullable();
             $table->longText('content')->nullable();
