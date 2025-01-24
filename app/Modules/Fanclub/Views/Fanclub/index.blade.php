@@ -41,9 +41,12 @@
                         <td>
                              {{$item->title}} 
                         </td>
-                        <td class="w-10 text-center"> <!-- Căn giữa logo -->
-                            <div class="flex justify-center items-center h-full">
-                                <img class="tooltip rounded-full h-10 w-10 object-cover" src="{{ asset($item->photo) }}" alt="Company Logo">
+                        <td class="w-40">
+                            <div class="flex">
+                                <div class="w-10 h-10 image-fit zoom-in">
+                                    <img  class="tooltip rounded-full" 
+                                        src="{{$item->photo}}"  >
+                                </div>
                             </div>
                         </td>
                         <td>
