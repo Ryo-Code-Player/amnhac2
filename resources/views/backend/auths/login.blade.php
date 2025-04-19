@@ -90,7 +90,7 @@
                           </div>
                           <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left">
                               <button type="submit" class="btn btn-primary py-3 px-4 w-full xl:w-32 xl:mr-3 align-top">Đăng nhập</button>
-                              <button class="btn btn-outline-secondary py-3 px-4 w-full xl:w-32 mt-3 xl:mt-0 align-top">Đăng ký</button>
+                              <a href="{{ route('front.user.register') }}" class="btn btn-outline-secondary py-3 px-4 w-full xl:w-32 mt-3 xl:mt-0 align-top">Đăng ký</a>
                           </div>
                           <div class="intro-x mt-10 xl:mt-24 text-slate-600 dark:text-slate-500 text-center xl:text-left"> 
                             Đăng ký tài khoản bạn sẽ đồng ý các điều khoản sau 

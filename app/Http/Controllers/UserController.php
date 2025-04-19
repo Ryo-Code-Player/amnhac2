@@ -192,6 +192,7 @@ class UserController extends Controller
             if(count ($photos) > 0)
                 $data['photo'] = $photos[0];
         }
+        $data['description'] = strip_tags($data['description']);
         if($request->email == null)
             $data['email'] = $data['phone'].'@gmail.com';
         if($request->password == null)

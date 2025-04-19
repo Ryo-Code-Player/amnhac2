@@ -241,6 +241,29 @@
     </ul>
 </li>
 
+<!-- topic -->
+<li>
+    <a href="javascript:;" class="side-menu {{ $active_menu == 'topic_manage' ? 'side-menu--active' : '' }}">
+        <div class="side-menu__icon"> <i data-lucide="slack"></i> </div>
+        <div class="side-menu__title">Chủ đề</div>
+        <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
+    </a>
+    <ul class="{{ $active_menu == 'topic_manage' ? 'side-menu__sub-open' : '' }}">
+        <li>
+            <a href="{{ route('admin.topic.index') }}" class="side-menu {{ $active_menu == 'topic_manage' ? 'side-menu--active' : '' }}">
+                <div class="side-menu__icon"> <i data-lucide="list"></i> </div>
+                <div class="side-menu__title">Danh sách chủ đề</div>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.topic.create') }}" class="side-menu {{ $active_menu == 'topic_create' ? 'side-menu--active' : '' }}">
+                <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
+                <div class="side-menu__title">Thêm chủ đề</div>
+            </a>
+        </li>
+    </ul>
+</li>
+
 <!-- Listener -->
 <li>
     <a href="javascript:;" class="side-menu {{ $active_menu == 'listener_management' ? 'side-menu--active' : '' }}">

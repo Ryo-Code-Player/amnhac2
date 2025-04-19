@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Modules\Tuongtac\Controllers\TCommentController;
+use App\Modules\Tuongtac\Controllers\TMotionItemController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -55,4 +57,38 @@ Route::group( ['prefix'=>'admin/','middleware'=>'admin.auth', 'as'=>'admin.'],fu
     Route::post('product-upload', [\App\Http\Controllers\FilesController::class, 'productUpload' ])->name('upload.product');
     Route::post('upload-ckeditor', [\App\Http\Controllers\FilesController::class, 'ckeditorUpload' ])->name('upload.ckeditor');
    
+});
+
+Route::group( [ 'as'=>'front.'],function(){
+    Route::get('/',[ \App\Http\Controllers\frontend\HomeController::class,'index'])->name('home');
+    Route::get('/cate',[ \App\Http\Controllers\frontend\HomeController::class,'cate'])->name('cate');
+    Route::get('/singer',[ \App\Http\Controllers\frontend\HomeController::class,'singer'])->name('singer');
+
+    // songs
+    Route::get('/songs',[ \App\Http\Controllers\frontend\HomeController::class,'song'])->name('song');
+    Route::get('/song/{slug}', [App\Http\Controllers\frontend\HomeController::class, 'detail'])->name('song.detail');
+
+
+    Route::get('/topic',[ \App\Http\Controllers\frontend\HomeController::class,'topic'])->name('topic');
+
+    Route::get('/blog',[ \App\Http\Controllers\frontend\BlogPageController::class,'index'])->name('blog');
+    Route::get('/blogs/{blogId}/comments', [\App\Http\Controllers\frontend\BlogPageController::class, 'loadComments'])->name('blogs.comments');
+    Route::post('/comments/store', [TCommentController::class, 'store'])->name('comments.store');
+    Route::post('/motions/toggle', [TMotionItemController::class, 'toggle'])->name('motions.toggle');
+    Route::post('/motions/check', [TMotionItemController::class, 'check'])->name('motions.check');
+
+    Route::get('/detail_music',[ \App\Http\Controllers\frontend\HomeController::class,'detail_music'])->name('detail_music');
+
+    // user profile
+    Route::get('/profile',[ \App\Http\Controllers\frontend\ProfileController::class,'index'])->name('profile');
+    
+    // user register
+    Route::get('register', [App\Http\Controllers\frontend\RegisterController::class, 'index'])->name('user.register');
+    Route::post('register/store', [App\Http\Controllers\frontend\RegisterController::class, 'store'])->name('user.register.add');
+
+    // event
+    Route::get('/event',[ \App\Http\Controllers\frontend\EventFrontController::class,'index'])->name('event');
+
+    // fanclub
+    Route::get('/fanclub',[ \App\Http\Controllers\frontend\FanclubFrontController::class,'index'])->name('fanclub');
 });

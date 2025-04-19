@@ -82,7 +82,7 @@
                         <th class="text-center whitespace-nowrap">PHOTO</th>
                         <th class="text-center whitespace-nowrap">EMAIL</th>
                         <th class="whitespace-nowrap">LOẠI</th>
-                        <th class="whitespace-nowrap">NHÓM</th>
+                        <!-- <th class="whitespace-nowrap">NHÓM</th> -->
                         <th class="text-center whitespace-nowrap">PHONE</th>
                         <th class="whitespace-nowrap">ĐỊA CHỈ</th>
                         
@@ -115,7 +115,7 @@
                         </td>
                         <td class="text-left"><?php echo $item->email; ?></td>
                         <td class="text-center">{{$item->title}} </td>
-                        <td class="text-center">{{$item->ugroup_id!= null?\App\Models\UGroup::where('id',$item->ugroup_id)->value('title'):''}} </td>
+                        <!-- <td class="text-center">{{$item->ugroup_id!= null?\App\Models\UGroup::where('id',$item->ugroup_id)->value('title'):''}} </td> -->
                         <td class="text-center">{{$item->phone}} </td>
                         <td class="text-left">{{$item->address}} </td>
                         

@@ -1,0 +1,15 @@
+#event{
+    .container{
+        header{
+            margin-top: 100px;
+        }
+
+        .card{
+            display: flex;
+            flex-direction: row;
+            img{
+                width: 250px;
+            }
+        }
+    }
+}
