@@ -1,4 +1,46 @@
-<!-- resources/views/frontend/blog/section.blade.php -->
+@section('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+    <style>
+        .blog-slider {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .blog-slider img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .slick-prev, .slick-next {
+            z-index: 1;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+        }
+        .slick-prev:before, .slick-next:before {
+            font-size: 24px;
+            color: white;
+        }
+        .slick-dots {
+            bottom: -30px;
+        }
+        .slick-dots li button:before {
+            font-size: 12px;
+            color: #999;
+        }
+        .slick-dots li.slick-active button:before {
+            color: #333;
+        }
+        @media (max-width: 768px) {
+            .blog-slider img {
+                height: 200px;
+            }
+        }
+    </style>
+@endsection
+
 <section id="blog" class="pb-0 pt-4 mt-10 blog-section">
     <div class="container">
         <div class="row align-items-center justify-content-center">
@@ -14,11 +56,19 @@
                                         <div class="username">{{ optional($blog->user)->full_name ?? 'Người dùng' }}</div>
                                         <div class="datetime">{{ $blog->created_at->diffForHumans() }}</div>
                                     </div>
-                                    <a class="follow" href="#">Theo dõi</a>
                                 </div>
 
-                                <img src="{{ asset($blog->photo) }}" alt="{{ $blog->title }}"
-                                     class="blog-image" loading="lazy">
+                                <div class="blog-slider blog-carousel owl-carousel owl-theme">
+                                    @php
+                                        $photos = explode(',', $blog->photo);
+                                    @endphp
+                                    @foreach ($photos as $photo)
+                                        <div class="item">
+                                            <img src="{{ asset(trim($photo)) }}" alt="{{ $blog->title }}"
+                                                 class="blog-image" loading="lazy">
+                                        </div>
+                                    @endforeach
+                                </div>
 
                                 <div class="blog-actions">
                                     <button class="like-btn {{ Auth::check() && $blog->Tmotion && in_array(Auth::id(), json_decode($blog->Tmotion->user_motions, true) ?? []) ? 'liked' : '' }}"

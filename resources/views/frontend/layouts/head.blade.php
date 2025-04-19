@@ -22,5 +22,7 @@
         <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}"/>
         <link rel="stylesheet" href="{{ asset('frontend/demos/data-analysis/data-analysis.css') }}" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" />
+        <link rel="stylesheet" href="{{ asset('frontend/lib/owl-carousel/dist/assets/owl.theme.default.min.css')}}">
+        <link rel="stylesheet" href="{{ asset('frontend/lib/owl-carousel/dist/assets/owl.carousel.min.css')}}">
 
     </head>

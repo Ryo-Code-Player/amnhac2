@@ -14,6 +14,7 @@ class MusicType extends Model
 
     protected $fillable = [
         'title',
+        'photo',
         'slug',
         'status',
     ];

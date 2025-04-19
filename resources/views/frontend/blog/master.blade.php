@@ -25,11 +25,13 @@
         <!-- end scroll progress -->
 
         <!-- javascript libraries -->
+         
         <script type="text/javascript" src="{{ asset('frontend/js/jquery.js')}}"></script>
         <script type="text/javascript" src="{{ asset('frontend/js/vendors.min.js')}}"></script>
         <script type="text/javascript" src="{{ asset('frontend/js/index.js')}}"></script>
         <!-- <script type="text/javascript" src="{{ asset('frontend/js/main.js')}}"></script> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="{{ asset('frontend/lib/owl-carousel/dist/owl.carousel.min.js')}}"></script>
 
 </body>
 </html>

@@ -10,6 +10,7 @@ use App\Modules\Resource\Models\Resource;
 use App\Modules\Tag\Models\Tag;
 use Illuminate\Support\Str;
 use App\Modules\Composer\Models\Composer;
+use App\Modules\MusicType\Models\MusicType;
 use App\Modules\Singer\Models\Singer;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -41,13 +42,14 @@ class SongController extends Controller
     {
         $singers = Singer::all();
         $composers = Composer::all();
+        $musictype = MusicType::all();
         $tags = Tag::where('status', 'active')->orderBy('title', 'ASC')->get();
         $active_menu = "song_management";
         $breadcrumb = '
              <li class="breadcrumb-item"><a href="' . route('admin.song.index') . '">Danh sách bài hát</a></li>
             <li class="breadcrumb-item active" aria-current="page">Thêm Bài Hát</li>';
         $resources = Resource::all();
-        return view('Song::song.create', compact('singers','composers','resources','active_menu', 'breadcrumb', 'tags'));
+        return view('Song::song.create', compact('musictype','singers','composers','resources','active_menu', 'breadcrumb', 'tags'));
     }
 
     public function store(Request $request)
@@ -61,6 +63,7 @@ class SongController extends Controller
         'tags.*' => 'exists:tags,id',
         'new_tags' => 'nullable|string',
         'status' => 'required|in:active,inactive',
+        'musictype_id' => 'required|exists:music_types,id',
         'composer_id' => 'required|exists:composers,id',
         'singer_id' => 'required|exists:singers,id',
         'resources' => 'nullable|array',
@@ -267,6 +270,7 @@ class SongController extends Controller
     // Lấy thông tin bài hát
     $song = Song::findOrFail($id);
     // Lấy danh sách nhạc sĩ và ca sĩ để chọn trong dropdown
+    $musictype = MusicType::all();
     $composers = Composer::all();
     $singers = Singer::all();
     // Giải mã cột resources nếu có dữ liệu
@@ -289,7 +293,7 @@ class SongController extends Controller
 
     // Trả về view chỉnh sửa với các thông tin cần thiết
     return view('Song::song.edit', compact(
-        'song', 'composers', 'singers','resources', 'availableResources', 'tags', 'attachedTags', 'allResources', 'active_menu', 'breadcrumb'
+        'musictype', 'song', 'composers', 'singers','resources', 'availableResources', 'tags', 'attachedTags', 'allResources', 'active_menu', 'breadcrumb'
     ));
 }
 
@@ -303,6 +307,7 @@ public function update(Request $request, $id)
         'tags' => 'nullable|array',
         'tags.*' => 'exists:tags,id',
         'status' => 'required|in:active,inactive',
+        'musictype_id' => 'required|exists:music_types,id',
         'composer_id' => 'required|exists:composers,id',
         'singer_id' => 'required|exists:singers,id',
         'resources' => 'nullable|array',

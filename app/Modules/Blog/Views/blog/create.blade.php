@@ -131,47 +131,66 @@
 </script>
 
 <script>
- Dropzone.autoDiscover = false;
-    
-    // Dropzone class:
-  
-        Dropzone.instances[0].options.multiple = false;
-        Dropzone.instances[0].options.autoQueue= true;
-        Dropzone.instances[0].options.maxFilesize =  1; // MB
-        Dropzone.instances[0].options.maxFiles =1;
-        Dropzone.instances[0].options.dictDefaultMessage = 'Drop images anywhere to upload (6 images Max)';
-        Dropzone.instances[0].options.acceptedFiles= "image/jpeg,image/png,image/gif";
-        Dropzone.instances[0].options.previewTemplate =  '<div class=" d-flex flex-column  position-relative">'
-                                        +' <img    data-dz-thumbnail >'
-                                        
-                                    +' </div>';
-        // Dropzone.instances[0].options.previewTemplate =  '<li><figure><img data-dz-thumbnail /><i title="Remove Image" class="icon-trash" data-dz-remove ></i></figure></li>';      
-        Dropzone.instances[0].options.addRemoveLinks =  true;
-        Dropzone.instances[0].options.headers= {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')};
+$(".btn_remove").click(function(){
+        $(this).parent().parent().remove();   
+        var link_photo = "";
+        $('.product_photo').each(function() {
+            if (link_photo != '')
+            {
+            link_photo+= ',';
+            }   
+            link_photo += $(this).data("photo");
+        });
+        $('#photo_old').val(link_photo);
+    });
 
-        Dropzone.instances[0].on("addedfile", function (file ) {
+ 
+                // previewsContainer: ".dropzone-previews",
+    Dropzone.instances[0].options.multiple = true;
+    Dropzone.instances[0].options.autoQueue= true;
+    Dropzone.instances[0].options.maxFilesize =  1; // MB
+    Dropzone.instances[0].options.maxFiles =5;
+    Dropzone.instances[0].options.acceptedFiles= "image/jpeg,image/png,image/gif";
+    Dropzone.instances[0].options.previewTemplate =  '<div class="col-span-5 md:col-span-2 h-28 relative image-fit cursor-pointer zoom-in">'
+                                               +' <img    data-dz-thumbnail >'
+                                               +' <div title="Xóa hình này?" class="tooltip w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-danger right-0 top-0 -mr-2 -mt-2"> <i data-lucide="octagon"   data-dz-remove> x </i> </div>'
+                                           +' </div>';
+    // Dropzone.instances[0].options.previewTemplate =  '<li><figure><img data-dz-thumbnail /><i title="Remove Image" class="icon-trash" data-dz-remove ></i></figure></li>';      
+    Dropzone.instances[0].options.addRemoveLinks =  true;
+    Dropzone.instances[0].options.headers= {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')};
+ 
+    Dropzone.instances[0].on("addedfile", function (file ) {
         // Example: Handle success event
         console.log('File addedfile successfully!' );
-        });
-        Dropzone.instances[0].on("success", function (file, response) {
+    });
+    Dropzone.instances[0].on("success", function (file, response) {
         // Example: Handle success event
         // file.previewElement.innerHTML = "";
         if(response.status == "true")
-        $('#photo').val(response.link);
-        console.log('File success successfully!' +response.link);
-        });
-        Dropzone.instances[0].on("removedfile", function (file ) {
-        $('#photo').val('');
+        {
+            var value_link = $('#photo').val();
+            if(value_link != "")
+            {
+                value_link += ",";
+            }
+            value_link += response.link;
+            $('#photo').val(value_link);
+        }
+           
+        // console.log('File success successfully!' +$('#photo').val());
+    });
+    Dropzone.instances[0].on("removedfile", function (file ) {
+            $('#photo').val('');
         console.log('File removed successfully!'  );
-        });
-        Dropzone.instances[0].on("error", function (file, message) {
+    });
+    Dropzone.instances[0].on("error", function (file, message) {
         // Example: Handle success event
         file.previewElement.innerHTML = "";
         console.log(file);
-
+       
         console.log('error !' +message);
-        });
-        console.log(Dropzone.instances[0].options   );
+    });
+     console.log(Dropzone.instances[0].options   );
 
         // console.log(Dropzone.optionsForElement);
 

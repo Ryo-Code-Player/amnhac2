@@ -43,6 +43,7 @@ class MusicTypeController extends Controller
     {
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
+            'photo' => 'string|nullable',
             'slug' => 'nullable|string|unique:music_types', // Kiểm tra slug là duy nhất
             'status' => 'required|string|in:active,inactive',
         ]);
@@ -50,8 +51,14 @@ class MusicTypeController extends Controller
         // Tạo slug tự động nếu không có
         $validatedData['slug'] = $validatedData['slug'] ?? $this->createSlug($validatedData['title']);
 
+        $photo = $validatedData['photo'] ?? asset('backend/images/profile-6.jpg');
         // Lưu vào cơ sở dữ liệu
-        MusicType::create($validatedData);
+        $MusicType = MusicType::create([
+            'title' => $validatedData['title'],
+            'photo' => $photo,
+            'slug' => $validatedData['slug'],
+            'status' => $validatedData['status'],
+        ]);
 
         // Chuyển hướng về danh sách thể loại âm nhạc với thông báo thành công
         return redirect()->route('admin.musictype.index')->with('success', 'Thể loại âm nhạc đã được thêm thành công.');
@@ -78,6 +85,7 @@ class MusicTypeController extends Controller
         // Xác thực dữ liệu đầu vào
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
+            'photo' => 'string|nullable',
             'slug' => 'nullable|string|unique:music_types,slug,' . $musicType->id, // Kiểm tra slug là duy nhất
             'status' => 'required|string|in:active,inactive',
         ]);
@@ -85,6 +93,11 @@ class MusicTypeController extends Controller
         // Cập nhật slug nếu tiêu đề đã thay đổi
         if ($musicType->title !== $request->title) {
             $validatedData['slug'] = $this->createSlug($request->title);
+        }
+
+        $validatedData['photo'] = $validatedData['photo'] ?? $musicType->photo;
+        if (empty($validatedData['photo'])) {
+            $validatedData['photo'] = asset('backend/images/profile-6.jpg');
         }
 
         // Cập nhật các thuộc tính khác

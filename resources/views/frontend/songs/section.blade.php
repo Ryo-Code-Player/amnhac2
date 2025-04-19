@@ -28,31 +28,11 @@
                                 <a href="{{ route('front.song.detail', ['slug' => $song->slug]) }}" class="text-dark-gray text-dark-gray-hover fw-600">{{ $song->title }}</a>
                                 <span class="d-inline-block align-middle w-10px separator-line-1px bg-light-gray ms-10px me-10px"></span>
                                 <div class="d-inline-block">{{ $song->singer->alias ?? 'Unknown' }}</div>
-                                <div class="d-inline-block">11,475 listens</div>
-                                <div class="d-inline-block">Pop Việt</div>
+                                <div class="d-inline-block">{{ $song->musictype->title }}</div>
                             </div>
                         </div>
                     </li>
                     @endforeach
-                    <!-- end portfolio item -->
-                    
-                    <!-- start portfolio item -->
-                    <li class="grid-item hot new transition-inner-all">
-                        <div class="portfolio-box">
-                            <div class="portfolio-image border-radius-6px bg-dark-gray">
-                                <a href="#">
-                                    <img src="{{ asset('frontend/images/mtp.jpg')}}" alt="" class="circular-image" />
-                                </a>
-                            </div>
-                            <div class="portfolio-caption pt-30px pb-30px sm-pt-25px sm-pb-25px">
-                                <a href="#" class="text-dark-gray text-dark-gray-hover fw-600">Hết Yêu Anh Rồi</a>
-                                <span class="d-inline-block align-middle w-10px separator-line-1px bg-light-gray ms-10px me-10px"></span>
-                                <div class="d-inline-block">Duy Khiêm ft Nâu Ccino</div>
-                                <div class="d-inline-block">21,679 listens</div>
-                                <div class="d-inline-block">Pop Việt</div>
-                            </div>
-                        </div>
-                    </li>
                     <!-- end portfolio item -->
                 </ul>
             </div>

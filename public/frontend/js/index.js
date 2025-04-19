@@ -1,8 +1,8 @@
-// public/frontend/js/index.js
 let music = {
     init: function () {
         this.user_playlist();
         this.blog();
+        this.blog_carousel();
     },
 
     user_playlist: function () {
@@ -17,6 +17,21 @@ let music = {
         });
     },
 
+    blog_carousel: function(){
+        jQuery(document).ready(function(){
+            var owl = $('.blog-carousel');
+            owl.owlCarousel({
+                items:1,
+                loop:true,
+                margin:10,
+                autoplay:true,
+                autoplayTimeout:3000,
+                autoplayHoverPause:true,
+                dots: true,
+            });
+        })
+    },
+
     blog: function () {
         jQuery(document).ready(function ($) {
             // Khởi tạo toastr
@@ -25,6 +40,33 @@ let music = {
                 progressBar: true,
                 positionClass: 'toast-top-right'
             };
+
+
+            // Xử lý nút Theo dõi
+            $(document).on('click', '.follow-btn', function () {
+                const btn = $(this);
+                const userId = btn.data('user-id');
+                $.ajax({
+                    url: '/follow/toggle',
+                    method: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        user_id: userId
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            btn.toggleClass('following', response.isFollowing);
+                            btn.text(response.isFollowing ? 'Đang theo dõi' : 'Theo dõi');
+                            toastr.success(response.message);
+                        } else {
+                            toastr.error(response.error || 'Có lỗi xảy ra.');
+                        }
+                    },
+                    error: function (xhr) {
+                        toastr.error(xhr.responseJSON.error || 'Có lỗi xảy ra.');
+                    }
+                });
+            });
 
             // Hiển thị/ẩn panel bình luận
             $(document).on('click', '.toggle-comments', function (e) {

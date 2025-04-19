@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Modules\Blog\Models\Blog;
+use App\Modules\Playlist\Models\Playlist;
 
 class ProfileController extends Controller
 {
@@ -25,14 +26,14 @@ class ProfileController extends Controller
         
         $blogs = Blog::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
 
-        
+        $playlist = Playlist::where('user_id', $user->id)->orderBy('created_at','desc')->get();
 
         return view('frontend.profile.master', [
             'full_name' => $user->full_name,
             'photo' => $user->photo,
             'id' => $user->id,
             'description' => $user->description,
-        ], compact('blogs'));
+        ], compact('blogs', 'playlist'));
     }
     /**
      * Show the form for creating a new resource.

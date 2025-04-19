@@ -21,6 +21,7 @@ return new class extends Migration
             $table->longText('content')->nullable();
             $table->unsignedBigInteger('cat_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->json('resources')->nullable();
             $table->enum('status',['active','inactive'])->default('active');
             $table->timestamps();
         });

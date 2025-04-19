@@ -3,6 +3,7 @@
 namespace App\Modules\Song\Models;
 
 use App\Modules\Composer\Models\Composer;
+use App\Modules\MusicType\Models\MusicType;
 use App\Modules\Singer\Models\Singer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,7 @@ class Song extends Model
         'resources', // Trường JSON để lưu tài nguyên
         'tags',
         'status',
+        'musictype_id',
         'composer_id', // Id của tác giả sáng tác
         'singer_id',   // Id của ca sĩ thể hiện
     ];
@@ -60,6 +62,11 @@ public function composer()
 public function singer()
 {
     return $this->belongsTo(Singer::class, 'singer_id'); // Tương tự như trên
+}
+
+public function musictype()
+{
+    return $this->belongsTo(MusicType::class, 'musictype_id'); // Tương tự như trên
 }
 
 

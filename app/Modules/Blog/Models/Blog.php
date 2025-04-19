@@ -11,7 +11,12 @@ use App\Models\User;
 class Blog extends Model
 {
     use HasFactory;
-    protected $fillable = ['title','slug', 'tags','photo','summary','content','cat_id','user_id','status'];
+    protected $fillable = ['title','slug', 'tags','photo','summary','content','cat_id', 'resources', 'user_id','status'];
+
+    protected $casts = [
+        'tags' => 'array',
+        'resources' => 'array'
+    ];
 
     public function tags()
     {

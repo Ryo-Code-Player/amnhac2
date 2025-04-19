@@ -62,16 +62,21 @@ Route::group( ['prefix'=>'admin/','middleware'=>'admin.auth', 'as'=>'admin.'],fu
 Route::group( [ 'as'=>'front.'],function(){
     Route::get('/',[ \App\Http\Controllers\frontend\HomeController::class,'index'])->name('home');
     Route::get('/cate',[ \App\Http\Controllers\frontend\HomeController::class,'cate'])->name('cate');
+
     Route::get('/singer',[ \App\Http\Controllers\frontend\HomeController::class,'singer'])->name('singer');
+    
 
     // songs
     Route::get('/songs',[ \App\Http\Controllers\frontend\HomeController::class,'song'])->name('song');
     Route::get('/song/{slug}', [App\Http\Controllers\frontend\HomeController::class, 'detail'])->name('song.detail');
-
+    Route::get('/songs/{slug}', [App\Http\Controllers\frontend\SongFrontController::class, 'songByCategory'])->name('song.category');
+    Route::get('/singersong/{slug}', [App\Http\Controllers\frontend\SongFrontController::class, 'songBySinger'])->name('song.singer');
+    Route::get('/songplaylist/{slug}', [App\Http\Controllers\frontend\SongFrontController::class, 'songByPlaylist'])->name('song.playlist');
 
     Route::get('/topic',[ \App\Http\Controllers\frontend\HomeController::class,'topic'])->name('topic');
 
     Route::get('/blog',[ \App\Http\Controllers\frontend\BlogPageController::class,'index'])->name('blog');
+    Route::get('/blogs/{id}',[ \App\Http\Controllers\frontend\BlogPageController::class,'detail'])->name('blog.detail');
     Route::get('/blogs/{blogId}/comments', [\App\Http\Controllers\frontend\BlogPageController::class, 'loadComments'])->name('blogs.comments');
     Route::post('/comments/store', [TCommentController::class, 'store'])->name('comments.store');
     Route::post('/motions/toggle', [TMotionItemController::class, 'toggle'])->name('motions.toggle');

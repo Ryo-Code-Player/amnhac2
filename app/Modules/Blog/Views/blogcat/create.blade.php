@@ -10,7 +10,7 @@
 <div class = 'content'>
     <div class="intro-y flex items-center mt-8">
         <h2 class="text-lg font-medium mr-auto">
-            Thêm banner
+            Tạo danh mục bài viết
         </h2>
     </div>
     <div class="grid grid-cols-12 gap-12 mt-5">

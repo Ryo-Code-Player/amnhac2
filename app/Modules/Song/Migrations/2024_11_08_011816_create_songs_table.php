@@ -24,11 +24,13 @@ return new class extends Migration
             $table->enum('status', ['active', 'inactive']);
             $table->unsignedBigInteger('composer_id');
             $table->unsignedBigInteger('singer_id');
+            $table->unsignedBigInteger('musictype_id');
             $table->timestamps();
 
             // Thiết lập khóa ngoại
             $table->foreign('composer_id')->references('id')->on('composers')->onDelete('cascade');
             $table->foreign('singer_id')->references('id')->on('singers')->onDelete('cascade');
+            $table->foreign('musictype_id')->references('id')->on('music_types')->onDelete('cascade');
         });
     }
 

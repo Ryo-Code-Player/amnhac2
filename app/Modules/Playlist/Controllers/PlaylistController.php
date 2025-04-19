@@ -47,7 +47,7 @@ class PlaylistController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255',
-            
+            'photo' => 'string|nullable',
             'song_id' => 'required|array',    // Kiểm tra song_id là mảng
             'song_id.*' => 'exists:songs,id',  // Kiểm tra từng ID bài hát tồn tại trong bảng songs
         ]);
@@ -110,15 +110,23 @@ public function update(Request $request, $id)
 
     $validatedData = $request->validate([
         'title' => 'required|string|max:255',
+        'photo' => 'string|nullable',
         'slug' => 'nullable|string|max:255',
         'song_id' => 'required|array',
         'type' => 'required|string|in:public,private', // Kiểm tra loại playlist
     ]);
 
+    
+
     // Kiểm tra và tạo slug mới nếu title thay đổi
     if ($playlist->title !== $request->title) {
         $playlist->slug = $this->createSlug($request->title);
     }
+
+    $validatedData['photo'] = $validatedData['photo'] ?? $playlist->photo;
+        if (empty($validatedData['photo'])) {
+            $validatedData['photo'] = asset('backend/images/profile-6.jpg');
+        }
 
     // Điền các giá trị từ $validatedData, ngoại trừ song_id
     $playlist->fill(Arr::except($validatedData, ['song_id']));

@@ -73,51 +73,31 @@ class BlogPageController extends Controller
             'hasMore' => $comments->count() === $limit
         ]);
     }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function detail($id)
     {
-        //
-    }
+        $blogs = Blog::select('id', 'title', 'slug', 'photo', 'summary', 'user_id', 'created_at')
+            ->with([
+                'user' => function ($query) {
+                    $query->select('id', 'full_name', 'photo');
+                },
+                'Tcomments' => function ($query) {
+                    $query->where('parent_id', 0)
+                          ->select('id', 'item_id', 'user_id', 'content', 'parent_id', 'created_at')
+                          ->with(['user' => function ($q) {
+                              $q->select('id', 'full_name', 'photo');
+                          }])
+                          ->take(3)
+                          ->latest();
+                },
+                'Tmotion' => function ($query) {
+                    $query->select('id', 'item_id', 'item_code', 'motions', 'user_motions');
+                }
+            ])
+            ->Where('id', $id)
+            ->latest()
+            ->get();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('frontend.blog.master', compact('blogs'));
     }
 }

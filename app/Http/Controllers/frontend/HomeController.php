@@ -4,6 +4,7 @@ namespace App\Http\Controllers\frontend;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Modules\MusicType\Models\MusicType;
 use App\Modules\Song\Models\Song;
 use App\Modules\Singer\Models\Singer;
 use Illuminate\Support\Facades\Storage;
@@ -28,8 +29,8 @@ class HomeController extends Controller
 
     public function cate()
     {
-        //
-        return view ('frontend.cate.master');
+        $cate = MusicType::where('status', 'active')->get();
+        return view ('frontend.cate.master', compact('cate'));
    
         // echo 'i am admin';
     }

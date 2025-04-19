@@ -14,6 +14,7 @@ class Playlist extends Model
 
     protected $fillable = [
         'title',
+        'photo',
         'slug',
         'user_id', // ID của người dùng tạo playlist
         'song_id', // ID của bài hát trong playlist

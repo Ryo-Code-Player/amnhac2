@@ -7,7 +7,7 @@
                     @foreach($singer as $item)
                     <div class="col text-center md-mb-35px singer">
                         <div class="client-box">
-                            <a href="#"><img src="{{ $item->photo}}" alt="" class="box-shadow-extra-large border-radius-100px w-150px"></a>
+                            <a href="{{ route('front.song.singer', ['slug' => $item->slug]) }}"><img src="{{ $item->photo}}" alt="" class="box-shadow-extra-large border-radius-100px w-150px"></a>
                             <span>{{ $item->alias }}</span>
                         </div>
                     </div>

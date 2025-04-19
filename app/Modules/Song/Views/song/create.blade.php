@@ -45,6 +45,16 @@
                 </div>
 
                 <div class="mt-3">
+                    <label for="musictype_id" class="form-label">Thể loại</label>
+                    <select name="musictype_id" class="form-select mt-2 sm:mr-2" required>
+                        <option value="">Chọn thể loại</option>
+                        @foreach ($musictype as $item)
+                            <option value="{{ $item->id }}" {{ old('musictype_id') == $item->id ? 'selected' : '' }}>{{ $item->title }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mt-3">
                     <label for="summary" class="form-label">Mô tả ngắn</label>
                     <textarea class="form-control" id="editor1" name="summary">{{ old('summary') }}</textarea>
                 </div>
