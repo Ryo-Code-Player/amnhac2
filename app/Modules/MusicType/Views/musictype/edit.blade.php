@@ -38,7 +38,7 @@
                         </div>
                         <div class="grid grid-cols-10 gap-5 pl-4 pr-5 py-5">
                                 <?php
-                                    $photos = explode( ',', $blog->photo);
+                                    $photos = explode( ',', $musicType->photo);
                                 ?>
                                 @foreach ( $photos as $photo)
                                 <div data-photo="{{$photo}}" class="product_photo col-span-5 md:col-span-2 h-28 relative image-fit cursor-pointer zoom-in">
@@ -93,7 +93,7 @@
         Dropzone.instances[0].options.multiple = true;
         Dropzone.instances[0].options.autoQueue= true;
         Dropzone.instances[0].options.maxFilesize =  5; // MB
-        Dropzone.instances[0].options.maxFiles =5;
+        Dropzone.instances[0].options.maxFiles =1;
         Dropzone.instances[0].options.dictDefaultMessage = 'Drop images anywhere to upload (6 images Max)';
         Dropzone.instances[0].options.acceptedFiles= "image/jpeg,image/png,image/gif";
         Dropzone.instances[0].options.previewTemplate =  '<div class=" d-flex flex-column  position-relative">'

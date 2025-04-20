@@ -72,6 +72,7 @@ Route::group( [ 'as'=>'front.'],function(){
     Route::get('/songs/{slug}', [App\Http\Controllers\frontend\SongFrontController::class, 'songByCategory'])->name('song.category');
     Route::get('/singersong/{slug}', [App\Http\Controllers\frontend\SongFrontController::class, 'songBySinger'])->name('song.singer');
     Route::get('/songplaylist/{slug}', [App\Http\Controllers\frontend\SongFrontController::class, 'songByPlaylist'])->name('song.playlist');
+    Route::get('/searchsong', [App\Http\Controllers\frontend\SongFrontController::class, 'searchsong'])->name('song.search2');
 
     Route::get('/topic',[ \App\Http\Controllers\frontend\HomeController::class,'topic'])->name('topic');
 
@@ -93,6 +94,7 @@ Route::group( [ 'as'=>'front.'],function(){
 
     // event
     Route::get('/event',[ \App\Http\Controllers\frontend\EventFrontController::class,'index'])->name('event');
+    Route::get('/event/detail/{id}',[ \App\Http\Controllers\frontend\EventFrontController::class,'detail'])->name('event.detail');
 
     // fanclub
     Route::get('/fanclub',[ \App\Http\Controllers\frontend\FanclubFrontController::class,'index'])->name('fanclub');

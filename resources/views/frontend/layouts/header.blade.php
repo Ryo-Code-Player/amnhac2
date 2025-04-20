@@ -15,7 +15,7 @@
                 <div class="container-fluid">
                     <div class="col-auto">
                         <a class="navbar-brand" href="demo-data-analysis.html">
-                            <img src="{{ asset('frontend/images/demo-data-analysis-logo-black.png') }}" data-at2x="{{ asset('frontend/images/demo-data-analysis-logo-black@2x.png') }}" alt="" class="default-logo">
+                            <img src="{{ asset('frontend/images/logo2.png') }}" alt="" class="default-logo">
                             <img src="{{ asset('frontend/images/demo-data-analysis-logo-black.png') }}" data-at2x="{{ asset('frontend/images/demo-data-analysis-logo-black@2x.png') }}" alt="" class="alt-logo">
                             <img src="{{ asset('frontend/images/demo-data-analysis-logo-black.png') }}" data-at2x="{{ asset('frontend/images/demo-data-analysis-logo-black@2x.png') }}" alt="" class="mobile-logo"> 
                         </a>
@@ -35,12 +35,23 @@
                                 <li class="nav-item"><a href="{{route('front.event')}}" class="nav-link">Sự kiện</a></li>
                                 <li class="nav-item"><a href="{{route('front.singer')}}" class="nav-link">Nghệ sĩ</a></li>
                                 <li class="nav-item"><a href="{{route('front.blog')}}" class="nav-link">Blog</a></li>
-                                <li class="nav-item"><a href="demo-data-analysis-contact.html" class="nav-link">Contact</a></li>
                             </ul>
                         </div>
                     </div>
+
                     <div class="col-auto ms-auto d-none d-sm-flex">
                         <div class="header-icon">
+                            
+                        <div class="relative d-flex align-items-center justify-content-center">
+                            <form action="{{ route('front.song.search2') }}" method="get" class="d-flex align-items-center justify-content-center">
+                                <input type="text" name="datasearch" class="ipsearch form-control w-56 pl-10 pr-10 py-2 rounded-lg border-gray-300"
+                                    placeholder="Search..." autocomplete="off">
+                                <button type="submit" class="absolute right-0 top-1/2 transform -translate-y-1 p-2 bg-transparent border-none cursor-pointer">
+                                    <i class="w-4 h-4 text-gray-500" data-lucide="search"></i>
+                                </button>
+                            </form>
+                        </div>
+
                             <div class="header-button ms-25px">
                             @if(Auth::check())
                             <div class="dropdown">

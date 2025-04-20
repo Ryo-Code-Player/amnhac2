@@ -10,6 +10,7 @@ use App\Modules\Song\Models\Song;
 use App\Modules\MusicType\Models\MusicType;
 use App\Modules\Playlist\Models\Playlist;
 use App\Modules\Singer\Models\Singer;
+use Illuminate\Support\Facades\DB;
 
 class SongFrontController extends Controller
 {
@@ -61,5 +62,16 @@ class SongFrontController extends Controller
         $cate = MusicType::where('status', 'active')->get();
 
         return view('frontend.songs.master', compact('songs', 'cate', 'playlist'));
+    }
+
+    public function searchSong(Request $request)
+    {
+        $searchdata =$request->datasearch;
+        $songs = Song::with('singer', 'musicType')
+        ->where('title', 'LIKE', '%' . $searchdata . '%')
+        ->orWhere('content', 'LIKE', '%' . $searchdata . '%')
+        ->get();
+
+        return view('frontend.songs.master', compact('songs', 'searchdata'));
     }
 }

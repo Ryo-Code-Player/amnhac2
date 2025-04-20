@@ -1,5 +1,5 @@
 <head>
-        <title>TMusic - Âm nhạc của tương lai</title>
+        <title>Miquinn - Âm nhạc của tương lai</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="author" content="ThemeZaa">

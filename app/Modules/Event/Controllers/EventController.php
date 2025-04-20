@@ -62,6 +62,7 @@ class EventController extends Controller
         // Validate input
         $request->validate([
             'title' => 'required|string|max:255',
+            'photo' => 'string|nullable',
             'summary' => 'nullable|string',
             'description' => 'nullable|string',
             'timestart' => 'required|date',
@@ -128,8 +129,9 @@ class EventController extends Controller
         }
 
         // Validate input
-        $request->validate([
+        $validatedData = $request->validate([
             'title' => 'required|string|max:255',
+            'photo' => 'string|nullable',
             'summary' => 'nullable|string',
             'description' => 'nullable|string',
             'timestart' => 'required|date',
@@ -146,18 +148,19 @@ class EventController extends Controller
             $slug = $slug . '-' . ($slugCount + 1);
         }
 
-        // Cập nhật sự kiện
-        $event->update([
-            'title' => $request->title,
-            'slug' => $slug,
-            'summary' => $request->summary,
-            'description' => $request->description,
-            'timestart' => $request->timestart,
-            'timeend' => $request->timeend,
-            'diadiem' => $request->diadiem,
-        ]);
+        $validatedData['photo'] = $validatedData['photo'] ?? $event->photo;
+        if (empty($validatedData['photo'])) {
+            $validatedData['photo'] = asset('backend/images/profile-6.jpg');
+        }
 
-        return redirect()->route('admin.Event.index')->with('success', 'Cập nhật sự kiện thành công!');
+        $event->fill($validatedData);
+        $status = $event->save();
+
+        if ($status) {
+            return redirect()->route('admin.Event.index')->with('success', 'Cập nhật thành công');
+        } else {
+            return back()->with('error', 'Có lỗi xảy ra!');
+        }
     }
 
     // Xóa sự kiện
