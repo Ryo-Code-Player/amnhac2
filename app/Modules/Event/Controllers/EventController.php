@@ -30,7 +30,6 @@ class EventController extends Controller
         return view('Event::Event.index', compact('events', 'breadcrumb', 'active_menu'));
     }
 
-    // Hiển thị form tạo mới sự kiện
     public function create()
     {
         $func = "event_add";
@@ -50,7 +49,6 @@ class EventController extends Controller
         return view('Event::Event.create', compact('breadcrumb', 'active_menu', 'eventtype'));
     }
 
-    // Lưu sự kiện mới
     public function store(Request $request)
     {
         $func = "event_add";
@@ -59,7 +57,6 @@ class EventController extends Controller
             return redirect()->route('unauthorized');
         }
 
-        // Validate input
         $request->validate([
             'title' => 'required|string|max:255',
             'photo' => 'string|nullable',
@@ -70,17 +67,17 @@ class EventController extends Controller
             'diadiem' => 'nullable|string',
         ]);
 
-        // Tạo slug từ title
         $slug = Str::slug($request->title);
         
-        // Kiểm tra slug trùng lặp
         $slugCount = Event::where('slug', $slug)->count();
         if ($slugCount > 0) {
             $slug = $slug . '-' . ($slugCount + 1);
         }
 
-        // Tạo một sự kiện mới
         $data = $request->all();
+        $data['photo'] = $request->photo ?? asset('backend/images/profile-6.jpg');
+
+        // Tạo một sự kiện mới
         $data['slug'] = $slug;
 
         Event::create($data);

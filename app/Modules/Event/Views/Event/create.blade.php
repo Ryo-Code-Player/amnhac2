@@ -1,4 +1,5 @@
 @extends('backend.layouts.master')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @section('content')
     <h2 class="intro-y text-lg font-medium mt-10">Tạo sự kiện mới</h2>
 

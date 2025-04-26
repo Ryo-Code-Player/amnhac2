@@ -81,7 +81,7 @@ header .left-nav .navbar-nav:before {
     background-image: linear-gradient(to right, #E3545C, #c84d9d, #885dd1, #2f86bc, #01a89e);
 }
 .bg-gradient-very-light-gray {
-    background-image: linear-gradient(to bottom, #f9eaec, #f9eaec, #faf5f9, #fcfafc, #ffffff);
+    background-image: linear-gradient(to bottom, #f9eaec, #f9eaec, #faf5f9, #fcfafc, #ffffff, #f9eaec);
 }
 .bg-gradient-very-ghost-white {
     background-image: linear-gradient(to bottom, #f4f6ff, #f7f8ff, #fafaff, #fdfdff, #ffffff);
