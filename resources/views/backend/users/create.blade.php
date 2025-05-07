@@ -41,7 +41,7 @@
                     </div>
                     <div class="mt-3">
                         <label for="regular-form-1" class="form-label" >Địa chỉ</label>
-                        <input id="address" name="address" type="text" class="form-control" placeholder="địa chỉ" required>
+                        <input id="address" name="taxaddress" type="text" class="form-control" placeholder="địa chỉ" required>
                     </div>
                     <div class="mt-3">
                         <label for="regular-form-1" class="form-label">Email</label>

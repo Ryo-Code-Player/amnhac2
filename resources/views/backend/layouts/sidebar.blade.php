@@ -31,12 +31,12 @@
                 </a>
             </li>
             
-            <li>
+            <!-- <li>
                 <a href="{{route('admin.blogcategory.index')}}" class="side-menu {{$active_menu=='blogcat_list'?'side-menu--active':''}}">
                     <div class="side-menu__icon"> <i data-lucide="hash"></i> </div>
                     <div class="side-menu__title">Danh mục bài viết </div>
                 </a>
-            </li>
+            </li> -->
       </ul>
   </li>
      
@@ -61,7 +61,7 @@
                     <div class="side-menu__title"> Thêm người dùng</div>
                 </a>
             </li>
-            <li>
+            <!-- <li>
                 <a href="{{route('admin.ugroup.index')}}" class="side-menu {{$active_menu=='ugroup_list'?'side-menu--active':''}}">
                     <div class="side-menu__icon"> <i data-lucide="circle"></i> </div>
                     <div class="side-menu__title">Ds nhóm người dùng</div>
@@ -72,13 +72,13 @@
                     <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
                     <div class="side-menu__title"> Thêm nhóm người dùng</div>
                 </a>
-            </li>
+            </li> -->
         </ul>
     </li>
 
    
     <!-- Comments -->
-    <li>
+    {{-- <li>
     <a href="javascript:;.html" class="side-menu side-menu {{($active_menu =='comment_add'|| $active_menu=='comment_list') ? 'side-menu--active' : ''}}">
         <div class="side-menu__icon"> <i data-lucide="message-square"></i> </div>
         <div class="side-menu__title">
@@ -94,7 +94,7 @@
             </a>
         </li>
         
-    </ul>
+    </ul> --}}
 </li>
 <!-- Quản lý Bài hát -->
 <!-- Quản lý Âm nhạc -->
@@ -242,7 +242,7 @@
 </li>
 
 <!-- Listener -->
-<li>
+{{-- <li>
     <a href="javascript:;" class="side-menu {{ $active_menu == 'listener_management' ? 'side-menu--active' : '' }}">
         <div class="side-menu__icon"> <i data-lucide="user"></i> </div>
         <div class="side-menu__title">Listener</div>
@@ -262,7 +262,7 @@
             </a>
         </li>
     </ul>
-</li>
+</li> --}}
     </ul>
 </li>
 
@@ -284,13 +284,13 @@
                         <div class="side-menu__title">Danh sách tài nguyên</div>
                     </a>
                 </li>
-                <li>
+                {{-- <li>
                     <a href="{{route('admin.resources.create')}}" class="side-menu {{$active_menu=='resource_add'?'side-menu--active':''}}">
                         <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
                         <div class="side-menu__title"> Thêm tài nguyên</div>
                     </a>
-                </li>
-                <li>
+                </li> --}}
+                {{-- <li>
                     <a href="{{route('admin.resource-types.index')}}" class="side-menu {{$active_menu=='resourcetype_list'?'side-menu--active':''}}">
                         <div class="side-menu__icon"> <i data-lucide="folder"></i> </div>
                         <div class="side-menu__title"> Loại tài nguyên </div>
@@ -301,12 +301,12 @@
                         <div class="side-menu__icon"> <i data-lucide="link"></i> </div>
                         <div class="side-menu__title"> Loại liên kết tài nguyên </div>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </li>
 
    <!-- group -->
-<li>
+<!-- <li>
     <a href="javascript:;" class="side-menu side-menu{{($active_menu=='group_list'||$active_menu=='group_add'||$active_menu=='groupmember'||$active_menu=='grouptype'||$active_menu=='grouprole')?'--active':''}}">
         <div class="side-menu__icon"> <i data-lucide="align-center"></i> </div>
         <div class="side-menu__title">
@@ -315,35 +315,30 @@
         </div>
     </a>
     <ul class="{{($active_menu=='group_list'||$active_menu=='group_add'||$active_menu=='groupmember'||$active_menu=='grouptype'||$active_menu=='grouprole')?'side-menu__sub-open':''}}">
-        <!-- Danh sách nhóm -->
         <li>
             <a href="{{route('admin.group.index')}}" class="side-menu {{$active_menu=='group_list'?'side-menu--active':''}}">
                 <div class="side-menu__icon"> <i data-lucide="compass"></i> </div>
                 <div class="side-menu__title">Danh sách nhóm</div>
             </a>
         </li>
-        <!-- Thêm nhóm -->
         <li>
             <a href="{{route('admin.group.create')}}" class="side-menu {{$active_menu=='group_add'?'side-menu--active':''}}">
                 <div class="side-menu__icon"> <i data-lucide="plus"></i> </div>
                 <div class="side-menu__title">Thêm nhóm</div>
             </a>
         </li>
-        <!-- Thành viên nhóm -->
         <li>
             <a href="{{route('admin.groupmember.index')}}" class="side-menu {{$active_menu=='groupmember'?'side-menu--active':''}}">
                 <div class="side-menu__icon"> <i data-lucide="user"></i> </div>
                 <div class="side-menu__title">Thành viên nhóm</div>
             </a>
         </li>
-        <!-- Loại nhóm -->
         <li>
             <a href="{{route('admin.grouptype.index')}}" class="side-menu {{$active_menu=='grouptype'?'side-menu--active':''}}">
                 <div class="side-menu__icon"> <i data-lucide="layers"></i> </div>
                 <div class="side-menu__title">Loại nhóm</div>
             </a>
         </li>
-        <!-- Vai trò nhóm -->
         <li>
             <a href="{{route('admin.grouprole.index')}}" class="side-menu {{$active_menu=='grouprole'?'side-menu--active':''}}">
                 <div class="side-menu__icon"> <i data-lucide="briefcase"></i> </div>
@@ -351,12 +346,12 @@
             </a>
         </li>
     </ul>
-</li>
+</li> -->
 
 
        
  <!-- Tag -->
- <li>
+ <!-- <li>
             <a href="javascript:;" class="side-menu {{($active_menu=='tag_list'|| $active_menu=='tag_add')?'side-menu--active':''}}">
                 <div class="side-menu__icon"> <i data-lucide="anchor"></i> </div>
                 <div class="side-menu__title">
@@ -378,10 +373,10 @@
                     </a>
                 </li>
             </ul>
-        </li>
+        </li> -->
         
   <!-- start interact -->
-
+{{-- 
   <li>
         <a href="javascript:;" class="side-menu side-menu{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='interact_list'||$active_menu=='interact_add'||$active_menu=='kiot'|| $active_menu=='interactype_list'|| $active_menu=='interactype_add'||$active_menu=='banner_add'|| $active_menu=='banner_list')?'--active':''}}">
             <div class="side-menu__icon"> <i data-lucide="book"></i> </div>
@@ -416,7 +411,7 @@
                     </a>
                 </li> -->
             </ul>
-        </li>
+        </li> --}}
 
     <!-- start fanclub -->
 
@@ -432,8 +427,7 @@
             <!-- Câu lạc bộ -->
             <li>
                 <a href="javascript:;" class="side-menu {{ $active_menu == 'fanclub_list' ? 'side-menu--active' : '' }}">
-                    <div class="side-menu__icon"> <i data-lucide="package
-"></i> </div>
+                    <div class="side-menu__icon"> <i data-lucide="package"></i> </div>
                     <div class="side-menu__title">Câu lạc bộ</div>
                     <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
                 </a>
@@ -454,10 +448,9 @@
             </li>
 
             <!--Tài nguyên -->
-            <li>
+            {{-- <li>
                 <a href="javascript:;" class="side-menu {{ $active_menu == 'fanclub_list' ? 'side-menu--active' : '' }}">
-                    <div class="side-menu__icon"> <i data-lucide="shopping-bag
-"></i> </div>
+                    <div class="side-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
                     <div class="side-menu__title">Tài nguyên</div>
                     <div class="side-menu__sub-icon"> <i data-lucide="chevron-down"></i> </div>
                 </a>
@@ -475,7 +468,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
             <!-- Thành viên câu lạc bộ -->
             <li>
@@ -539,7 +532,7 @@
             </li>
 
             <!-- Loại sự kiện -->
-            <li>
+            {{-- <li>
                 <a href="javascript:;" class="side-menu {{ $active_menu == 'eventtype_list' ? 'side-menu--active' : '' }}">
                     <div class="side-menu__icon"> <i data-lucide="code"></i> </div>
                     <div class="side-menu__title">Loại hình sự kiện</div>
@@ -559,7 +552,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
             <!-- người tham gia -->
             <li>
@@ -585,7 +578,7 @@
             </li>
 
             <!-- Nhóm tham gia sự kiện -->  
-            <li>
+            {{-- <li>
                 <a href="javascript:;" class="side-menu {{ $active_menu == 'event_group_list' ? 'side-menu--active' : '' }}">
                     <div class="side-menu__icon"> <i data-lucide="users"></i> </div>
                     <div class="side-menu__title">Nhóm tham gia</div>
@@ -605,7 +598,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
         </ul>
     </li>
     <!-- end event -->
@@ -622,18 +615,18 @@
         </a>
         <ul class="{{($active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'||$active_menu=='role_list1'||$active_menu=='role_add'||$active_menu=='kiot'|| $active_menu=='setting_list'|| $active_menu=='banner_add'|| $active_menu=='banner_list')?'side-menu__sub-open':''}}">
              
-              <li>
+              <!-- <li>
                   <a href="{{route('admin.role.index',1)}}" class="side-menu {{$active_menu=='role_list2'||$active_menu=='role_add'?'side-menu--active':''}}">
                       <div class="side-menu__icon"> <i data-lucide="octagon"></i> </div>
                       <div class="side-menu__title"> Roles</div>
                   </a>
-              </li>
-              <li>
+              </li> -->
+              {{-- <li>
                   <a href="{{route('admin.cmdfunction.index',1)}}" class="side-menu {{$active_menu=='cmdfunction_list'||$active_menu=='cmdfunction_add'?'side-menu--active':''}}">
                       <div class="side-menu__icon"> <i data-lucide="moon"></i> </div>
                       <div class="side-menu__title"> Chức năng</div>
                   </a>
-              </li>
+              </li> --}}
               <li>
                   <a href="{{route('admin.setting.edit',1)}}" class="side-menu {{$active_menu=='setting_list'?'side-menu--active':''}}">
                       <div class="side-menu__icon"> <i data-lucide="key"></i> </div>

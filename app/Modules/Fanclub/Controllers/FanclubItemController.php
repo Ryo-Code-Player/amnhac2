@@ -13,7 +13,7 @@ class FanclubItemController extends Controller
     protected $pagesize;
     public function index()
     {
-
+        // dd(1);
         $func = "fanclub_list";
         if(!$this->check_function($func))
         {

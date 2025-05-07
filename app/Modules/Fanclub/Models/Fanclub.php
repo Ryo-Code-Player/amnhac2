@@ -2,6 +2,7 @@
 
 namespace App\Modules\Fanclub\Models;
 
+use App\Modules\Event\Models\Event;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
@@ -11,13 +12,26 @@ class Fanclub extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'slug', 'photo', 'summary', 'content', 'singer_id', 'status', 'user_id',
+        'title', 'slug', 'photo', 'summary', 'content', 'singer_id', 'status', 'user_id','quantity'
     ];
+
+
+    protected $appends = ['check_fanclub'];
+
+    public function getCheckFanclubAttribute(){
+        $fanclubUser = FanclubUser::where('fanclub_id',$this->id)->where('user_id',auth()->user()->id)->first();
+        return $fanclubUser ? true : false;
+    }
 
     // public function singer()
     // {
     //     return $this->belongsTo(Singer::class);
     // }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 
     public function user()
     {

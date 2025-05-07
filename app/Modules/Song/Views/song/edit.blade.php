@@ -66,21 +66,21 @@
                         <label for="content" class="form-label">Nội dung</label>
                         <textarea class="form-control" name="content" id="editor2">{{ old('content', $song->content) }}</textarea>
                     </div>
-<!-- Phần tài nguyên (file nhạc, MV, v.v.) -->
-<div class="form-group mt-3">
-    <label for="resources">Tài nguyên hiện có:</label>
-    <ul>
-        @foreach($resources as $resource)
-            <li id="resource-{{ $resource->resource_id }}">
-                <!-- Hiển thị tên tài nguyên -->
-                <a href="{{ $resource->url }}" target="_blank">{{ $resource->file_name }}</a>
+                <!-- Phần tài nguyên (file nhạc, MV, v.v.) -->
+                {{-- <div class="form-group mt-3">
+                    <label for="resources">Tài nguyên hiện có:</label>
+                    <ul>
+                        @foreach($resources as $resource)
+                            <li id="resource-{{ $resource->resource_id }}">
+                                <!-- Hiển thị tên tài nguyên -->
+                                <a href="{{ $resource->url }}" target="_blank">{{ $resource->file_name }}</a>
 
-                <!-- Nút xóa tài nguyên -->
-                <button class="delete-resource btn btn-danger btn-sm" data-id="{{ $resource->id }}" data-song-id="{{ $song->id }}">Xóa</button>
-            </li>
-        @endforeach
-    </ul>
-</div>
+                                <!-- Nút xóa tài nguyên -->
+                                <button class="delete-resource btn btn-danger btn-sm" data-id="{{ $resource->id }}" data-song-id="{{ $song->id }}">Xóa</button>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div> --}}
 
 
 
@@ -88,10 +88,10 @@
 
 <!-- Thêm tài nguyên mới -->
 <div class="form-group">
-    <label for="resources_file">Tải tài nguyên mới:</label>
-    <input type="file" name="resources[]" multiple class="form-control" id="resources_file">
+    {{-- <label for="resources_file">Tải tài nguyên mới:</label>
+    <input type="file" name="resources[]" multiple class="form-control" id="resources_file"> --}}
 
-    <label for="resources_url" class="form-label mt-2">Hoặc nhập URL tài nguyên:</label>
+    <label for="resources_url" class="form-label mt-2">Nhập URL tài nguyên:</label>
     <input type="url" name="resources[]" placeholder="Nhập URL từ YouTube hoặc tài nguyên khác" class="form-control" id="resources_url">
 </div>
 

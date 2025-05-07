@@ -128,7 +128,7 @@ class MusicCompanyController extends Controller
                     }
                     $tagsArray = json_decode($musicCompany->tags, true); // Giải mã JSON để lấy mảng
                     // Lưu tài nguyên vào bảng resources
-                    $resourceRecord = Resource::create([
+                    $resourceRecord = Resource::create([    
                          'company_id' => $musicCompanyId,
                         'title' => $musicCompany->title,
                         'slug' => $slug,

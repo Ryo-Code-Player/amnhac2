@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('set null');
             $table->integer('vote')->default(0);
             $table->timestamps();
+            $table->string('code')->nullable();
+
         });
     }
 

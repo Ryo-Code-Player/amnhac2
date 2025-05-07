@@ -26,6 +26,7 @@ class SongFrontController extends Controller
 
     public function songByCategory($slug)
     {
+        
         $musicType = MusicType::where('slug', $slug)->where('status', 'active')->firstOrFail();
         $songs = Song::with('singer', 'musicType')
             ->where('musictype_id', $musicType->id)

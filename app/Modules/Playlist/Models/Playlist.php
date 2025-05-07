@@ -2,6 +2,7 @@
 
 namespace App\Modules\Playlist\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str; // Thêm dòng này
@@ -51,5 +52,11 @@ class Playlist extends Model
     public function createSlug($title)
     {
         return Str::slug($title);
+    }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

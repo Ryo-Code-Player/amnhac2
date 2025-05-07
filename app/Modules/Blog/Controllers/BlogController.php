@@ -26,12 +26,13 @@ class BlogController extends Controller
         {
             return redirect()->route('unauthorized');
         }
-
         $active_menu="blog_list";
         $breadcrumb = '
         <li class="breadcrumb-item"><a href="#">/</a></li>
         <li class="breadcrumb-item active" aria-current="page"> Danh sách bài viết </li>';
+        // dd(1);
         $blogs = Blog::orderBy('id','DESC')->paginate($this->pagesize);
+       
         // categories
         return view('Blog::blog.index',compact('blogs','breadcrumb','active_menu'));
 

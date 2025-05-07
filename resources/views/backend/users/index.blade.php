@@ -99,25 +99,21 @@
                        
                         <td class="w-20">
                             <div class="flex">
-                                
-                                    <?php
-                                        $photos = explode( ',', $item->photo);
-                                        foreach($photos as $photo)
-                                        {
-                                            echo '<div class="w-10 h-10 image-fit zoom-in">
-                                                <img class="tooltip rounded-full"  src="'.$photo.'"/>
-                                            </div>';
-                                        }
-                                    ?>
+                                <div class="w-10 h-10 image-fit zoom-in">
+                                    <img class="tooltip rounded-full"
+                                    src="{{auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://i.pinimg.com/736x/bc/43/98/bc439871417621836a0eeea768d60944.jpg' }}"/>
+                                </div>
+                                    
                                      
                                 
                             </div>
                         </td>
-                        <td class="text-left"><?php echo $item->email; ?></td>
-                        <td class="text-center">{{$item->title}} </td>
+                        <td class="text-center"><?php echo $item->email; ?></td>
+                        <td class="">{{  ($item->role == 'customer' ? 'Tài khoản người dùng' : 'Admin') }}</td>
+                   
                         <!-- <td class="text-center">{{$item->ugroup_id!= null?\App\Models\UGroup::where('id',$item->ugroup_id)->value('title'):''}} </td> -->
                         <td class="text-center">{{$item->phone}} </td>
-                        <td class="text-left">{{$item->address}} </td>
+                        <td class="text-left">{{$item->taxaddress}} </td>
                         
                         <td class="text-center"> 
                             <input type="checkbox" 

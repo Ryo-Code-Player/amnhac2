@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use App\Modules\Tag\Models\Tag;
 use App\Modules\MusicCompany\Models\MusicCompany;
 use App\Modules\MusicType\Models\MusicType;
+use App\Modules\Song\Models\Song;
 
 class Singer extends Model
 {
@@ -74,4 +75,9 @@ class Singer extends Model
     return $this->belongsTo(MusicType::class, 'type_id');
     }
 
+
+    public function song()
+    {
+        return $this->hasMany(Song::class, 'singer_id');
+    }
 }

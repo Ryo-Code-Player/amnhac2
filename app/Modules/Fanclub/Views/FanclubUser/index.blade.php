@@ -24,9 +24,10 @@
                 <tbody>
                     @if (isset($fanclubuser) && count($fanclubuser) > 0)
                     @foreach ($fanclubuser as $item)
+                        {{-- {{ dd($item) }} --}}
                         <tr class="intro-x">
                             <td class="text-gray-800">{{ $item->user->username }}</td>
-                            <td class="text-green-600">{{ $item->role->title }}</td>
+                            <td class="text-green-600">{{ $item->user->role }}</td>
                             <td class="text-blue-600">{{ $item->fanclub->title }}</td>
                             
                             <td class="table-report__action w-56">

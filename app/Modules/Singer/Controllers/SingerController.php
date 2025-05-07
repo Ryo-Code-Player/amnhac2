@@ -104,7 +104,7 @@ class SingerController extends Controller
         
         $singer = new Singer($validatedData);
         $singer->user_id = Auth::id();
-        $singer->tags = json_encode($tagsArray);  // Lưu mảng tags dưới dạng JSON
+        $singer->tags = json_encode(value: $tagsArray);  // Lưu mảng tags dưới dạng JSON
         $singer->photo = $validatedData['photo'] ?? asset('backend/images/profile-6.jpg');
         $singer->save();
     

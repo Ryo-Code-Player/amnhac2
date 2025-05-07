@@ -38,8 +38,9 @@ class BlogPageController extends Controller
             ])
             ->latest()
             ->get();
-
-        return view('frontend.blog.master', compact('blogs'));
+            // dd(1);   
+            // dd($blogs);
+        return view('frontend.blog.index_blog', compact('blogs'));
     }
 
     public function loadComments(Request $request, $blogId)
@@ -76,28 +77,31 @@ class BlogPageController extends Controller
 
     public function detail($id)
     {
-        $blogs = Blog::select('id', 'title', 'slug', 'photo', 'summary', 'user_id', 'created_at')
-            ->with([
-                'user' => function ($query) {
-                    $query->select('id', 'full_name', 'photo');
-                },
-                'Tcomments' => function ($query) {
-                    $query->where('parent_id', 0)
-                          ->select('id', 'item_id', 'user_id', 'content', 'parent_id', 'created_at')
-                          ->with(['user' => function ($q) {
-                              $q->select('id', 'full_name', 'photo');
-                          }])
-                          ->take(3)
-                          ->latest();
-                },
-                'Tmotion' => function ($query) {
-                    $query->select('id', 'item_id', 'item_code', 'motions', 'user_motions');
-                }
-            ])
-            ->Where('id', $id)
-            ->latest()
-            ->get();
-
-        return view('frontend.blog.master', compact('blogs'));
+        // $blogs = Blog::select('id', 'title', 'slug', 'photo', 'summary', 'user_id', 'created_at')
+        //     ->where('slug', $id)
+        //     ->with([
+        //         'user' => function ($query) {
+        //             $query->select('id', 'full_name', 'photo');
+        //         },
+        //         'Tcomments' => function ($query) {
+        //             $query->where('parent_id', 0)
+        //                   ->select('id', 'item_id', 'user_id', 'content', 'parent_id', 'created_at')
+        //                   ->with(['user' => function ($q) {
+        //                       $q->select('id', 'full_name', 'photo');
+        //                   }])
+        //                   ->take(3)
+        //                   ->latest();
+        //         },
+        //         'Tmotion' => function ($query) {
+        //             $query->select('id', 'item_id', 'item_code', 'motions', 'user_motions');
+        //         }
+        //     ])
+        //     ->Where('id', $id)
+        //     ->latest()
+        //     ->get();4
+    
+        $blogs = Blog::where('slug', $id)->with('user')->first();
+        // dd($blogs);
+        return view('frontend.blog.edit', compact('blogs'));
     }
 }

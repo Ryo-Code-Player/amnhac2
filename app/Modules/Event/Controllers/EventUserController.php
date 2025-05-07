@@ -62,6 +62,7 @@ class EventUserController extends Controller
         if (!$this->check_function($func)) {
             return redirect()->route('unauthorized');
         }
+        $request->merge(['code' => Str::upper(Str::random(10))]);
 
         // Validate input
         $request->validate([
@@ -69,7 +70,8 @@ class EventUserController extends Controller
             'event_id' => 'required|exists:events,id',
             'role_id' => 'nullable|exists:roles,id',
             'vote' => 'nullable|integer',
-        ]);
+            'code' => 'required'
+         ]);
 
         // Tạo mới người tham gia sự kiện
         EventUser::create($request->all());

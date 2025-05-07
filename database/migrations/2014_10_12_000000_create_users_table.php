@@ -37,6 +37,8 @@ return new class extends Migration
             $table->enum('status',['active','inactive'])->default('active');
             $table->rememberToken();
             $table->timestamps();
+            $table->string('monitor')->nullable();
+            $table->string('following')->nullable();
         });
     }
 

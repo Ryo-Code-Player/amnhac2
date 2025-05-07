@@ -19067,3 +19067,8 @@ html body{
         color: rgb(var(--color-success) / var(--tw-text-opacity));
     }
 }
+
+
+.swal2-styled{
+  color: #333 !important;
+}

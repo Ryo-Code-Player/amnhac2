@@ -40,6 +40,8 @@ class User extends Authenticatable
         'taxname',
         'taxaddress',
         'status',
+        'monitor',
+        'following'
     ];
     
     /**

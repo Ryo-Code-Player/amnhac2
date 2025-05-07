@@ -28,7 +28,7 @@
                     <th class="whitespace-nowrap">ID</th>
                     <th class="whitespace-nowrap">TÊN CÔNG TY</th>
                     <th class="whitespace-nowrap">ĐỊA CHỈ</th>
-                    <th class="text-center whitespace-nowrap">LOGO</th>
+                    <!-- <th class="text-center whitespace-nowrap">LOGO</th> -->
                     <th class="whitespace-nowrap">NGƯỜI DÙNG</th>
                     <th class="text-center whitespace-nowrap">TRẠNG THÁI</th>
                     <th class="text-center whitespace-nowrap">HÀNH ĐỘNG</th>
@@ -51,11 +51,11 @@
                 <a href="{{ route('admin.musiccompany.show', $company->id) }}" class="font-medium whitespace-nowrap">{{ $company->title }}</a>
             </td>
             <td class="text-left">{{ $company->address }}</td>
-            <td class="w-40 text-center"> <!-- Căn giữa logo -->
+            <!-- <td class="w-40 text-center">
                 <div class="flex justify-center items-center h-full">
                     <img class="tooltip rounded-full h-10 w-10 object-cover" src="{{ asset($company->photo) }}" alt="Company Logo">
                 </div>
-            </td>
+            </td> -->
             <td class="text-left">{{ optional($company->user)->full_name ?? 'N/A' }}</td>   
             <td class="text-center"> 
                             <input type="checkbox" 

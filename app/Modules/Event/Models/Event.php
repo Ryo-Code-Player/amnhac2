@@ -10,8 +10,21 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'slug', 'photo', 'summary', 'description', 'resources', 'timestart', 'timeend', 'diadiem', 'tags', 'event_type_id'];
+    protected $fillable = ['title', 'slug', 'photo', 'summary', 'description', 
+    'resources', 'timestart', 'timeend', 'diadiem', 'tags', 'event_type_id',
+    'price', 'quantity', 'fanclub_id', 'user_id','content'];
 
+    protected $appends = ['timestart_event','timeend_event'];
+
+    public function getTimestartEventAttribute()
+    {
+        return $this->timestart;
+    }
+
+    public function getTimeendEventAttribute()
+    {
+        return $this->timeend;
+    }
     public function eventType()
     {
         return $this->belongsTo(EventType::class, 'event_type_id');

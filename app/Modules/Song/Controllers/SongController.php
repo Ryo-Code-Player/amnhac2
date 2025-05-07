@@ -260,6 +260,7 @@ class SongController extends Controller
     public function edit($id)
 {
     
+    // dd(1);
     // Lấy danh sách các thẻ (tags) có trạng thái "active"
     $tags = Tag::where('status', 'active')->orderBy('title', 'ASC')->get();
     // Thiết lập menu và breadcrumb
@@ -281,7 +282,7 @@ class SongController extends Controller
     
     // Nếu có resource_id, lấy danh sách tài nguyên đã gắn cho bài hát
     $resources = Resource::whereIn('id', $resourceIds)->get();
-
+    // dd($resources);
     // Lấy danh sách tài nguyên có thể thêm vào (tức là chưa được gắn)
     $availableResources = Resource::whereNotIn('id', $resourceIds)->get();
 

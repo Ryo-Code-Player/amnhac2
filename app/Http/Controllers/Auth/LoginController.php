@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
 class LoginController extends Controller
 {
     /*
@@ -41,11 +43,13 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         // Redirect to the login page or home page
-        return redirect('admin/login');  // Or any other page you prefer
-    }
+        // return redirect('admin/login');  // Or any other page you prefer
+        return redirect('/');
+        }
 
     public function login(Request $request)
     {
+       
         $input = $request->all();
         // dd($input);
         $this->validate($request, [
@@ -67,17 +71,24 @@ class LoginController extends Controller
                     {
                         return redirect($request->plink);
                     }
-                    else
-                        return redirect()->route('admin.home');
+                    else{
+                        if(auth()->user()->role == 'customer'){
+                            return redirect('/')->with('success', 'Đăng nhập thành công!');
+                        }
+                        else{
+                            return redirect()->route('admin.home');
+                        }
+                     
+                    }
                 }
             } else {
-                return redirect()->route('admin.login')
-                    ->with('error', 'Email hoặc số điện thoại hoặc mật khẩu không đúng..');
+                return redirect('/')->with('error', 'Email hoặc số điện thoại hoặc mật khẩu không đúng..');
+                    // ->with('error', 'Email hoặc số điện thoại hoặc mật khẩu không đúng..');
             }
         }
         else {
-            return redirect()->route('admin.login')
-                ->with('error', 'Email hoặc số điện thoại hoặc mật khẩu không đúng.');
+            return redirect('/');
+                // ->with('error', 'Email hoặc số điện thoại hoặc mật khẩu không đúng.');
         }
        
     }
@@ -90,5 +101,33 @@ class LoginController extends Controller
     public function viewAdminlogin()
     {
         return view('auth.admin.login');
+    }
+
+
+    public function register(Request $request)
+    {
+
+        
+        $user = new \App\Models\User();
+        $user->full_name = $request->name;
+        $user->username = $request->email;
+        $user->email = $request->email;
+        $user->phone = $request->phone ?? '';
+        $user->password = Hash::make($request->password);
+        $user->save();
+        // toastr()->success('Đăng ký thành công!');
+        return redirect('/')->with('success', 'Đăng ký thành công!');
+    }
+
+    public function updateProfile123(Request $request)
+    {
+    
+      
+        $user = \App\Models\User::find(auth()->user()->id);
+        $user->full_name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone ?? '';
+        $user->save();
+        return redirect('/')->with('success', 'Cập nhật thành công!');
     }
 }

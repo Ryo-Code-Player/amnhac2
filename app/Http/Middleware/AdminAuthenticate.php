@@ -25,7 +25,7 @@ class AdminAuthenticate
             if ($request->expectsJson()) {
                 return response()->json(['message' => 'Unauthorized'], 401);
             } else {
-                return redirect()->route('admin.login'); // Custom login route
+                return redirect('/'); // Custom login route
             }
         }
         return $next($request);

@@ -11,7 +11,15 @@ class EventUser extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'event_id', 'role_id', 'vote'];
+    protected $fillable = ['user_id', 'event_id', 'role_id', 'vote','created_at','updated_at','code'];
+
+    protected $appends = ['created_at_format'];
+
+    public function getCreatedAtFormatAttribute()
+    {
+        return $this->created_at->format('d/m/Y H:i:s');
+    }
+
 
     public function event()
     {

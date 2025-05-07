@@ -26,7 +26,7 @@ return new class extends Migration
             $table->unsignedBigInteger('singer_id');
             $table->unsignedBigInteger('musictype_id');
             $table->timestamps();
-
+            $table->integer('view')->nullable()->default(0);
             // Thiết lập khóa ngoại
             $table->foreign('composer_id')->references('id')->on('composers')->onDelete('cascade');
             $table->foreign('singer_id')->references('id')->on('singers')->onDelete('cascade');

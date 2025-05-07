@@ -43,7 +43,7 @@
                         <div class="grid grid-cols-10 gap-5 pl-4 pr-5 py-5">
                                 @if ($user->photo)
                                 <div class="col-span-5 md:col-span-2 h-28 relative image-fit cursor-pointer zoom-in">
-                                    <img class="rounded-md "   src="{{$user->photo}}">
+                                    <img class="rounded-md "   src="{{asset('storage/' . $user->photo)}}">
                                     
                                 </div>
                                 @endif

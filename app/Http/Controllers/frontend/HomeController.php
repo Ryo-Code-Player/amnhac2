@@ -4,6 +4,10 @@ namespace App\Http\Controllers\frontend;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
+use App\Models\Post;
+use App\Modules\Event\Models\Event;
+use App\Modules\Event\Models\EventUser;
 use App\Modules\MusicType\Models\MusicType;
 use App\Modules\Song\Models\Song;
 use App\Modules\Singer\Models\Singer;
@@ -21,10 +25,26 @@ class HomeController extends Controller
     }
     public function index()
     {
-        //
-        return view ('frontend.layouts.master');
-   
-        // echo 'i am admin';
+        
+        $song = Song::where('status', 'active')->with('singer')
+        ->orderBy('id', 'desc')
+        ->limit(5)
+        ->get();
+        $songs = $song->map(function($s) {
+            return [
+                'title' => $s->title,
+                'artist' => $s->singer->alias,
+                'src' => asset(str_replace(':8000/', '', $s->resourcesSong[0]->url)),
+                'thumb' => asset($s->singer->photo),
+            ];
+        });
+     
+        $blog = Blog::where('status', 'active')->orderBy('id', 'desc')->limit(5)->get();
+
+        $Singer = Singer::where('status', 'active')->orderBy('id', 'desc')->limit(5)->get();
+        
+        return view ('frontend.layouts.content', compact('songs','song','blog','Singer'));
+
     }
 
     public function cate()
@@ -55,7 +75,7 @@ class HomeController extends Controller
     public function detail($slug)
     {
         $song = Song::with('singer')->where('slug', $slug)->first();
-
+   
         $resourcesArray = [];
         if ($song->resources) {
             $resourcesArray = json_decode($song->resources, true);
@@ -145,5 +165,50 @@ class HomeController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function songView(Request $request)
+    {
+       
+        $song = Song::where('id',$request->song_id)->first();
+       
+        $song->view = ($song->view ?? 0) + 1;
+        $song->save();
+        return response()->json(['message' => 'View updated']);
+    }
+
+    public function eventRegistrations(Request $request)
+    {
+        
+       
+        $event = EventUser::orderBy('id','desc')->
+        where('user_id',$request->id)->with('event','user','role')->get();
+      
+        return response()->json($event);
+    }
+
+
+    public function songShare(Request $request)
+    {   
+
+       
+          
+            $song = Song::where('id',$request->id)->with('singer')->first();
+         
+            $post = Post::create([
+                'description' => $song->title . ' - ' . $request->url,
+                'link' => $request->url,
+                'user_id' => auth()->user()->id,
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'like' => 0,
+                'view' => 0,
+                'comment' => 0,
+                'share' => 0,   
+                'post_singer'=> optional($song->singer)->id ?? null        
+        ]);
+        return redirect()->back()->with('success','Bài hát đã được chia sẻ thành công');
+     
     }
 }

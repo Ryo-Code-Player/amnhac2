@@ -29,10 +29,10 @@
                 <thead>
                     <tr>
                         <th class="whitespace-nowrap">Tiêu đề</th>
-                        <th class="whitespace-nowrap">Mô tả</th>
-                        <th class="whitespace-nowrap">Nội dung</th>
+                        <!-- <th class="whitespace-nowrap">Mô tả</th> -->
+                        {{-- <th class="whitespace-nowrap">Nội dung</th> --}}
                         <th class="whitespace-nowrap">Địa điểm</th>
-                        <th class="whitespace-nowrap">Loại sự kiện</th>
+                        <!-- <th class="whitespace-nowrap">Loại sự kiện</th> -->
                         <th class="whitespace-nowrap">Thời gian bắt đầu</th>
                         <th class="whitespace-nowrap">Thời gian kết thúc</th>
                         <th></th>
@@ -44,19 +44,19 @@
                             <td>
                                 {{ $event->title }}
                             </td>
-                            <td>
+                            <!-- <td>
                                 {{ $event->summary }}
-                            </td>
-                            <td>
+                            </td> -->
+                            {{-- <td>
                                 {{ $event->description }}
-                            </td>
+                            </td> --}}
                             <td>
                                 {{ $event->diadiem }}
                             </td>
 
-                            <td>
+                            {{-- <td>
                                 {{ $event->eventType->title }}
-                            </td>
+                            </td> --}}
                             <td>
                                 {{ \Carbon\Carbon::parse($event->timestart)->format('d/m/Y H:i') }}
                             </td>

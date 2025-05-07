@@ -64,10 +64,10 @@
                 </div>
 
                         <div class="mt-3">
-            <label for="resources_file" class="form-label">Tải lên tài nguyên (File)</label>
-            <input type="file" name="resources[]" id="resources_file" class="form-control" multiple>
+            {{-- <label for="resources_file" class="form-label">Tải lên tài nguyên (File)</label>
+            <input type="file" name="resources[]" id="resources_file" class="form-control" multiple> --}}
             
-            <label for="resources_url" class="form-label">Hoặc nhập URL tài nguyên</label>
+            <label for="resources_url" class="form-label">Nhập URL tài nguyên</label>
             <input type="url" name="resources[]" placeholder="Nhập URL từ YouTube" class="form-control">
 
             

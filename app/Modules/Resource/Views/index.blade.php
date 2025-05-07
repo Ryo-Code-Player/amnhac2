@@ -4,7 +4,7 @@
     <h2 class="intro-y text-lg font-medium mt-10">Danh sách tài nguyên</h2>
 
     <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-        <a href="{{ route('admin.resources.create') }}" class="btn btn-primary shadow-md mr-2">Thêm tài nguyên</a>
+        {{-- <a href="{{ route('admin.resources.create') }}" class="btn btn-primary shadow-md mr-2">Thêm tài nguyên</a> --}}
 
         <div class="hidden md:block mx-auto text-slate-500">
             Hiển thị trang {{ $resources->currentPage() }} trong {{ $resources->lastPage() }} trang

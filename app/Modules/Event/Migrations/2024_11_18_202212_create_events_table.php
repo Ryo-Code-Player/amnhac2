@@ -25,9 +25,16 @@ return new class extends Migration
             $table->string('tags')->nullable();
             $table->foreignId('event_type_id')->constrained('event_types')->onDelete('cascade');
             $table->timestamps();
+            $table->string('price')->nullable();
+            $table->string('quantity')->nullable();
+            $table->string('fanclub_id')->nullable();
+
+
         });
     }
 
+
+ 
     /**
      * Reverse the migrations.
      */

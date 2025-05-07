@@ -39,10 +39,10 @@
                         </select>
                     </div>
 
-                    <div class="mt-3">
-                        <label for="vote" class="form-label">Điểm bầu chọn</label>
-                        <input type="number" name="vote" id="vote" class="form-control" value="{{ old('vote', $eventUser->vote) }}">
-                    </div>
+                        {{-- <div class="mt-3">
+                            <label for="vote" class="form-label">Điểm bầu chọn</label>
+                            <input type="number" name="vote" id="vote" class="form-control" value="{{ old('vote', $eventUser->vote) }}">
+                        </div> --}}
 
                     <div class="text-right mt-5">
                         <button type="submit" class="btn btn-primary w-24">Cập nhật</button>

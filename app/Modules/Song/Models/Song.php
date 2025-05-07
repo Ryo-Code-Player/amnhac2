@@ -28,12 +28,32 @@ class Song extends Model
         'musictype_id',
         'composer_id', // Id của tác giả sáng tác
         'singer_id',   // Id của ca sĩ thể hiện
+        'view',
     ];
 
     // Nếu bạn sử dụng JSON để lưu trữ resources
     protected $casts = [
         'resources' => 'array',
     ];
+    
+    protected $appends = ['resourcesSong'];
+
+    public function getResourcesSongAttribute(){
+        
+        $resourcesArray = is_string($this->resources) ? json_decode($this->resources, true) : $this->resources;
+       
+        // Lấy tất cả các resource_id từ mảng resources đã gắn vào bài hát
+        $resourceIds = array_column($resourcesArray, 'resource_id');
+    
+        // Nếu có resource_id, lấy danh sách tài nguyên đã gắn cho bài hát
+        $resources = Resource::where('id', $resourceIds)->get();
+        // dd($resources);
+        return $resources;
+        // Lấy danh sách tài nguyên có thể thêm vào (tức là chưa được gắn)
+        // $availableResources = Resource::whereNotIn('id', $resourceIds)->get();
+
+        // return $availableResources;
+    }
 
     protected static function boot()
     {

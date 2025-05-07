@@ -42,7 +42,7 @@
             <input type="text" name="diadiem" class="form-control" required>
         </div>
 
-        <div class="mt-4">
+        {{-- <div class="mt-4">
             <label for="event_type_id" class="form-label">Chọn loại sự kiện</label>
             <select name="event_type_id" id="event_type_id" class="form-select mt-2 sm:mr-2" required>
                 @foreach($eventtype as $type)
@@ -52,7 +52,7 @@
             @if ($errors->has('event_type_id'))
                 <div class="text-danger mt-2">{{ $errors->first('event_type_id') }}</div>
             @endif
-        </div>
+        </div> --}}
 
         <div class="form-group">
             <label for="timestart">Thời gian bắt đầu</label>
