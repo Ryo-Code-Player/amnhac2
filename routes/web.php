@@ -89,7 +89,8 @@ Route::group( [ 'as'=>'front.'],function(){
     Route::get('/blogs/{blogId}/comments', [\App\Http\Controllers\frontend\BlogPageController::class, 'loadComments'])->name('blogs.comments');
 
     Route::get('/detail_music',[ \App\Http\Controllers\frontend\HomeController::class,'detail_music'])->name('detail_music');
-
+    // category
+    Route::get('/category',[ \App\Http\Controllers\frontend\CategoryController::class,'index'])->name('category');
     // user profile
     Route::get('/profile',[ \App\Http\Controllers\frontend\ProfileController::class,'index'])->name('profile');
     

@@ -140,17 +140,17 @@
                     <div>
                       <b>{{ optional($comment->user)->full_name }}</b> <span style="color:#888; font-size:0.9em;">{{ $comment->created_at->diffForHumans() }}</span>
                       <div class="comment-box" id="comment1" data-id="1">
-                        <div id="content-show-comment" style="padding: 10px;">{{ $comment->content }}</div>
+                        <div id="content-show-comment-{{$comment->id}}" style="padding: 10px;">{{ $comment->content }}</div>
 
                         <div class="comment-input-box-alter" id="comment-input-alter-{{ $comment->id }}" style="display:none; margin-top:10px; margin-bottom:30px;">
-                          <textarea id="text-content-comment" rows="2" style="width:97%;border-radius:8px;padding:8px 12px;border:1px solid #ddd;resize:none;" placeholder="Nhập bình luận..."></textarea>
+                          <textarea id="text-content-comment{{$comment->id}}" rows="2" style="width:97%;border-radius:8px;padding:8px 12px;border:1px solid #ddd;resize:none;" placeholder="Nhập bình luận..."></textarea>
                           <button class="cancel-comment-alt" id="cancel-comment-alt" onclick="cancelCommentEdit({{ $comment->id }})">Huỷ</button>
                           <button class="send-comment-alter-btn" data-id="{{ $comment->id }}" style="margin-top:6px;
                           background:#1877f2;color:#fff;border:none;padding:7px 18px;
                           border-radius:8px;cursor:pointer;float:right; margin-right:10px;" onclick="commentEdit({{$comment->id}})">Bình luận</button>
                         </div>
 
-                        <div class="more-menu" id="more-menu">
+                        <div class="more-menu" id="more-menu-{{$comment->id}}">
                             <div class="more-button">⋮</div>
                             <div class="dropdown-menu">
                               <ul>
@@ -496,14 +496,15 @@ document.addEventListener('DOMContentLoaded', function() {
             // Lấy dữ liệu từ data-attributes
             const id = this.dataset.id;
             const contentComment = this.dataset.title;
-            document.getElementById('text-content-comment').innerHTML = contentComment;
-            document.getElementById('content-show-comment').style.display = 'none';
+            
+            document.getElementById('text-content-comment'+id).innerHTML = contentComment;
+            document.getElementById('content-show-comment-'+id).style.display = 'none';
             document.getElementById('comment-input-alter-'+id).style.display = 'block';
-            document.getElementById('more-menu').style.display = 'none';
+            document.getElementById('more-menu-'+id).style.display = 'none';
         });
     });
     function commentEdit(commentId){
-      const contentComment = document.getElementById('text-content-comment').value;
+      const contentComment = document.getElementById('text-content-comment'+commentId).value;
       if(contentComment){
         fetch('{{ route('front.blog.comment') }}', {
                 method: 'POST',
@@ -538,9 +539,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function cancelCommentEdit(id){
-      document.getElementById('content-show-comment').style.display = 'block';
+      document.getElementById('content-show-comment-'+id).style.display = 'block';
       document.getElementById('comment-input-alter-'+id).style.display = 'none';
-      document.getElementById('more-menu').style.display = 'block';
+      document.getElementById('more-menu-'+id).style.display = 'block';
     }
 </script>
 <!-- Modal hiển thị bình luận -->

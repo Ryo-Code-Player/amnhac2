@@ -114,16 +114,16 @@
                             <span style="vertical-align: middle; margin-right: 8px;">
                                 <svg width="18" height="18" fill="#a259ff" viewBox="0 0 24 24"><path d="M9 17.5A2.5 2.5 0 1 1 4 17.5a2.5 2.5 0 0 1 5 0zm10-2.5V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v9.5a4.5 4.5 0 1 0 2 0V8h8v7a4.5 4.5 0 1 0 2 0z"></path></svg>
                             </span>
-                            <img class="zc-song-img" src="{{ asset($s->singer->photo ?? 'storage/' . auth()->user()->photo) }}" alt="" />
+                            <img class="zc-song-img" src="{{ asset($s->singer->photo ?? ((isset(auth()->user()->photo)) ? 'storage/' . auth()->user()->photo : null )) }}" alt="" />
                         </td>
                         <td><span class="zc-song-title">{{Str::limit($s->title, 25) }}</span><br><span style="color:#aaa;font-size:13px;">{{ $s['artist'] }}</span></td>
                         <td>{{ $s->created_at->diffForHumans() }}</td>
                         <td>
                             <button style="background:none;border:none;cursor:pointer;padding:0;margin-right:8px;" onclick="playSong('{{ asset($songUrl) }}',
-                            '{{ $s->title }}', '{{ $s->singer->alias ?? auth()->user()->full_name }}','{{ $s->singer->photo ?? 'storage/' . auth()->user()->photo }}',{{ $s->id }})">
+                            '{{ $s->title }}', '{{ $s->singer->alias ?? (auth()->user()->full_name ?? null) }}','{{ $s->singer->photo ?? ((isset(auth()->user()->photo)) ? 'storage/' . auth()->user()->photo : null ) }}',{{ $s->id }})">
                                 <svg width="28" height="28" fill="#fff" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#a259ff"/><polygon points="10,8 16,12 10,16" fill="#fff"/></svg>
                             </button>
-                            <button style="background:none;border:none;cursor:pointer;padding:0;margin-right:8px;" onclick="openAddPlaylistPopup('{{ $s->id }}', '{{ $s->title }}', '{{ $s->singer->photo ?? 'storage/' . auth()->user()->photo }}')">
+                            <button style="background:none;border:none;cursor:pointer;padding:0;margin-right:8px;" onclick="openAddPlaylistPopup('{{ $s->id }}', '{{ $s->title }}', '{{ $s->singer->photo ?? ((isset(auth()->user()->photo)) ? 'storage/' . auth()->user()->photo : null ) }}')">
                                 <svg width="28" height="28" fill="#fff" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#44406a"/><line x1="12" y1="8" x2="12" y2="16" stroke="#fff" stroke-width="2" stroke-linecap="round"/><line x1="8" y1="12" x2="16" y2="12" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
                             </button>
                             @if(auth()->check())

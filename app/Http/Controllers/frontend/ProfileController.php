@@ -119,9 +119,9 @@ class ProfileController extends Controller
             if (!$s) continue; 
             $songs[] = [
                 'title' => $s->title,
-                'artist' => $s->singer->alias ?? '',
+                'artist' => $s->singer->alias ?? (auth()->user()->full_name ?? null),
                 'src' => asset(str_replace(':8000/', '', $s->resourcesSong[0]->url ?? '')),
-                'thumb' => asset($s->singer->photo ?? ''),
+                'thumb' => asset($s->singer->photo ?? (auth()->user()->photo ?? null)),
             ];
         }
         return view('frontend.profile.playlist_slug', compact('playlist','songs','array_song'));
@@ -210,9 +210,9 @@ class ProfileController extends Controller
         $songs = $song->map(function($s) {
             return [
                 'title' => $s->title,
-                'artist' => $s->singer->alias ?? auth()->user()->full_name,
+                'artist' => $s->singer->alias ?? (auth()->user()->full_name ?? null),
                 'src' => asset(str_replace(':8000/', '', $s->resourcesSong[0]->url)),
-                'thumb' => asset($s->singer->photo ?? 'storage/' . auth()->user()->photo),
+                'thumb' => asset($s->singer->photo ?? (auth()->user()->photo ?? null)),
             ];
         });
         $array_view = [];

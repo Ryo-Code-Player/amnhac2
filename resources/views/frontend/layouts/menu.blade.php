@@ -47,13 +47,15 @@
       <nav>
         <ul>
             <li><a href="/" style="text-decoration:none;"><li class="{{ request()->is('/') ? 'active' : '' }}"><i class="fas fa-home"></i> Trang Chủ</li></a></li>
+            <li><a href="/category" style="text-decoration:none;color:#fff;"><li class="{{ request()->is('category') ? 'active' : '' }}"><i class="fas fas fa-list"></i> Thể loại</li></a></li>
             <li><a href="/zingchart" style="text-decoration:none;color:#fff;"><li class="{{ request()->is('zingchart') ? 'active' : '' }}"><i class="fas fa-chart-line"></i> Bảng xếp hạng</li></a></li>
             @if(auth()->check())
-                <li><a href="{{ route('front.blog.index',['id' => auth()->user()->id]) }}" style="text-decoration:none;color:#fff;"><li class="{{ request()->is('blog') ? 'active' : '' }}"><i class="fa-solid fa-blog"></i> Cộng đồng</li></a></li>
+                <li><a href="{{ route('front.blog.index',['id' => auth()->user()->id]) }}" style="text-decoration:none;color:#fff;"><li class="{{ request()->is('blog-index') ? 'active' : '' }}"><i class="fa-solid fa-blog"></i> Cộng đồng</li></a></li>
             @endif
-            <li><a href="{{ route('front.playlist') }}" style="text-decoration:none;color:#fff;"><li class="{{ request()->is('playlist') ? 'active' : '' }}" ><i class="fas fa-list"></i> Playlist</li></a></li>
+            {{-- <li><a href="{{ route('front.playlist') }}" style="text-decoration:none;color:#fff;"><li class="{{ request()->is('playlist') ? 'active' : '' }}" ><i class="fas fa-list"></i> Playlist</li></a></li> --}}
             <li><a href="{{ route('front.fanclub') }}" style="text-decoration:none;color:#fff;"><li class="{{ request()->is('fanclub') ? 'active' : '' }}" ><i class="fas fa-compact-disc"></i> Fanclub</li></a></li>
-        </ul>
+            {{-- <li><a href="/create-blog" style="text-decoration:none;color:#fff;"><li class="{{ request()->is('create-blog') ? 'active' : '' }}" ><i class="fas fa-user"></i>Tạo Blog</li></a></li> --}}
+          </ul>
       </nav>
     </div>
 </div>

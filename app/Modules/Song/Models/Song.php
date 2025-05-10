@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str; // Thêm dòng này
 use App\Modules\Resource\Models\Resource;
 use App\Modules\Tag\Models\Tag;
+use App\Models\User;
 
 class Song extends Model
 {
@@ -135,5 +136,9 @@ public function tags()
         return Str::slug($title);
     }
 
-    
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id'); // Tương tự như trên
+    }
+
 }

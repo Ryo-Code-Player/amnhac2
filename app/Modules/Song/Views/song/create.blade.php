@@ -34,7 +34,7 @@
                     </select>
                 </div>
 
-                <div class="mt-3">
+                {{-- <div class="mt-3">
                     <label for="singer_id" class="form-label">Ca sĩ</label>
                     <select name="singer_id" class="form-select mt-2 sm:mr-2" required>
                         <option value="">Chọn ca sĩ</option>
@@ -42,7 +42,7 @@
                             <option value="{{ $singer->id }}" {{ old('singer_id') == $singer->id ? 'selected' : '' }}>{{ $singer->alias }}</option>
                         @endforeach
                     </select>
-                </div>
+                </div> --}}
 
                 <div class="mt-3">
                     <label for="musictype_id" class="form-label">Thể loại</label>

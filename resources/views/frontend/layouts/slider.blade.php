@@ -9,8 +9,7 @@
     }
     .slider {
       position: relative;
-      width: 80%;
-      margin: 50px auto;
+      width: 100%;
       overflow: hidden;
       border-radius: 10px;
     }
@@ -39,6 +38,7 @@
       padding: 10px 20px;
       cursor: pointer;
       font-size: 18px;
+      display: none
     }
     .control-btn:hover {
       background: rgba(0,0,0,0.7);
@@ -64,9 +64,12 @@
 <div class="body_slider">
     <div class="slider">
         <div class="slides">
-          <div class="slide" style="background-image: url('https://picsum.photos/id/1015/800/300');"></div>
-          <div class="slide" style="background-image: url('https://picsum.photos/id/1016/800/300');"></div>
-          <div class="slide" style="background-image: url('https://picsum.photos/id/1018/800/300');"></div>
+          @forEach($music_type_slider as $key=>$c)
+            <div class="slide" style="background-image: url('{{$c->photo}}');"></div>
+          @endforeach
+          
+          {{-- <div class="slide" style="background-image: url('http://imedia.imuzik.com.vn/media2/images/imuzikp3/73/bc/c7/68076ae358f99.jpg');"></div>
+          <div class="slide" style="background-image: url('http://imedia.imuzik.com.vn/media2/images/imuzikp3/2f/af/f2/67d2aa8c9f3b0.jpg');"></div> --}}
         </div>
         <div class="controls">
           <button class="control-btn" id="prev">&#10094;</button>
@@ -78,6 +81,8 @@
         <span class="dot active" data-index="0"></span>
         <span class="dot" data-index="1"></span>
         <span class="dot" data-index="2"></span>
+        <span class="dot" data-index="3"></span>
+        <span class="dot" data-index="4"></span>
       </div>
       
       <script>

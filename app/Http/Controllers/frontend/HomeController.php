@@ -13,6 +13,9 @@ use App\Modules\Song\Models\Song;
 use App\Modules\Singer\Models\Singer;
 use Illuminate\Support\Facades\Storage;
 use App\Modules\Resource\Models\Resource;
+use App\Modules\Playlist\Models\Playlist;
+use App\Modules\Fanclub\Models\Fanclub;
+
 
 class HomeController extends Controller
 {
@@ -25,7 +28,7 @@ class HomeController extends Controller
     }
     public function index()
     {
-        $song = Song::where('status', 'active')->with('singer')
+        $song = Song::where('status', 'active')->with('singer')->with('user')
         ->orderBy('id', 'desc')
         ->limit(6)
         ->get();
@@ -41,8 +44,20 @@ class HomeController extends Controller
         $blog = Blog::where('status', 'active')->orderBy('id', 'desc')->limit(5)->get();
 
         $Singer = Singer::where('status', 'active')->orderBy('id', 'desc')->limit(4)->get();
+
+        $music_type = MusicType::where('status', 'active')->orderBy('id', 'desc')->limit(3)->get();
+
+        $music_type_slider = MusicType::where('status', 'active')->orderBy('created_at', 'desc')->limit(5)->get();
         
-        return view ('frontend.layouts.content', compact('songs','song','blog','Singer'));
+        $song_rank = Song::where('status', 'active')->orderBy('view','desc')->with('singer')->limit(5)->get();
+
+        $playlist = Playlist::where('type','public')->limit(4)->get();
+
+        $fanclubs = Fanclub::where('status','active')
+        ->with(relations: 'user')
+        ->orderBy('created_at','desc')->limit(3)->get();
+
+        return view ('frontend.layouts.content', compact('songs','song','blog','Singer','music_type', 'song_rank', 'playlist','fanclubs','music_type_slider'));
 
     }
 

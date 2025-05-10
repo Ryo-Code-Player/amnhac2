@@ -1,4 +1,4 @@
-<div class="main" style="background-color:#1e1e2f">
+<div class="main" style="background-color:rgb(83 174 209)">
     <!-- Header -->
     <class="header">
         <div class="container">
@@ -21,6 +21,7 @@
                     <div class="dropdown-content" id="user-dropdown-content" style="display:none;position:absolute;right:0;background:#fff;min-width:160px;box-shadow:0 8px 16px rgba(0,0,0,0.2);z-index:1;border-radius:6px;overflow:hidden;">
                         <a href="" style="color:#333;padding:12px 16px;display:block;text-decoration:none;">Quản lý thông tin</a>
                         <a href="#" id="event-manage-link" style="color:#333;padding:12px 16px;display:block;text-decoration:none;">Quản lý đăng kí sự kiện</a>
+                        <a href="{{ route('front.playlist') }}" style="color:#333;padding:12px 16px;display:block;text-decoration:none;">Playlist</a>
 
                         <form method="POST" action="{{ route('admin.logout') }}" style="margin:0;">
                             @csrf
@@ -42,7 +43,7 @@
                 });
             </script>
             @else
-            <div class="user" id="user-info" style="margin-top:54px">
+            <div class="user" id="user-info" style="margin-top:54px; margin-left:auto">
                 <button id="login-btn" style="background:none;border:none;color:#fff;font-size:16px;cursor:pointer;">Đăng nhập</button>
             </div>
             @endif
