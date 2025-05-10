@@ -14,6 +14,7 @@
     <meta name="description" content= "{{isset($description)?strip_tags($description):$detail->memory}}"/>
     <meta name="author" content="{{$detail?$detail->short_name:''}}">
     <title>{{$detail?$detail->company_name:''}} - Âm nhạc của tương lai</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('style.css') }}">

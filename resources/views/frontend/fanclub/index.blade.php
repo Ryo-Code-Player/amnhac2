@@ -108,9 +108,10 @@
 <style>
 .fanclub-container {
   display: flex;
-  background: #18182a;
   min-height: 80vh;
   color: #fff;
+  margin-top: 16px;
+  margin-bottom: 32px;
 }
 .sidebar {
   width: 200px;
@@ -141,6 +142,11 @@
   flex: 1;
   padding: 40px;
   position: relative;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #18182a;
+  border-radius: 16px
 }
 .tabs {
   display: flex;

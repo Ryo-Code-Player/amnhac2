@@ -1,8 +1,8 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: #170f23;
-    color: #fff;
+    background: #fff;
+    color: #000000;
 }
 
 .sidebar {
@@ -48,12 +48,7 @@ body {
     color: #a0a0a0;
     letter-spacing: 1px;
 }
-.main {
-    margin-left: 220px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+
 header {
     display: flex;
     justify-content: space-between;
@@ -102,13 +97,15 @@ header .user img {
     margin-bottom: 32px;
 }
 .featured h2, .zingchart h2 {
-    color: #fff;
+    color: #000000;
     font-size: 22px;
     margin-bottom: 16px;
+    text-transform: uppercase;
 }
 .song-list {
     display: flex;
-    gap: 24px;
+    flex-wrap: wrap;
+    gap: 34px;
 }
 .song-card {
     background: #2f2739;
@@ -117,7 +114,7 @@ header .user img {
     display: flex;
     align-items: center;
     gap: 16px;
-    width: 260px;
+    width: 268px;
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
@@ -274,9 +271,10 @@ header .user img {
     margin-bottom: 32px;
 }
 .album-section h2 {
-    color: #fff;
+    color: #000000;
     font-size: 28px;
     margin-bottom: 24px;
+    text-transform: uppercase;
 }
 .album-list {
     display: flex;
@@ -565,9 +563,10 @@ header .user img {
     margin: 48px 0 0 0;
 }
 .blog-section h2 {
-    color: #fff;
+    color: #000000;
     font-size: 28px;
     margin-bottom: 24px;
+    text-transform: uppercase;
 }
 .blog-list {
     display: flex;
@@ -640,4 +639,9 @@ header .user img {
     .blog-list { gap: 8px; }
     .blog-card { width: 100%; min-width: 0; }
     .blog-card img { height: 80px; }
+}
+@media (min-width: 1200px) {
+    .container {
+        width: 1060px
+    }
 }

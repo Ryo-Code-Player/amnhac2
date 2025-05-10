@@ -44,12 +44,15 @@ class BlogFEController extends Controller
         }
         $music_type = MusicType::where('status','active')->get();
         $company = MusicCompany::where('status','active')->get();
+        $user_id = auth()->user()->id;
         
         $allSongs = collect();
         foreach($singer as $s){
             $allSongs = $allSongs->merge(Song::where('singer_id', $s->id)->with('singer')->get());
         }
-        // dd($allSongs);
+        $allSongs2 = Song::where('user_id', $user_id)->get();
+        $allSongs = $allSongs->merge($allSongs2);
+        // dd($allSongs);die;
         return view('frontend.blog.index', 
         compact('posts','post_user','image_user','user',
         'follow','following','music_type','company','singer','allSongs'));
@@ -131,6 +134,16 @@ class BlogFEController extends Controller
 
     public function comment(Request $request)
     {
+        if(isset($request->comment_id)){
+            $comment = Comment::findOrFail($request->comment_id);
+            $comment->update([
+                'content' => $request->comment_content,
+            ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Chỉnh sửa bình luận thành công',
+            ], 200);
+        }
         $comment = Comment::create([
             'post_id' => $request->post_id,
             'user_id' => auth()->user()->id,
@@ -216,6 +229,16 @@ class BlogFEController extends Controller
         }
        
 
+        
+    }
+
+    public function deleteComment($id)
+    {
+       Comment::findOrFail($id)->delete();
+       return response()->json([
+            'success' => true,
+            'message' => 'Bình luận đã bị xoá',
+        ], 200);
         
     }
 
@@ -357,47 +380,88 @@ class BlogFEController extends Controller
     public function songStore(Request $request)
     {
 
-                $singer = Singer::where('id', $request->singer_id)->first();
-                if(!$singer){
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Ca sĩ không tồn tại',
-                    ], 400);
-                }
-            $resource = Resource::create([
-                'title' => $request->title,
-                'slug' => Str::slug($request->title),
-                'file_type' => 'URL',
-                'file_size' => 0,
-                'url' => $request->resource,
-                'code' => 'songs',
-                'type_code' => 'order',
-            ]);
-            if($resource){
-                $array = [];
-                $array['song_id'] = $request->singer_id;
-                $array['resource_id'] = $resource->id;
-                $check[] = $array;
-                $song = Song::create([
+            $singer = Singer::where('id', $request->singer_id)->first();
+                // if(!$singer){
+                //     return response()->json([
+                //         'success' => false,
+                //         'message' => 'Ca sĩ không tồn tại',
+                //     ], 400);
+                // }
+
+
+            if ($request->song_id) {
+                // Nếu có song_id → chỉnh sửa
+                $resource = Resource::findOrFail($request->resource_id);
+                $song = Song::findOrFail($request->song_id);
+                $resource->update([
                     'title' => $request->title,
                     'slug' => Str::slug($request->title),
-                    'singer_id' => $request->singer_id,
-                    'summary' => $request->summary,
-                    'content' => $request->content,
-                    'status' => 'active',
-                    'company_id' => $singer->company_id,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                    'musictype_id' => $singer->musicType->id,
-                    'resources' => json_encode($check),
+                    'file_type' => 'URL',
+                    'file_size' => 0,
+                    'url' => $request->resource,
+                    'code' => 'songs',
+                    'type_code' => 'order',
                 ]);
+                if($resource){
+                    $array = [];
+                    $array['song_id'] = $request->singer_id??null;
+                    $array['resource_id'] = $resource->id;
+                    $check[] = $array;
+                    $song->update([
+                        'title' => $request->title,
+                        'slug' => Str::slug($request->title),
+                        'singer_id' => $request->singer_id??null,
+                        'summary' => $request->summary,
+                        'content' => $request->content,
+                        'status' => 'active',
+                        'company_id' => $singer->company_id ?? null,
+                        'musictype_id' => $singer->musicType->id ?? null,
+                        'resources' => json_encode($check),
+                    ]);
+                }
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Chỉnh sửa bài hát thành công!',
+                    'data' => $song
+                ], 200);
+                
+            } else {
+                // Nếu không có song_id → tạo mới
+                $resource = Resource::create([
+                    'title' => $request->title,
+                    'slug' => Str::slug($request->title),
+                    'file_type' => 'URL',
+                    'file_size' => 0,
+                    'url' => $request->resource,
+                    'code' => 'songs',
+                    'type_code' => 'order',
+                ]);
+                if($resource){
+                    $array = [];
+                    $array['song_id'] = $request->singer_id??null;
+                    $array['resource_id'] = $resource->id;
+                    $check[] = $array;
+                    $song = Song::create([
+                        'title' => $request->title,
+                        'slug' => Str::slug($request->title),
+                        'singer_id' => $request->singer_id??null,
+                        'summary' => $request->summary,
+                        'content' => $request->content,
+                        'status' => 'active',
+                        'company_id' => $singer->company_id ?? null,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                        'musictype_id' => $singer->musicType->id ?? null,
+                        'resources' => json_encode($check),
+                        'user_id' => $request->singer_id ? null : auth()->user()->id,
+                    ]);
+                }
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Lưu bài hát thành công!',
+                    'data' => $song
+                ], 200);
             }
-            return response()->json([
-                'success' => true,
-                'message' => 'Lưu bài hát thành công!',
-                'data' => $song
-            ], 200);
-          
     }
 
     public function songDestroy($id)

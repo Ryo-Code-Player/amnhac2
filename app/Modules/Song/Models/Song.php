@@ -29,6 +29,7 @@ class Song extends Model
         'composer_id', // Id của tác giả sáng tác
         'singer_id',   // Id của ca sĩ thể hiện
         'view',
+        'user_id'
     ];
 
     // Nếu bạn sử dụng JSON để lưu trữ resources

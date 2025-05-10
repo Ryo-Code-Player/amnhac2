@@ -11,15 +11,17 @@
     </div>
     <!-- end cursor -->
 
-    <!-- start header -->
+    {{-- <!-- start header -->
     @include('frontend.layouts.header')
-    <!-- end header -->
+    <!-- end header --> --}}
 
 
     <!-- start section -->
     @include('frontend.layouts.section')
 
     @include('frontend.layouts.footer')
+
+    @include('frontend.layouts.footer_v2')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- YouTube Video Player Blur Background -->
@@ -340,9 +342,9 @@
         $songs_array = $check->map(function($s) {
             return [
                 'title' => $s->title,
-                'artist' => $s->singer->alias,
+                'artist' => $s->singer->alias ?? (isset(auth()->user()->full_name) ? auth()->user()->full_name : null),
                 'src' => asset(str_replace(':8000/', '', $s->resourcesSong[0]->url)),
-                'thumb' => asset($s->singer->photo),
+                'thumb' => asset($s->singer->photo ?? (isset(auth()->user()->photo) ? auth()->user()->photo : null)),
             ];
         });
     

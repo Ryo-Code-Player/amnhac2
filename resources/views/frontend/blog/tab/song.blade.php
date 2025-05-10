@@ -10,33 +10,38 @@
       <div id="add-song-modal" class="zing-modal" style="color:black">
         <div class="zing-modal-content">
           <span class="zing-modal-close" id="close-add-song-modal">&times;</span>
-          <h2 class="zing-modal-title">Thêm Bài Hát Mới</h2>
+          <h2 class="zing-modal-title" id="infor_form">Thêm Bài Hát Mới</h2>
           <form id="add-song-form" enctype="multipart/form-data">
+            <input type="hidden" name="song_id" id="songId">
+            <input type="hidden" name="resource_id" id="resourceId">
             <div class="zing-form-group">
               <label>Tên bài hát</label>
-              <input type="text" name="title" class="zing-input" required style="width:95%;">
+              <input type="text" id="songTitle" name="title" class="zing-input" required style="width:95%;">
             </div>
             <div class="zing-form-group">
                 <label>Link bài hát</label>
-                <input type="text" name="resource" class="zing-input" style="width:95%;">
+                <input type="text" id="songUrl" name="resource" class="zing-input" style="width:95%;">
             </div>
-            <div class="zing-form-group">
-              <label>Ca sĩ</label>
-              <select name="singer_id" class="zing-input" required>
-                    <option value="">Chọn ca sĩ</option>
-                    @foreach ($singer as $s)
-                        <option value="{{ $s->id }}">{{ $s->alias }}</option>
-                    @endforeach
-              </select>
-            </div>
+            @if(Auth::user()->role === 'admin')
+              <div class="zing-form-group">
+                <label>Ca sĩ</label>
+                <select name="singer_id" class="zing-input" required>
+                      <option value="">Chọn ca sĩ</option>
+                      @foreach ($singer as $s)
+                          <option value="{{ $s->id }}">{{ $s->alias }}</option>
+                      @endforeach
+                </select>
+              </div>
+            @endif
+            
           
             <div class="zing-form-group">
               <label>Mô tả ngắn</label>
-              <textarea name="summary" class="zing-input" style="width:95%;"></textarea>
+              <textarea name="summary" class="zing-input" id="songSummary" style="width:95%;"></textarea>
             </div>
             <div class="zing-form-group">
                 <label>Nội dung bài hát</label>
-                <textarea row="3" name="content" class="zing-input" style="width:95%;"></textarea>
+                <textarea row="3" name="content" class="zing-input" id="songContent" style="width:95%;"></textarea>
               </div>
             <div class="zing-form-group">
               <label>Trạng thái</label>
@@ -45,7 +50,7 @@
                 <option value="inactive">Inactive</option>
               </select>
             </div>
-            <button type="submit" class="zing-btn-save">Lưu</button>
+            <button type="submit" class="zing-btn-save" id="btn-save-form">Lưu</button>
           </form>
         </div>
       </div>
@@ -156,6 +161,20 @@
         cursor: pointer;
         transition: background 0.2s;
       }
+      .editSongBtn{
+        background: #8b918f;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .editSongBtn:hover{
+        background: #616b68;
+      }
       .follower-delete-btn:hover {
         background: #d9363e;
       }
@@ -184,16 +203,29 @@
                 $songUrl = str_replace(':8000/', '', $s->resourcesSong[0]->url);  
             @endphp
             <div class="follower-card-check">
-              <img src="{{ $s->singer->photo ? asset($s->singer->photo) : 'https://i.pinimg.com/736x/bc/43/98/bc439871417621836a0eeea768d60944.jpg' }}" class="follower-avatar" alt="avatar">
+              <img src="{{ ($s->singer->photo ?? 'storage/' . auth()->user()->photo) ? asset($s->singer->photo ?? 'storage/' . auth()->user()->photo) : 'https://i.pinimg.com/736x/bc/43/98/bc439871417621836a0eeea768d60944.jpg' }}" class="follower-avatar" alt="avatar">
               <div class="follower-info">
                 <div class="follower-name">{{ $s->title }}</div>
-                <div class="follower-email"><i class="fa fa-envelope"></i> {{ $s->singer->alias }}</div>
+                <div class="follower-email"><i class="fa fa-envelope"></i> {{ $s->singer->alias ?? auth()->user()->full_name }}</div>
               </div>
               <a onclick="playSong('{{ asset($songUrl) }}',
-                     '{{ $s->title }}', '{{ $s->singer->alias }}','{{ $s->singer->photo }}',{{ $s->id }})" class="follower-view-btn">Nghe nhạc</a>
+                     '{{ $s->title }}', '{{ $s->singer->alias ?? auth()->user()->full_name }}','{{ $s->singer->photo ?? 'storage/' . auth()->user()->photo }}',{{ $s->id }})" class="follower-view-btn">Nghe nhạc</a>
               
               @if(auth()->user()->id == $user->id)
                 <button class="follower-delete-btn" data-id="{{ $s->id }}">Xóa</button>
+                <div>
+                    <button class="editSongBtn"
+                        data-id="{{ $s->id }}",
+                        data-resourceid="{{ $s->resourcesSong[0]->id }}"
+                        data-title="{{ $s->title }}"
+                        data-url="{{ $songUrl }}"
+                        data-singer="{{ $s->singer_id }}"
+                        data-summary="{{ $s->summary }}"
+                        data-content="{{ $s->content }}"
+                        data-active="{{ $s->active }}">
+                        Chỉnh sửa
+                    </button>
+                </div>
               @endif
               <!-- <button class="follower-share-btn" data-url="{{ asset($songUrl) }}"><i class="fa-solid fa-square-share-nodes"></i></button> -->
               <a class="follower-view-btn"
@@ -253,6 +285,31 @@
         }
       };
 
+      // Sự kiện nhất nút chỉnh sửa
+      document.querySelectorAll('.editSongBtn').forEach(button => {
+          button.addEventListener('click', function() {
+              // Lấy dữ liệu từ data-attributes
+              const id = this.dataset.id;
+              const resource_id = this.dataset.resourceid;
+              const title = this.dataset.title;
+              const url = this.dataset.url;
+              const singer = this.dataset.singer;
+              const summary = this.dataset.summary;
+              const content = this.dataset.content;
+              const active = this.dataset.active;
+
+              document.getElementById('songId').value = id;
+              document.getElementById('resourceId').value = resource_id;
+              document.getElementById('songTitle').value = title;
+              document.getElementById('songUrl').value = url;
+              document.getElementById('songSummary').value = summary;
+              document.getElementById('songContent').value = content;
+              document.getElementById('infor_form').innerHTML = "Chỉnh sửa bài hát";
+              document.getElementById('btn-save-form').innerHTML = "Lưu chỉnh sửa";
+              document.getElementById('add-song-modal').style.display = 'flex';
+          });
+      });
+
       // Sự kiện submit form thêm bài hát mới
       const addSongForm = document.getElementById('add-song-form');
       addSongForm.onsubmit = function(e) {
@@ -271,7 +328,7 @@
           if(data.success){
             document.getElementById('add-song-modal').style.display = 'none';
             addSongForm.reset();
-            Notiflix.Notify.success('Thêm bài hát thành công!');
+            Notiflix.Notify.success(data.message);
             setTimeout(() => {
               window.location.reload();
             }, 1000);

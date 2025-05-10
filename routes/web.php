@@ -120,6 +120,7 @@ Route::group( [ 'as'=>'front.'],function(){
     Route::post('/blog-like',[BlogFEController::class,'like'])->name('blog.like');
     Route::delete('/blog-delete',[BlogFEController::class,'delete'])->name('blog.delete');
     Route::post('/blog-comment',[BlogFEController::class,'comment'])->name('blog.comment');
+    Route::delete('/blog-delete-comment/{comment_id}',[BlogFEController::class,'deleteComment'])->name('blog.deleteComment');
     Route::post('/blog-edit',[BlogFEController::class,'edit'])->name('blog.edit');
     Route::post('/blog-like-comment',[BlogFEController::class,'likeComment'])->name('blog.likeComment');
     Route::post('/blog-update-profile',[BlogFEController::class,'updateProfile'])->name('profile.updateProfile');
