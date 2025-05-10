@@ -210,9 +210,9 @@ class ProfileController extends Controller
         $songs = $song->map(function($s) {
             return [
                 'title' => $s->title,
-                'artist' => $s->singer->alias,
+                'artist' => $s->singer->alias ?? auth()->user()->full_name,
                 'src' => asset(str_replace(':8000/', '', $s->resourcesSong[0]->url)),
-                'thumb' => asset($s->singer->photo),
+                'thumb' => asset($s->singer->photo ?? 'storage/' . auth()->user()->photo),
             ];
         });
         $array_view = [];

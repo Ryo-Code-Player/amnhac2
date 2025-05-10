@@ -1,47 +1,53 @@
-<div class="main">
+<div class="main" style="background-color:#1e1e2f">
     <!-- Header -->
-    <header>
-        <div class="search" style="opacity: 0">
-            <input type="text" placeholder="Tìm kiếm bài hát, nghệ sĩ..." id="search-input" autocomplete="off">
-            <i class="fas fa-search"></i>
-            <div class="search-suggest" id="search-suggest"></div>
-        </div>
-        @if(auth()->check())
-            <div class="user-dropdown" style="position: relative; display: inline-block;">
-                <div id="user-toggle" style="display: flex; align-items: center; cursor: pointer;">
-                    <img src="{{auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://i.pinimg.com/736x/bc/43/98/bc439871417621836a0eeea768d60944.jpg' }}" alt="User" style="width:36px;height:36px;border-radius:50%;border:2px solid #7200a1;object-fit:cover;">
-                    <span style='margin-left:8px;'>{{ auth()->user()->email }}</span>
-                    <i class="fas fa-caret-down" style="margin-left: 6px;"></i>
-                </div>
-                <div class="dropdown-content" id="user-dropdown-content" style="display:none;position:absolute;right:0;background:#fff;min-width:160px;box-shadow:0 8px 16px rgba(0,0,0,0.2);z-index:1;border-radius:6px;overflow:hidden;">
-                    <a href="" style="color:#333;padding:12px 16px;display:block;text-decoration:none;">Quản lý thông tin</a>
-                    <a href="#" id="event-manage-link" style="color:#333;padding:12px 16px;display:block;text-decoration:none;">Quản lý đăng kí sự kiện</a>
+    <class="header">
+        <div class="container">
+            <!-- start header -->
+            @include('frontend.layouts.menu')
+            <!-- end header -->
 
-                    <form method="POST" action="{{ route('admin.logout') }}" style="margin:0;">
-                        @csrf
-                        <button type="submit" style="width:100%;background:none;border:none;color:#333;padding:12px 16px;text-align:left;cursor:pointer;">Đăng xuất</button>
-                    </form>
-                </div>
+            <div class="search" style="opacity: 0; display:none">
+                <input type="text" placeholder="Tìm kiếm bài hát, nghệ sĩ..." id="search-input" autocomplete="off">
+                <i class="fas fa-search"></i>
+                <div class="search-suggest" id="search-suggest"></div>
             </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var toggle = document.getElementById('user-toggle');
-                var dropdown = document.getElementById('user-dropdown-content');
-                toggle.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            @if(auth()->check())
+                <div class="user-dropdown" style="position: relative; display: inline-block; top:43px;margin-left:40px">
+                    <div id="user-toggle" style="display: flex; align-items: center; cursor: pointer;">
+                        <img src="{{auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://i.pinimg.com/736x/bc/43/98/bc439871417621836a0eeea768d60944.jpg' }}" alt="User" style="width:36px;height:36px;border-radius:50%;border:2px solid #7200a1;object-fit:cover;">
+                        <span style='margin-left:8px;'>{{ auth()->user()->email }}</span>
+                        <i class="fas fa-caret-down" style="margin-left: 6px;"></i>
+                    </div>
+                    <div class="dropdown-content" id="user-dropdown-content" style="display:none;position:absolute;right:0;background:#fff;min-width:160px;box-shadow:0 8px 16px rgba(0,0,0,0.2);z-index:1;border-radius:6px;overflow:hidden;">
+                        <a href="" style="color:#333;padding:12px 16px;display:block;text-decoration:none;">Quản lý thông tin</a>
+                        <a href="#" id="event-manage-link" style="color:#333;padding:12px 16px;display:block;text-decoration:none;">Quản lý đăng kí sự kiện</a>
+
+                        <form method="POST" action="{{ route('admin.logout') }}" style="margin:0;">
+                            @csrf
+                            <button type="submit" style="width:100%;background:none;border:none;color:#333;padding:12px 16px;text-align:left;cursor:pointer;">Đăng xuất</button>
+                        </form>
+                    </div>
+                </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var toggle = document.getElementById('user-toggle');
+                    var dropdown = document.getElementById('user-dropdown-content');
+                    toggle.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                    });
+                    document.addEventListener('click', function() {
+                        dropdown.style.display = 'none';
+                    });
                 });
-                document.addEventListener('click', function() {
-                    dropdown.style.display = 'none';
-                });
-            });
-        </script>
-        @else
-        <div class="user" id="user-info">
-            <button id="login-btn" style="background:none;border:none;color:#fff;font-size:16px;cursor:pointer;">Đăng nhập</button>
+            </script>
+            @else
+            <div class="user" id="user-info" style="margin-top:54px">
+                <button id="login-btn" style="background:none;border:none;color:#fff;font-size:16px;cursor:pointer;">Đăng nhập</button>
+            </div>
+            @endif
         </div>
-        @endif
-    </header>
+    </div>
 
     <!-- Content -->
     @yield('content')
@@ -190,6 +196,14 @@
 </div>
 
 <style>
+.container { 
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    color: #ffffff !important;
+}    
 #profile-modal {
     display: none;
     position: fixed;

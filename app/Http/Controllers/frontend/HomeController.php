@@ -25,23 +25,22 @@ class HomeController extends Controller
     }
     public function index()
     {
-        
         $song = Song::where('status', 'active')->with('singer')
         ->orderBy('id', 'desc')
-        ->limit(5)
+        ->limit(6)
         ->get();
         $songs = $song->map(function($s) {
             return [
                 'title' => $s->title,
-                'artist' => $s->singer->alias,
+                'artist' => $s->singer->alias ?? (auth()->user()->full_name ?? null),
                 'src' => asset(str_replace(':8000/', '', $s->resourcesSong[0]->url)),
-                'thumb' => asset($s->singer->photo),
+                'thumb' => asset($s->singer->photo ?? (auth()->user()->photo ?? null)),
             ];
         });
      
         $blog = Blog::where('status', 'active')->orderBy('id', 'desc')->limit(5)->get();
 
-        $Singer = Singer::where('status', 'active')->orderBy('id', 'desc')->limit(5)->get();
+        $Singer = Singer::where('status', 'active')->orderBy('id', 'desc')->limit(4)->get();
         
         return view ('frontend.layouts.content', compact('songs','song','blog','Singer'));
 

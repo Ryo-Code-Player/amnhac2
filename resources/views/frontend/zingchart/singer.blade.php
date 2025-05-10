@@ -73,22 +73,22 @@
 
         
     </style>
-
-    <div class="singer-list">
-        @foreach($Singer as $s)
-            <a href="{{ route('front.zingsinger_slug', $s->slug) }}" style="text-decoration: none;color: #fff;">
-                <div class="singer-card">
-                    <div class="singer-avatar-wrapper">
-                        <img class="singer-avatar" src="{{ asset($s->photo) }}" alt="{{ $s->alias }}">
-                        <span class="live-badge">{{ optional($s->musicType)->title ?? 'N/A' }}</span>
-                        <img class="singer-logo" src="{{ asset($s->photo) }}" alt="{{ $s->alias }}">
+    <div class="container">
+        <div class="singer-list">
+            @foreach($Singer as $s)
+                <a href="{{ route('front.zingsinger_slug', $s->slug) }}" style="text-decoration: none;color: #fff;">
+                    <div class="singer-card">
+                        <div class="singer-avatar-wrapper">
+                            <img class="singer-avatar" src="{{ asset($s->photo) }}" alt="{{ $s->alias }}">
+                            <span class="live-badge">{{ optional($s->musicType)->title ?? 'N/A' }}</span>
+                            <img class="singer-logo" src="{{ asset($s->photo) }}" alt="{{ $s->alias }}">
+                        </div>
+                        <div class="singer-name">{{ $s->alias }}</div>
+                        <div class="singer-listeners">{{ optional($s->company)->title ?? 'N/A' }}</div>
                     </div>
-                    <div class="singer-name">{{ $s->alias }}</div>
-                    <div class="singer-listeners">{{ optional($s->company)->title ?? 'N/A' }}</div>
-                </div>
-            </a>
-        @endforeach
+                </a>
+            @endforeach
+        </div>
     </div>
-
   
 @endsection
