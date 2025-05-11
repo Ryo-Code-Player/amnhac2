@@ -139,7 +139,28 @@
                     <img src="{{  asset('storage/' . optional($comment->user)->photo) }}" alt="" class="avatar-small">
                     <div>
                       <b>{{ optional($comment->user)->full_name }}</b> <span style="color:#888; font-size:0.9em;">{{ $comment->created_at->diffForHumans() }}</span>
-                      <div style="padding: 10px;">{{ $comment->content }}</div>
+                      <div class="comment-box" id="comment1" data-id="1">
+                        <div id="content-show-comment-{{$comment->id}}" style="padding: 10px;">{{ $comment->content }}</div>
+
+                        <div class="comment-input-box-alter" id="comment-input-alter-{{ $comment->id }}" style="display:none; margin-top:10px; margin-bottom:30px;">
+                          <textarea id="text-content-comment{{$comment->id}}" rows="2" style="width:97%;border-radius:8px;padding:8px 12px;border:1px solid #ddd;resize:none;" placeholder="Nhập bình luận..."></textarea>
+                          <button class="cancel-comment-alt" id="cancel-comment-alt" onclick="cancelCommentEdit({{ $comment->id }})">Huỷ</button>
+                          <button class="send-comment-alter-btn" data-id="{{ $comment->id }}" style="margin-top:6px;
+                          background:#1877f2;color:#fff;border:none;padding:7px 18px;
+                          border-radius:8px;cursor:pointer;float:right; margin-right:10px;" onclick="commentEdit({{$comment->id}})">Bình luận</button>
+                        </div>
+
+                        <div class="more-menu" id="more-menu-{{$comment->id}}">
+                            <div class="more-button">⋮</div>
+                            <div class="dropdown-menu">
+                              <ul>
+                                <li class="edit-comment-btn" data-id="{{ $comment->id }}"data-title="{{ $comment->content }}">Chỉnh sửa</li>
+                                <li class="delete-comment-btn" data-id="{{ $comment->id }}">Xoá</li>
+                              </ul>
+                            </div>
+                        </div>
+                      </div>
+                      
                       <div style="margin-top:4px;display:flex;gap:12px;align-items:center;">
                         <button class="comment-like-btn" data-id="{{ $comment->id }}" data-liked="{{ $comment->like }}" data-count="{{ $comment->like }}" style="background:none;border:none;color:#888;cursor:pointer;font-size:1em;display:flex;align-items:center;gap:4px;">
                           @if ($comment->commentChildrenUser->contains('user_id', $user->id))
@@ -185,6 +206,14 @@
             <button class="show-more-comments">Xem thêm bình luận</button>
           </div>
         @endforeach
+      </div>
+      <div id="confirmPopup" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); 
+    justify-content:center; align-items:center;">
+          <div style="background:white; padding:20px; border-radius:8px; text-align:center;">
+              <p>Bạn có chắc chắn muốn xoá comment này không?</p>
+              <button class="confirm-delete" id="confirmDelete">Xoá</button>
+              <button class="cancel-delete" id="cancelDelete">Huỷ</button>
+          </div>
       </div>
     </div>
   </div>
@@ -395,6 +424,125 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle menu ba chấm
+        document.querySelectorAll('.more-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const dropdown = this.nextElementSibling;
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        // Đóng menu khi click ra ngoài
+        window.addEventListener('click', function() {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.style.display = 'none';
+            });
+        });
+    });
+
+    let commentIdToDelete = null;
+    document.querySelectorAll('.delete-comment-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            commentIdToDelete = this.dataset.id;
+            document.getElementById('confirmPopup').style.display = 'flex';
+        });
+    });
+    document.getElementById('cancelDelete').addEventListener('click', function() {
+        document.getElementById('confirmPopup').style.display = 'none';
+        commentIdToDelete = NULL;
+    });
+
+    document.getElementById('confirmDelete').addEventListener('click', function() {
+      console.log(commentIdToDelete);
+      
+      if (commentIdToDelete) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch(`/blog-delete-comment/${commentIdToDelete}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+              Notiflix.Notify.success('Bình luận đã bị xoá');
+              setTimeout(() => {
+                  window.location.reload();
+              }, 1000);
+            
+            } else {
+                return response.json().then(data => {
+                    throw new Error(data.message || 'Xoá thất bại!');
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi:', error);
+            Notiflix.Notify.failure('Xoá thất bại!');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        });
+      }  
+    });  
+
+    document.querySelectorAll('.edit-comment-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            // Lấy dữ liệu từ data-attributes
+            const id = this.dataset.id;
+            const contentComment = this.dataset.title;
+            
+            document.getElementById('text-content-comment'+id).innerHTML = contentComment;
+            document.getElementById('content-show-comment-'+id).style.display = 'none';
+            document.getElementById('comment-input-alter-'+id).style.display = 'block';
+            document.getElementById('more-menu-'+id).style.display = 'none';
+        });
+    });
+    function commentEdit(commentId){
+      const contentComment = document.getElementById('text-content-comment'+commentId).value;
+      if(contentComment){
+        fetch('{{ route('front.blog.comment') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ comment_id: commentId, comment_content: contentComment })
+            })
+        .then(response => {
+            if (response.ok) {
+              Notiflix.Notify.success('Chỉnh sửa bình luận thành công');
+              setTimeout(() => {
+                  window.location.reload();
+              }, 1000);
+            
+            } else {
+                return response.json().then(data => {
+                    throw new Error(data.message || 'Chỉnh sửa bình luận thất bại!');
+                });
+              }
+            })
+        .catch(error => {
+            console.error('Lỗi:', error);
+            Notiflix.Notify.failure('Chỉnh sửa bình luận thất bại!');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        });
+      }
+
+    }
+
+    function cancelCommentEdit(id){
+      document.getElementById('content-show-comment-'+id).style.display = 'block';
+      document.getElementById('comment-input-alter-'+id).style.display = 'none';
+      document.getElementById('more-menu-'+id).style.display = 'block';
+    }
 </script>
 <!-- Modal hiển thị bình luận -->
 <div id="comment-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;">
@@ -409,3 +557,89 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 </div>
+
+<style>
+  .more-menu {
+    position: relative;
+    display: inline-block;
+  }
+
+  .more-button {
+      font-size: 24px;
+      cursor: pointer;
+      user-select: none;
+  }
+
+  .dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: white;
+      min-width: 120px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      z-index: 1;
+      border-radius: 4px;
+  }
+
+  .dropdown-menu a {
+      color: black;
+      padding: 10px 16px;
+      text-decoration: none;
+      display: block;
+  }
+
+  .dropdown-menu a:hover {
+      background-color: #f0f0f0;
+  }
+
+  .comment-box {
+      display: flex
+  }
+  .dropdown-menu ul{
+      list-style: none;
+      padding-left: 16px;
+  }
+  .dropdown-menu ul li{
+      cursor: pointer;
+      margin-bottom: 10px
+  }
+  .confirm-delete{
+    background: linear-gradient(90deg, #4f8cff, #38b6ff);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 1em;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    margin-left: 10px;
+    cursor: pointer;
+
+  }
+  .cancel-delete{
+    background: #ff4d4f;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .cancel-comment-alt{
+    margin-top: 6px;
+    float: right;
+    background: #ff4d4f;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-right: -14px;
+  }
+</style>

@@ -5,6 +5,13 @@
     padding: 32px 48px;
     background: #181526;
     min-height: 100vh;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    margin-bottom: 32px;
+    border-radius: 16px;
+    border: 1px solid white; 
 }
 .playlist-title {
     color: #fff;

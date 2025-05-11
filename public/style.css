@@ -1,8 +1,8 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: #170f23;
-    color: #fff;
+    background: #fff;
+    color: #000000;
 }
 
 .sidebar {
@@ -48,12 +48,7 @@ body {
     color: #a0a0a0;
     letter-spacing: 1px;
 }
-.main {
-    margin-left: 220px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+
 header {
     display: flex;
     justify-content: space-between;
@@ -102,28 +97,33 @@ header .user img {
     margin-bottom: 32px;
 }
 .featured h2, .zingchart h2 {
-    color: #fff;
+    color: #000000;
     font-size: 22px;
     margin-bottom: 16px;
+    text-transform: uppercase;
 }
 .song-list {
     display: flex;
-    gap: 24px;
+    flex-wrap: wrap;
+    gap: 22px;
 }
 .song-card {
-    background: #2f2739;
+    background: #fff;
     border-radius: 10px;
-    padding: 16px;
+    padding: 10px;
     display: flex;
     align-items: center;
     gap: 16px;
-    width: 260px;
+    width: 268px;
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
+    color:#000000;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
 }
 .song-card:hover {
-    background: #39304a;
+    background: #afacac;
 }
 .song-card img {
     width: 60px;
@@ -134,7 +134,7 @@ header .user img {
 .song-card h4 {
     margin: 0 0 4px 0;
     font-size: 16px;
-    color: #fff;
+    color: #000000;
 }
 .song-card p {
     margin: 0;
@@ -167,17 +167,20 @@ header .user img {
 .zingchart li {
     display: flex;
     align-items: center;
-    background: #2f2739;
-    border-radius: 8px;
-    margin-bottom: 12px;
+    background: #fff;
+    margin-bottom: 18px;
     padding: 10px 16px;
-    gap: 16px;
+    gap: 20px;
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
+    height: 80px;
+    color:#000000;
+    border-top: 1px solid #e5e5e5;
 }
 .zingchart li:hover {
-    background: #39304a;
+    background: #afacac;
+    border-radius: 16px;
 }
 .zingchart .rank {
     font-size: 20px;
@@ -187,8 +190,8 @@ header .user img {
     text-align: center;
 }
 .zingchart img {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 6px;
     object-fit: cover;
 }
@@ -274,9 +277,10 @@ header .user img {
     margin-bottom: 32px;
 }
 .album-section h2 {
-    color: #fff;
+    color: #000000;
     font-size: 28px;
     margin-bottom: 24px;
+    text-transform: uppercase;
 }
 .album-list {
     display: flex;
@@ -562,12 +566,13 @@ header .user img {
     z-index: 10;
 }
 .blog-section {
-    margin: 48px 0 0 0;
+    margin: 48px 0 24px 0;
 }
 .blog-section h2 {
-    color: #fff;
+    color: #000000;
     font-size: 28px;
     margin-bottom: 24px;
+    text-transform: uppercase;
 }
 .blog-list {
     display: flex;
@@ -575,13 +580,13 @@ header .user img {
     flex-wrap: wrap;
 }
 .blog-card {
-    background: #231b2e;
+    background: #fff;
     border-radius: 16px;
     overflow: hidden;
-    width: 340px;
+    width: 303px;
     min-width: 240px;
     max-width: 100%;
-    box-shadow: 0 4px 16px 0 rgba(72,0,128,0.08);
+    box-shadow: 0 4px 16px 0 rgba(72,0,128,0.2);
     display: flex;
     flex-direction: column;
     transition: transform 0.15s, box-shadow 0.15s;
@@ -604,12 +609,12 @@ header .user img {
 }
 .blog-title {
     font-size: 18px;
-    color: #fff;
+    color: #000;
     margin: 0 0 4px 0;
     font-weight: bold;
 }
 .blog-desc {
-    color: #bdbdbd;
+    color: #706d6d;
     font-size: 15px;
     margin: 0 0 8px 0;
 }
@@ -640,4 +645,9 @@ header .user img {
     .blog-list { gap: 8px; }
     .blog-card { width: 100%; min-width: 0; }
     .blog-card img { height: 80px; }
+}
+@media (min-width: 1200px) {
+    .container {
+        width: 1060px
+    }
 }

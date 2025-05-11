@@ -10,6 +10,7 @@
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px #ccc;
+    margin-top: 12px;
   }
   .cover-photo {
     background: linear-gradient(120deg, #d4145a 0%, #b3125c 100%);

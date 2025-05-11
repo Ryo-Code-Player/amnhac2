@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use App\Modules\Group\Models\Group;
+use App\Modules\Song\Models\Song;
 
 class User extends Authenticatable
 {
@@ -95,6 +96,11 @@ class User extends Authenticatable
     public function groups()
     {
         return $this->belongsToMany(Group::class, 'group_members');
+    }
+
+    public function songs()
+    {
+        return $this->hasMany(Song::class,'user_id');
     }
     
 }   

@@ -65,7 +65,7 @@ class SongController extends Controller
         'status' => 'required|in:active,inactive',
         'musictype_id' => 'required|exists:music_types,id',
         'composer_id' => 'required|exists:composers,id',
-        'singer_id' => 'required|exists:singers,id',
+        // 'singer_id' => 'required|exists:singers,id',
         'resources' => 'nullable|array',
     ]);
 
@@ -97,6 +97,7 @@ class SongController extends Controller
     $song->slug = $this->createSlug($song->title);
     $song->status = $validatedData['status'];
     $song->tags = json_encode($tagsArray);
+    $song->user_id =  auth()->user()->id;
     $song->save();
 
     $songId = $song->id;
@@ -310,7 +311,7 @@ public function update(Request $request, $id)
         'status' => 'required|in:active,inactive',
         'musictype_id' => 'required|exists:music_types,id',
         'composer_id' => 'required|exists:composers,id',
-        'singer_id' => 'required|exists:singers,id',
+        // 'singer_id' => 'required|exists:singers,id',
         'resources' => 'nullable|array',
     ]);
 
@@ -348,6 +349,7 @@ public function update(Request $request, $id)
     $song->slug = $this->createSlug($song->title);
     $song->status = $validatedData['status'];
     $song->tags = json_encode($tagsArray);
+    $song->user_id =  auth()->user()->id;
 
     // Kiểm tra xem người dùng có thay đổi hoặc thêm tài nguyên không
     if ($request->has('resources') && count($request->resources) > 0) {

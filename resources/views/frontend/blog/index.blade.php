@@ -41,7 +41,7 @@
       <a href="#" class="tab-link" data-tab="friends">Bài viết của {{ $user->full_name }}</a>
       <a href="#" class="tab-link" data-tab="albums">Ảnh của {{ $user->full_name }}</a>
       <a href="#" class="tab-link" data-tab="gallery">Thông tin cá nhân</a>
-      <a href="#" class="tab-link" data-tab="sing">Hồ sơ ca sĩ</a>
+      {{-- <a href="#" class="tab-link" data-tab="sing">Hồ sơ ca sĩ</a> --}}
       <a href="#" class="tab-link" data-tab="song">Danh sách bài hát</a>
 
     </div>
@@ -50,7 +50,7 @@
       <a href="#" class="tab-link active" data-tab="friends">Bài viết của {{ $user->full_name }}</a>
       <a href="#" class="tab-link" data-tab="followers">{{ $follow->count() }} Người đang theo dõi</a> 
       <a href="#" class="tab-link" data-tab="albums">Ảnh của {{ $user->full_name }}</a>
-      <a href="#" class="tab-link" data-tab="sing">Hồ sơ ca sĩ</a>
+      {{-- <a href="#" class="tab-link" data-tab="sing">Hồ sơ ca sĩ</a> --}}
       <a href="#" class="tab-link" data-tab="song">Danh sách bài hát</a>
     </div>
   @endif

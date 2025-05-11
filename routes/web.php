@@ -89,7 +89,8 @@ Route::group( [ 'as'=>'front.'],function(){
     Route::get('/blogs/{blogId}/comments', [\App\Http\Controllers\frontend\BlogPageController::class, 'loadComments'])->name('blogs.comments');
 
     Route::get('/detail_music',[ \App\Http\Controllers\frontend\HomeController::class,'detail_music'])->name('detail_music');
-
+    // category
+    Route::get('/category',[ \App\Http\Controllers\frontend\CategoryController::class,'index'])->name('category');
     // user profile
     Route::get('/profile',[ \App\Http\Controllers\frontend\ProfileController::class,'index'])->name('profile');
     
@@ -120,6 +121,7 @@ Route::group( [ 'as'=>'front.'],function(){
     Route::post('/blog-like',[BlogFEController::class,'like'])->name('blog.like');
     Route::delete('/blog-delete',[BlogFEController::class,'delete'])->name('blog.delete');
     Route::post('/blog-comment',[BlogFEController::class,'comment'])->name('blog.comment');
+    Route::delete('/blog-delete-comment/{comment_id}',[BlogFEController::class,'deleteComment'])->name('blog.deleteComment');
     Route::post('/blog-edit',[BlogFEController::class,'edit'])->name('blog.edit');
     Route::post('/blog-like-comment',[BlogFEController::class,'likeComment'])->name('blog.likeComment');
     Route::post('/blog-update-profile',[BlogFEController::class,'updateProfile'])->name('profile.updateProfile');

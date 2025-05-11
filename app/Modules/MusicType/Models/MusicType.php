@@ -5,6 +5,8 @@ namespace App\Modules\MusicType\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Modules\Song\Models\Song;
+
 
 class MusicType extends Model
 {
@@ -34,5 +36,9 @@ class MusicType extends Model
                 $model->slug = Str::slug($model->title);
             }
         });
+    }
+    public function song()
+    {
+        return $this->hasMany(Song::class, 'musictype_id');
     }
 }
